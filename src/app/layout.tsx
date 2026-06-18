@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Orbitron } from "next/font/google";
 import "./globals.css";
-import { profile } from "@/data/profile";
+import { profile, socials, skills, experience, education } from "@/data/profile";
 import BootSequence from "@/components/BootSequence";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 
@@ -25,17 +25,27 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://${profile.domain}`),
   title: `${profile.name} — ${profile.title}`,
   description: profile.blurb,
+  alternates: { canonical: "/" },
   openGraph: {
     title: `${profile.name} — ${profile.title}`,
-    description: profile.blurb,
+    description: `${profile.tagline} ${profile.subtagline}`,
     url: `https://${profile.domain}`,
     siteName: profile.name,
     type: "website",
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: `${profile.name} — ${profile.title}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: `${profile.name} — ${profile.title}`,
-    description: profile.blurb,
+    description: `${profile.tagline} ${profile.subtagline}`,
+    images: ["/og.png"],
   },
 };
 
@@ -44,6 +54,29 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Structured data so search engines can show a rich "Person" result.
+  const personJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: profile.name,
+    url: `https://${profile.domain}`,
+    jobTitle: profile.title,
+    description: profile.subtagline,
+    email: profile.email,
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Austin",
+      addressRegion: "TX",
+      addressCountry: "US",
+    },
+    worksFor: { "@type": "Organization", name: experience[0]?.org },
+    alumniOf: { "@type": "CollegeOrUniversity", name: education[0]?.school },
+    knowsAbout: skills.flatMap((s) => s.items),
+    sameAs: socials
+      .filter((s) => s.href.startsWith("http"))
+      .map((s) => s.href),
+  };
+
   return (
     <html
       lang="en"
@@ -55,6 +88,10 @@ export default function RootLayout({
         <div className="fx-scanlines" aria-hidden />
         <BootSequence name={profile.name} />
         <KonamiEasterEgg />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
         {children}
       </body>
     </html>

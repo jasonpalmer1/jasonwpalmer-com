@@ -77,8 +77,11 @@ export default function Hero() {
             CLASS // {game.playerClass}
           </p>
 
-          <p className="mt-6 max-w-2xl text-lg text-foreground/90 sm:text-xl">
+          <p className="mt-6 max-w-2xl text-xl font-semibold leading-snug text-foreground text-glow sm:text-2xl">
             {profile.tagline}
+          </p>
+          <p className="mt-3 max-w-2xl text-base text-foreground/80 sm:text-lg">
+            {profile.subtagline}
           </p>
           <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
             {profile.blurb}

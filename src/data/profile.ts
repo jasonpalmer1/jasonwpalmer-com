@@ -6,8 +6,11 @@ export const profile = {
   name: "Jason Palmer",
   // Short label used in the page <title> / social cards.
   title: "Finance Operator & Systems Builder",
-  // Short tagline under your name in the hero.
+  // Punchy value pitch — the hero's first line. Leads with "why you should care."
   tagline:
+    "I do the work of a finance team — then build the AI that does it in minutes.",
+  // Supporting line under the pitch (the "what I do" specifics).
+  subtagline:
     "I architect AI systems that underwrite deals, analyze portfolios, and automate the work.",
   // One or two sentences. Your elevator pitch (kept public-safe — no employer internals).
   blurb:
