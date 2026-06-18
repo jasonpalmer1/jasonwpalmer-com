@@ -69,6 +69,10 @@ export default function Hero() {
             <span className="font-mono text-xs text-muted">
               LOC: <span className="text-foreground">{profile.location}</span>
             </span>
+            <span className="font-mono text-xs text-muted">
+              CRED:{" "}
+              <span className="text-foreground">Series 65 · UT Austin Finance</span>
+            </span>
           </div>
 
           <h1 className="mt-6 font-display text-4xl font-black tracking-tight text-foreground sm:text-7xl">
@@ -128,10 +132,6 @@ export default function Hero() {
             />
           </div>
         </div>
-
-        <p className="mt-4 text-center font-mono text-[0.65rem] tracking-widest text-muted/50">
-          psst — try ↑ ↑ ↓ ↓ ← → ← → B A
-        </p>
       </div>
     </section>
   );

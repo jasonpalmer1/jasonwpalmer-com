@@ -44,9 +44,9 @@ export type Stat = {
 // Animated counters in the stat HUD.
 export const stats: Stat[] = [
   { label: "Transacted", value: 3, prefix: "$", suffix: "B+" },
-  { label: "Deals closed", value: 12, suffix: "+" },
+  { label: "Faster underwriting", value: 20, suffix: "×" },
   { label: "Students taught", value: 500, suffix: "+" },
-  { label: "Years XP", value: 5, suffix: "+" },
+  { label: "Years experience", value: 5, suffix: "+" },
 ];
 
 export type SocialLink = {

@@ -30,6 +30,9 @@ export default function Home() {
             {game.callsign} // {profile.domain} // BUILT WITH NEXT.JS × CLOUDFLARE
           </span>
         </div>
+        <p className="pb-6 text-center font-mono text-[0.6rem] tracking-widest text-muted/40">
+          psst — try ↑ ↑ ↓ ↓ ← → ← → B A
+        </p>
       </footer>
     </>
   );

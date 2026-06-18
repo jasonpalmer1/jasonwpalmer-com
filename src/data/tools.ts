@@ -41,7 +41,9 @@ export const tools: Tool[] = [
       "initiative) that underwrites a commercial real estate deal end-to-end and runs a live " +
       "operating picture of the firm's portfolio. It compresses a ~60-minute manual underwrite " +
       "to ~3 minutes by standardizing the data layer and automating document intake, modeling, " +
-      "valuation, and market analysis — with every assumption grounded in the firm's own data.",
+      "valuation, and market analysis. Speed isn't the point — fast and right is: every output " +
+      "is grounded in the firm's own data, relentlessly tested, and backed by as much data as " +
+      "possible before it informs a decision.",
     icon: "🏢",
     status: "active",
     stack: ["Claude Code", "AI agents", "DuckDB", "Data architecture", "Python", "Automation"],
