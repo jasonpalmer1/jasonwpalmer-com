@@ -62,7 +62,6 @@ export default function RootLayout({
     url: `https://${profile.domain}`,
     jobTitle: profile.title,
     description: profile.subtagline,
-    email: profile.email,
     address: {
       "@type": "PostalAddress",
       addressLocality: "Austin",

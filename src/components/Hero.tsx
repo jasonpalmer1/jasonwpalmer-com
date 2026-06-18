@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { profile, game, socials } from "@/data/profile";
+import EmailLink from "@/components/EmailLink";
 
 type AgeStats = {
   level: number;
@@ -121,6 +122,10 @@ export default function Hero() {
                 {s.label}
               </a>
             ))}
+            <EmailLink
+              label="Email"
+              className="rounded-md border border-border bg-surface px-5 py-2.5 font-mono text-sm tracking-wide text-foreground/90 transition-colors hover:border-accent/60 hover:text-accent"
+            />
           </div>
         </div>
 

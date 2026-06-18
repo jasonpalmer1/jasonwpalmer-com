@@ -20,7 +20,6 @@ export const profile = {
     "and founded a financial-education platform that grew to 500+ students. This site is a " +
     "live, always-current record of what I've built.",
   location: "Austin, TX",
-  email: "jwpalm99@gmail.com",
   domain: "jasonwpalmer.com",
 };
 
@@ -58,7 +57,6 @@ export type SocialLink = {
 export const socials: SocialLink[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/jasonwpalmer" },
   { label: "GitHub", href: "https://github.com/jasonpalmer1" },
-  { label: "Email", href: "mailto:jwpalm99@gmail.com" },
 ];
 
 export type SkillGroup = {

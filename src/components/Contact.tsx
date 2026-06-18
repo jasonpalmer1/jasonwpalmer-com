@@ -1,4 +1,5 @@
-import { profile, socials } from "@/data/profile";
+import { socials } from "@/data/profile";
+import EmailLink from "@/components/EmailLink";
 
 export default function Contact() {
   return (
@@ -12,12 +13,7 @@ export default function Contact() {
           <p className="mx-auto mt-3 max-w-md text-sm text-muted">
             Building something or want to talk shop? Open a channel.
           </p>
-          <a
-            href={`mailto:${profile.email}`}
-            className="mt-7 inline-block rounded-md border border-accent bg-accent/10 px-6 py-3 font-mono text-sm font-semibold tracking-wide text-accent transition-colors hover:bg-accent hover:text-background"
-          >
-            [ {profile.email} ]
-          </a>
+          <EmailLink className="mt-7 inline-block rounded-md border border-accent bg-accent/10 px-6 py-3 font-mono text-sm font-semibold tracking-wide text-accent transition-colors hover:bg-accent hover:text-background" />
           <div className="mt-7 flex justify-center gap-5 font-mono text-xs text-muted">
             {socials.map((s) => (
               <a
