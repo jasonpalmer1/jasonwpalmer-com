@@ -10,7 +10,7 @@ export default function Contact() {
             CONTACT
           </h2>
           <p className="mx-auto mt-3 max-w-md text-sm text-muted">
-            Building something, hiring, or want to talk shop? Open a channel.
+            Building something or want to talk shop? Open a channel.
           </p>
           <a
             href={`mailto:${profile.email}`}
