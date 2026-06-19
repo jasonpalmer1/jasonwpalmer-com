@@ -69,6 +69,21 @@ export const tools: Tool[] = [
     rarity: "epic",
   },
   {
+    id: "whos-starting",
+    name: "Who's Starting",
+    tagline: "Mobile college football depth charts, built for game day",
+    description:
+      "A fast, installable web app for checking FBS depth charts on your phone at the stadium — " +
+      "works fully offline, with team-colored rosters, a head-to-head matchup field view, and an " +
+      "auto-refreshing data pipeline across 130+ teams.",
+    icon: "🏈",
+    status: "live",
+    stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
+    liveUrl: "https://whosstarting.com",
+    year: "2026",
+    rarity: "epic",
+  },
+  {
     id: "the-league",
     name: "The League Educational",
     tagline: "Financial-education platform — 500+ students",
