@@ -1,6 +1,12 @@
 # jasonwpalmer.com
 
+[![Live site](https://img.shields.io/badge/live-jasonwpalmer.com-34f5c5?style=flat-square&logo=cloudflare&logoColor=white)](https://jasonwpalmer.com)
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+
 My personal site / live résumé — **[jasonwpalmer.com](https://jasonwpalmer.com)**.
+
+![Site preview](./public/og.png)
 
 A finance operator & systems builder's portfolio, styled as a cyberpunk "operator terminal" (boot sequence, HUD panels, live age/XP, build cards with rarity tiers). The tool showcase doubles as an always-current record of what I've built.
 
