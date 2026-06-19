@@ -1,36 +1,44 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# jasonwpalmer.com
 
-## Getting Started
+My personal site / live résumé — **[jasonwpalmer.com](https://jasonwpalmer.com)**.
 
-First, run the development server:
+A finance operator & systems builder's portfolio, styled as a cyberpunk "operator terminal" (boot sequence, HUD panels, live age/XP, build cards with rarity tiers). The tool showcase doubles as an always-current record of what I've built.
+
+## Tech stack
+
+- **Next.js 16** (App Router, React 19) — static export (`output: "export"`)
+- **Tailwind CSS v4** + **TypeScript**
+- **Cloudflare Pages** for hosting (zero server runtime)
+
+## Structure
+
+Content is data-driven — most edits happen in two files:
+
+- `src/data/profile.ts` — bio, value pitch, stats, skills, experience, education, socials
+- `src/data/tools.ts` — the build/tool showcase cards
+
+Components live in `src/components/`; the page composition is `src/app/page.tsx`.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npx next dev          # http://localhost:3000
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build & deploy
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npx next build                                              # -> ./out (static)
+npx wrangler pages deploy out --project-name=jasonwpalmer-com
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Notes
 
-## Learn More
+- SEO: OpenGraph share card, JSON-LD `Person` schema, canonical URL, sitemap/robots.
+- Privacy: the contact email is assembled client-side (no plain `mailto:` in the HTML) to defeat scrapers.
+- Built and iterated with [Claude Code](https://claude.com/claude-code).
 
-To learn more about Next.js, take a look at the following resources:
+## License
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+© Jason Palmer. Code is provided for reference; please don't republish the site or its content as your own.
