@@ -71,11 +71,13 @@ export const tools: Tool[] = [
   {
     id: "whos-starting",
     name: "Who's Starting",
-    tagline: "Mobile college football depth charts, built for game day",
+    tagline: "The ad-free sports app that respects your time and your team",
     description:
-      "A fast, installable web app for checking FBS depth charts on your phone at the stadium — " +
-      "works fully offline, with team-colored rosters, a head-to-head matchup field view, and an " +
-      "auto-refreshing data pipeline across 130+ teams.",
+      "Started as a fix for a dumb problem: no good way to check college football depth charts " +
+      "offline at a game. Grew into something more ambitious — a full Game Center covering CFB and " +
+      "MLB, Madden-style OVR player ratings with the math shown, The People's Ratings crowd debate " +
+      "engine (vote players over/underrated vs the algorithm), Draft the Country, and shareable " +
+      "cards. Offline-first PWA. Zero ads.",
     icon: "🏈",
     status: "live",
     stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
