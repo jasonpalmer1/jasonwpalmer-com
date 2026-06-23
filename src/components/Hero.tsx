@@ -114,6 +114,12 @@ export default function Hero() {
             >
               [ VIEW BUILDS ]
             </a>
+            <a
+              href="/build/"
+              className="rounded-md border border-accent-3 bg-accent-3/10 px-5 py-2.5 font-mono text-sm font-semibold tracking-wide text-accent-3 transition-colors hover:bg-accent-3 hover:text-background"
+            >
+              [ WORK WITH ME ]
+            </a>
             {socials.map((s) => (
               <a
                 key={s.label}
