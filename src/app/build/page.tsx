@@ -148,12 +148,12 @@ export default function BuildPage() {
                 {
                   icon: "💼",
                   title: "Quoted Absurd Agency Prices",
-                  body: "If they quoted $200K for what sounds like a 6-week project — you&apos;re probably right.",
+                  body: "If they quoted $200K for what sounds like a 6-week project — you're probably right.",
                 },
                 {
                   icon: "🔧",
-                  title: "Can&apos;t Make SaaS Fit",
-                  body: "Your data is too proprietary or the off-the-shelf tools won&apos;t connect.",
+                  title: "Can't Make SaaS Fit",
+                  body: "Your data is too proprietary or the off-the-shelf tools won't connect.",
                 },
                 {
                   icon: "⚡",
