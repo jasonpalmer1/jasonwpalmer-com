@@ -6,31 +6,25 @@ import { profile, socials } from "@/data/profile";
 export const metadata: Metadata = {
   title: `Work With Me — ${profile.name}`,
   description:
-    "Jason Palmer builds custom software fast — AI tools, workflow automation, and internal systems for any business running a painful manual process. FINRA Series 65, $3B+ transacted. Fixed price. Ships in weeks.",
+    "Jason Palmer builds custom software fast — AI tools, workflow automation, and internal systems for any business running a painful manual process. $3B+ in real transactions. Fixed price. Ships in weeks.",
   alternates: { canonical: "/build/" },
 };
 
 // ── Real builds (proof of work) ─────────────────────────────────────────────
 const realBuilds = [
   {
-    rarity: "LEGENDARY" as const,
-    rarityClass: "text-gold",
-    glowClass: "glow-border-legendary",
     meta: "// INTERNAL · LIVE",
     title: "CRE Underwriting AI — Command Center",
     problem:
       "~60 minutes per manual underwrite — document intake, model population, market pulls, valuation — before a single decision could be made.",
     built:
-      "Proprietary AI system (built on personal initiative) that automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm's own data.",
+      "Proprietary AI system (built on personal initiative) that automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm\'s own data.",
     outcome:
       "~60-minute underwrites now complete in ~3 minutes. Live portfolio picture alongside the deal pipeline. Used on real acquisitions and dispositions. Reference available on request.",
     tags: ["Claude Code", "AI agents", "DuckDB", "Python", "Data architecture"],
     link: null,
   },
   {
-    rarity: "EPIC" as const,
-    rarityClass: "text-accent-3",
-    glowClass: "glow-border-epic",
     meta: "// PUBLIC · LIVE",
     title: "wafergraph.com — Supply-Chain Decision Tool",
     problem:
@@ -43,9 +37,6 @@ const realBuilds = [
     link: "https://wafergraph.com",
   },
   {
-    rarity: "EPIC" as const,
-    rarityClass: "text-accent-3",
-    glowClass: "glow-border-epic",
     meta: "// PUBLIC · LIVE",
     title: "whosstarting.com — Full Product, Shipped in ~2 Days",
     problem: "No good way to check college football depth charts offline at a game.",
@@ -89,7 +80,7 @@ export default function BuildPage() {
 
               {/* Core line */}
               <p className="mt-6 max-w-2xl text-lg font-semibold leading-snug text-foreground sm:text-xl">
-                Fixed price. Ships in 4&ndash;8 weeks. One operator — no committee, no agency markup.
+                Fixed price. Ships in 4&ndash;8 weeks. One operator — no agency markup.
               </p>
 
               {/* Identity / credibility */}
@@ -103,7 +94,7 @@ export default function BuildPage() {
                 >
                   Jason Palmer
                 </a>
-                {" "}— FINRA Series 65, $3B+ in real transactions, and I&apos;ve run the ops side of businesses myself.
+                {" "}— $3B+ in real transactions, and I&apos;ve run the ops side of businesses myself.
                 That means I get how your business works and where the real ROI is — not just what&apos;s technically possible.
                 Finance is where I started; any operator with a high-value manual process is who I serve.
               </p>
@@ -192,8 +183,8 @@ export default function BuildPage() {
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
 
               {/* Service 1 — Ship it fast */}
-              <div className="hud rounded-xl p-6 glow-border-legendary">
-                <p className="font-mono text-[0.65rem] tracking-widest text-gold">CORE OFFERING</p>
+              <div className="hud rounded-xl p-6">
+                <p className="font-mono text-[0.65rem] tracking-widest text-accent">CORE OFFERING</p>
                 <h3 className="mt-4 font-display text-lg font-bold text-foreground">
                   Ship It Fast
                 </h3>
@@ -215,6 +206,9 @@ export default function BuildPage() {
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">
                   Best for: document-heavy ops · recurring analyst workflows · high-repeat reporting
+                </p>
+                <p className="mt-3 font-mono text-[0.6rem] tracking-wide text-muted/60">
+                  // e.g. vendor intake agent: AI scores submissions, routes to the right approver, logs every step — hours of admin per vendor collapsed to minutes.
                 </p>
               </div>
 
@@ -249,12 +243,9 @@ export default function BuildPage() {
               {realBuilds.map((b) => (
                 <div
                   key={b.title}
-                  className={`hud rounded-xl p-6 sm:p-8 ${b.glowClass}`}
+                  className="hud rounded-xl p-6 sm:p-8"
                 >
                   <div className="mb-4 flex flex-wrap items-center gap-3">
-                    <span className={`font-mono text-[0.65rem] tracking-widest ${b.rarityClass}`}>
-                      {b.rarity}
-                    </span>
                     <span className="font-mono text-[0.65rem] tracking-widest text-muted">
                       {b.meta}
                     </span>
@@ -304,68 +295,7 @@ export default function BuildPage() {
           </div>
         </section>
 
-        {/* ── 5. Cross-Domain Examples ──────────────────────────────────────────── */}
-        <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <p className="label">// what a typical engagement looks like</p>
-            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
-              EXAMPLE BUILDS
-            </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              Representative workflows — the shape of what I build, across domains.
-            </p>
-
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              {[
-                {
-                  domain: "OPERATIONS",
-                  title: "Vendor Intake & Routing Agent",
-                  problem: "New vendor applications processed manually — 2-3 hours each, routed by email.",
-                  built: "AI agent ingests submissions, scores completeness, routes to the right approver, logs every step.",
-                  result: "Hours of admin per vendor collapsed to minutes. Full audit trail.",
-                },
-                {
-                  domain: "FINANCE / REAL ESTATE",
-                  title: "Fund Reconciliation Automation",
-                  problem: "Monthly reconciliation across multiple custodians — analyst hours, high error risk.",
-                  built: "AI pipeline ingests custodian exports, matches positions, flags discrepancies, drafts the memo. Human approval gate maintained.",
-                  result: "Multi-hour reconciliation to minutes. Compliance-ready audit trail.",
-                },
-                {
-                  domain: "LOGISTICS / SERVICES",
-                  title: "Ops Exception Dashboard",
-                  problem: "Exceptions and escalations scattered across email, Slack, and a shared sheet — nothing triaged automatically.",
-                  built: "Unified dashboard that pulls from all sources, auto-scores urgency, and routes to the right person.",
-                  result: "Zero missed escalations. Operations team sees one screen instead of three.",
-                },
-              ].map(({ domain, title, problem, built, result }) => (
-                <div key={title} className="hud rounded-xl p-6 glow-border-epic">
-                  <p className="font-mono text-[0.65rem] tracking-widest text-accent-3">{domain}</p>
-                  <h3 className="mt-2 font-display text-base font-bold text-foreground">{title}</h3>
-                  <div className="mt-4 space-y-3">
-                    <div>
-                      <p className="font-mono text-[0.6rem] tracking-widest text-muted">PROBLEM</p>
-                      <p className="mt-1 text-xs leading-relaxed text-foreground/80">{problem}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[0.6rem] tracking-widest text-muted">BUILT</p>
-                      <p className="mt-1 text-xs leading-relaxed text-foreground/80">{built}</p>
-                    </div>
-                    <div>
-                      <p className="font-mono text-[0.6rem] tracking-widest text-muted">RESULT</p>
-                      <p className="mt-1 text-xs leading-relaxed text-foreground/80">{result}</p>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <p className="mt-6 font-mono text-[0.65rem] tracking-wide text-muted/60">
-              // Representative workflow examples — not sold client engagements. References available on request.
-            </p>
-          </div>
-        </section>
-
-        {/* ── 6. How We Work ───────────────────────────────────────────────────── */}
+        {/* ── 5. How We Work ───────────────────────────────────────────────────── */}
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <p className="label">// process</p>
@@ -374,6 +304,11 @@ export default function BuildPage() {
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
               Fixed scope. Fixed price. You&apos;re paying for judgment and speed — not headcount or agency overhead.
+            </p>
+
+            {/* Price anchor */}
+            <p className="mt-4 font-mono text-sm text-foreground/80">
+              Most projects start at $10K — exact scope and price fixed in a paid Strategy Sprint before any build.{/* TODO: Jason confirm number */}
             </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
@@ -385,9 +320,8 @@ export default function BuildPage() {
                   Diagnose &amp; Scope
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Map your workflows, identify the highest-value target, produce a concrete spec and price. A plan — not a slide deck.
+                  Map your workflows, identify the highest-value target, produce a concrete spec and price. A plan — not a slide deck. Scope and price set before any build begins.
                 </p>
-                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
 
               <div className="hud rounded-xl p-6">
@@ -398,13 +332,12 @@ export default function BuildPage() {
                   Build It — Ships in 4&ndash;8 Weeks
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Defined problem, fixed scope, fixed price. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — a throat to choke, and your data stays in your environment.
+                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — a throat to choke, and your data stays in your environment.{/* TODO: Jason confirm number */}
                 </p>
-                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
 
-              <div className="hud rounded-xl p-6 glow-border-legendary">
-                <p className="font-mono text-[0.65rem] tracking-widest text-gold">
+              <div className="hud rounded-xl p-6">
+                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
                   03 // OPTIONAL — ONGOING RETAINER
                 </p>
                 <h3 className="mt-2 font-display text-lg font-bold text-foreground">
@@ -413,17 +346,12 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Monthly embedded access — ongoing builds, iterations, automation. Continuous leverage without the full-time hire. Best for operators with more than one thing to build.
                 </p>
-                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
             </div>
-
-            <p className="mt-6 font-mono text-[0.65rem] tracking-wide text-muted/60">
-              // Final scope and price set before any work begins. No surprise invoices.
-            </p>
           </div>
         </section>
 
-        {/* ── 7. Consulting Contact Form ────────────────────────────────────────── */}
+        {/* ── 6. Consulting Contact Form ────────────────────────────────────────── */}
         <section id="consult" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="hud mx-auto max-w-2xl rounded-2xl p-8 sm:p-12">
