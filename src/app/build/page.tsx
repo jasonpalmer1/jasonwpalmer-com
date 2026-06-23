@@ -15,12 +15,12 @@ const signatureEngagement = {
   title: "Fund Admin Reconciliation Automation",
   meta: "// EXAMPLE ENGAGEMENT · TYPICAL WORKFLOW",
   problem:
-    "A fund admin team manually reconciles investor statements, capital-call notices, and LP reports across multiple custodians — a multi-hour process each period with high error risk and no audit trail.",
+    "A fund admin team manually reconciling investor statements, capital-call notices, and LP reports across multiple custodians — hours per period, high error risk, no audit trail.",
   built:
-    "An AI agent pipeline that ingests raw custodian exports, matches positions, flags discrepancies, drafts the reconciliation memo, and routes exceptions to a human approver before anything goes out. Every step logged with a full audit trail.",
+    "An AI agent pipeline that ingests custodian exports, matches positions, flags discrepancies, drafts the reconciliation memo, and routes exceptions to a human approver. Every step logged.",
   result:
-    "Multi-hour reconciliation compressed to minutes per period. Human-in-the-loop approval gate maintained — the system surfaces decisions; your team makes them. Full audit trail for compliance.",
-  note: "This is a named, repeatable workflow — not a sold client engagement. It illustrates what a typical build looks like.",
+    "Multi-hour reconciliation compressed to minutes. Human approval gate maintained. Full audit trail for compliance.",
+  note: "Named, repeatable workflow — not a sold client engagement.",
 };
 
 // ── Real builds (proof of work) ─────────────────────────────────────────────
@@ -32,11 +32,11 @@ const realBuilds = [
     meta: "// INTERNAL · LIVE",
     title: "HPI Command Center — CRE Underwriting AI",
     problem:
-      "A real estate fund with a live acquisition pipeline was spending ~60 minutes per manual underwrite — document intake, model population, market pulls, valuation — before a single decision.",
+      "~60 minutes per manual underwrite — document intake, model population, market pulls, valuation — before a single decision.",
     built:
-      "A proprietary AI system (built on personal initiative) that standardizes the data layer, automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm's own data. Relentlessly tested before it informs a decision.",
+      "Proprietary AI system (built on personal initiative) that automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm's own data.",
     outcome:
-      "~60-minute underwrites now complete in ~3 minutes. Live operating picture of the portfolio alongside the deal pipeline. Used on real acquisitions and dispositions.",
+      "~60-minute underwrites now complete in ~3 minutes. Live portfolio picture alongside the deal pipeline. Used on real acquisitions and dispositions.",
     tags: ["Claude Code", "AI agents", "DuckDB", "Python", "Data architecture"],
     link: null,
   },
@@ -47,9 +47,9 @@ const realBuilds = [
     meta: "// PUBLIC · LIVE",
     title: "wafergraph.com — Supply-Chain Decision Tool",
     problem:
-      "No free, neutral, current map of the semiconductor & AI supply chain existed — just scattered analyst reports and paywalled databases.",
+      "No free, neutral map of the semiconductor & AI supply chain — just scattered analyst reports and paywalled databases.",
     built:
-      "An interactive decision tool covering 456+ companies across the full semiconductor value chain — materials, equipment, EDA/IP, chip design, foundry, memory, packaging, and AI/data center. Each company profiled with financials, dependencies, market share, and chokepoint exposure.",
+      "Interactive decision tool covering 456+ companies across the full semiconductor value chain — materials to AI/data center. Each company profiled with financials, dependencies, and chokepoint exposure.",
     outcome: "Shipped and live.",
     outcomeLink: { href: "https://wafergraph.com", label: "→ wafergraph.com" },
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
@@ -61,12 +61,11 @@ const realBuilds = [
     glowClass: "glow-border-epic",
     meta: "// PUBLIC · LIVE",
     title: "whosstarting.com — Full Product, Shipped in ~2 Days",
-    problem:
-      "No good way to check college football depth charts offline at a game. Simple problem, no clean solution.",
+    problem: "No good way to check college football depth charts offline at a game.",
     built:
-      "A full offline-first PWA covering CFB and MLB depth charts — player OVR ratings, crowd-debate mechanics, shareable cards. Zero ads. Concept to deployed product.",
+      "Offline-first PWA covering CFB and MLB depth charts — player OVR ratings, crowd-debate mechanics, shareable cards. Zero ads.",
     outcome:
-      "Live. Shipped in approximately two days — a build pace most development shops quote in months.",
+      "Live. Concept to deployed product in approximately two days.",
     outcomeLink: { href: "https://whosstarting.com", label: "→ whosstarting.com" },
     tags: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
     link: "https://whosstarting.com",
@@ -99,36 +98,8 @@ export default function BuildPage() {
 
               {/* Core line */}
               <p className="mt-6 max-w-2xl text-lg font-semibold leading-snug text-foreground sm:text-xl">
-                I sit with you, find the highest-ROI thing to build or automate, and ship it in
-                weeks — no agency, no committee, one operator who actually understands your
-                business.
+                Series 65. $3B+ transacted. I find the highest-ROI thing to build and ship it in weeks — one operator, no committee.
               </p>
-
-              {/* Credibility / supporting copy */}
-              <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-                Series 65 licensed. $3B+ in transactions executed across real estate, capital
-                markets, and interest-rate derivatives. I&apos;ve underwritten deals, run
-                dispositions end-to-end, and built the AI that compresses that work to minutes.
-                Most &ldquo;AI consultants&rdquo; haven&apos;t closed a deal in their lives. I
-                built the tool to do mine faster.
-              </p>
-
-              {/* Trust signals */}
-              <div className="mt-6 flex flex-wrap gap-3">
-                {[
-                  "JUDGMENT + SPEED",
-                  "NOT PRICE",
-                  "YOUR DATA STAYS IN YOUR ENVIRONMENT",
-                  "ONE ACCOUNTABLE PERSON",
-                ].map((signal) => (
-                  <span
-                    key={signal}
-                    className="rounded border border-border bg-surface px-2 py-1 font-mono text-[0.6rem] tracking-widest text-accent/70"
-                  >
-                    {signal}
-                  </span>
-                ))}
-              </div>
 
               {/* CTA buttons */}
               <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -156,43 +127,38 @@ export default function BuildPage() {
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
               THE RIGHT FIT
             </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              Finance and real-estate operators are the warm-start audience — lightly regulated,
-              high data density, painful manual workflows. But increasingly, any business with a
-              process worth automating.
-            </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
                   icon: "🏦",
                   title: "Private & Non-Bank Lenders",
-                  body: "Manual loan origination, servicing notes, draw requests — one workflow eating analyst hours that software should handle.",
+                  body: "Loan origination and servicing workflows that still run on analyst hours.",
                 },
                 {
                   icon: "🏢",
                   title: "Real Estate Operators & Family Offices",
-                  body: "Deal underwriting, asset management reporting, LP communications — the operational surface that scales when you build the right internal tools.",
+                  body: "Deal underwriting, asset management, LP reporting — the ops surface that breaks at scale.",
                 },
                 {
                   icon: "📊",
                   title: "Fund Admins & Fund Managers",
-                  body: "Reconciliation, capital-call notices, investor reporting — repeatable, high-stakes, table-stakes for compliance.",
+                  body: "Reconciliation, capital-call notices, investor reporting. High-stakes, high-repeat.",
                 },
                 {
                   icon: "💼",
                   title: "Quoted Absurd Agency Prices",
-                  body: "If an agency quoted you $200K to build what you actually need, and you suspect it&apos;s a 6-week project — you&apos;re probably right.",
+                  body: "If they quoted $200K for what sounds like a 6-week project — you&apos;re probably right.",
                 },
                 {
                   icon: "🔧",
                   title: "Can&apos;t Make SaaS Fit",
-                  body: "Your workflow is too specific, your data too proprietary, or the off-the-shelf tools don&apos;t talk to each other in the way you need.",
+                  body: "Your data is too proprietary or the off-the-shelf tools won&apos;t connect.",
                 },
                 {
                   icon: "⚡",
-                  title: "Any Business With a Process Worth Automating",
-                  body: "Finance and real estate first — and increasingly, any operator running a repeatable, high-value process that&apos;s still done by hand.",
+                  title: "Any Process Worth Automating",
+                  body: "Finance and real estate first — any operator running a high-value manual process.",
                 },
               ].map(({ icon, title, body }) => (
                 <div key={title} className="hud rounded-xl p-5">
@@ -212,10 +178,6 @@ export default function BuildPage() {
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
               SERVICES
             </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              Three types of engagements. All anchored to real finance and operations problems —
-              not buzzword theater.
-            </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
 
@@ -227,10 +189,7 @@ export default function BuildPage() {
                   Ship It Fast
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Idea to working internal tool or MVP in weeks — not months. I scope the build,
-                  price it, and deliver it. No scope creep, no surprise invoices. If your team has
-                  been talking about a tool for six months, I&apos;ll have a working version before
-                  the next planning cycle.
+                  Idea to working internal tool or MVP in weeks. Fixed scope, fixed price — no surprise invoices.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">
                   Best for: underwriting tools · internal dashboards · workflow apps
@@ -244,10 +203,7 @@ export default function BuildPage() {
                   Automate the Grind
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  AI agents for the repetitive analyst and ops work — document intake, data
-                  extraction, report drafting, reconciliation, pipeline triage. Human-in-the-loop
-                  approval gates and full audit trails built in. Decision-support, not black-box
-                  automation.
+                  AI agents for repetitive analyst and ops work — document intake, reconciliation, report drafting. Human-in-the-loop approval gates and audit trails built in.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">
                   Best for: fund admin · document-heavy ops · analyst workflows
@@ -261,10 +217,7 @@ export default function BuildPage() {
                   Wire It Together
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Connect your existing tools, models, and data into one coherent workflow. CRM to
-                  model to report. Custodian data to reconciliation to memo. The integrations that
-                  no SaaS vendor will build for you because your setup is too specific — and too
-                  valuable.
+                  Connect your tools, models, and data into one coherent workflow. The integrations no SaaS vendor will build because your setup is too specific.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">
                   Best for: data integration · existing-tool orchestration · bespoke pipelines
@@ -281,10 +234,6 @@ export default function BuildPage() {
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
               NAMED WORKFLOW EXAMPLE
             </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              This is a named, repeatable workflow — not a sold client engagement. It illustrates
-              the shape and scope of a typical build.
-            </p>
 
             <div className="mt-10 hud rounded-xl p-6 sm:p-8 glow-border-epic">
               <div className="mb-4 flex flex-wrap items-center gap-3">
@@ -330,25 +279,6 @@ export default function BuildPage() {
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
               HOW WE WORK
             </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              Three phases. Every engagement starts with a strategy sprint so we&apos;re building
-              the right thing — not just something.
-            </p>
-
-            {/* Trust model callout */}
-            <div className="mt-8 rounded-xl border border-accent/30 bg-accent/5 p-5">
-              <p className="font-mono text-[0.65rem] tracking-widest text-accent">
-                // FINANCE-GRADE TRUST MODEL
-              </p>
-              <p className="mt-2 text-sm leading-relaxed text-foreground/80">
-                Every system I build is decision-support with{" "}
-                <strong className="text-foreground">human-in-the-loop approval gates</strong> and{" "}
-                <strong className="text-foreground">full audit trails</strong>. AI surfaces the
-                analysis; your team approves before anything goes out. Not a black box — a tool
-                your team controls, with a throat to choke if something goes wrong. Your data
-                stays in your environment.
-              </p>
-            </div>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               <div className="hud rounded-xl p-6">
@@ -359,10 +289,7 @@ export default function BuildPage() {
                   Diagnose the Highest-ROI Target
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  A focused engagement to map your current workflows, identify the highest-value
-                  automation or build target, and produce a concrete spec. Walk away with a clear
-                  plan — not a slide deck full of buzzwords. Sets up every subsequent engagement
-                  for a clean scope.
+                  Map your workflows, identify the highest-value target, produce a concrete spec. A plan — not a slide deck.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement</p>
               </div>
@@ -375,9 +302,7 @@ export default function BuildPage() {
                   Build It
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  You have a defined problem; I build the solution. Fixed scope, fixed price,
-                  delivered. Audit trails, approval gates, and human-in-the-loop controls built
-                  in from the start. Weeks, not months.
+                  Fixed scope, fixed price, delivered in weeks. Human-in-the-loop controls and audit trails from day one.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">Fixed price · scoped per project</p>
               </div>
@@ -390,9 +315,7 @@ export default function BuildPage() {
                   Fractional AI Builder in Residence
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Embedded part-time — your AI systems builder without the full-time headcount.
-                  Ongoing builds, iterations, and ops support. Best for teams who want continuous
-                  leverage without committing to a hire.
+                  Embedded part-time — your AI systems builder without the full-time headcount. Ongoing builds, iterations, ops support.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">Monthly · let&apos;s talk</p>
               </div>
@@ -408,8 +331,7 @@ export default function BuildPage() {
               PROOF OF WORK
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              No invented client names. No fabricated outcomes. These are real systems I built —
-              shown exactly as they are.
+              No invented client names. No fabricated outcomes. Real systems, shown as-is.
             </p>
 
             <div className="mt-10 space-y-6">
@@ -479,8 +401,7 @@ export default function BuildPage() {
               WHAT IT COSTS
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              Scoped per engagement — no posted prices because every problem is different. What I
-              can tell you: you&apos;re paying for judgment and speed, not headcount.
+              Scoped per engagement. You&apos;re paying for judgment and speed, not headcount.
             </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-2">
@@ -493,15 +414,8 @@ export default function BuildPage() {
                 </h3>
                 <p className="mt-1 font-mono text-xs text-muted">Fractional AI Builder-in-Residence</p>
                 <p className="mt-4 text-sm leading-relaxed text-muted">
-                  I join your team on a monthly basis as your embedded AI systems builder — without
-                  the full-time headcount. Ongoing builds, iterations, and automation. You get
-                  continuous leverage; I get deep context on your business. The model that produces
-                  the most value per dollar for operators with more than one thing to build.
+                  Monthly embedded access — ongoing builds, iterations, automation. Continuous leverage without the full-time hire. Best for operators with more than one thing to build.
                 </p>
-                {/* ── PRICING PLACEHOLDER ──────────────────────────────── */}
-                {/* Jason: fill in your retainer range here before go-live  */}
-                {/* Realistic range context (for Jason only): $500–$2K/mo   */}
-                {/* ─────────────────────────────────────────────────────── */}
                 <p className="mt-5 font-mono text-xs text-accent">
                   Monthly · scoped per engagement · let&apos;s talk
                 </p>
@@ -514,14 +428,8 @@ export default function BuildPage() {
                 </h3>
                 <p className="mt-1 font-mono text-xs text-muted">One tool, fully delivered</p>
                 <p className="mt-4 text-sm leading-relaxed text-muted">
-                  A defined problem, scoped and priced before we start. I build it; you own it.
-                  Delivered in weeks. No retainer required — this is the right model if you have a
-                  specific tool in mind and want it done cleanly.
+                  Defined problem, scoped and priced before we start. I build it; you own it. Delivered in weeks. No retainer required.
                 </p>
-                {/* ── PRICING PLACEHOLDER ──────────────────────────────── */}
-                {/* Jason: fill in your build range here before go-live     */}
-                {/* Realistic range context (for Jason only): $10K–$30K     */}
-                {/* ─────────────────────────────────────────────────────── */}
                 <p className="mt-5 font-mono text-xs text-accent">
                   Fixed price · scoped per project · let&apos;s talk
                 </p>
@@ -539,8 +447,7 @@ export default function BuildPage() {
                 LET&apos;S TALK
               </h2>
               <p className="mx-auto mt-3 max-w-md text-center text-sm text-muted">
-                Tell me what you&apos;re trying to solve. No commitment — just a conversation. I
-                respond within 48 hours.
+                Tell me what you&apos;re trying to solve. No commitment. I respond within 48 hours.
               </p>
               <ConsultingForm />
             </div>
