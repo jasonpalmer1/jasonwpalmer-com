@@ -106,6 +106,12 @@ export default function ConsultingForm() {
         />
       </label>
 
+      {/* Pricing anchor — shown before budget ask */}
+      <div className="rounded-md border border-border bg-surface px-4 py-3 font-mono text-xs text-muted">
+        {/* TODO: Jason confirm pricing — placeholders below */}
+        Strategy Sprint ~$2,500 &middot; Fixed-scope builds start ~$10K &middot; Retainer from ~$4K/mo
+      </div>
+
       {/* Row 4: Budget range */}
       <label className="block">
         <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
@@ -148,6 +154,10 @@ export default function ConsultingForm() {
           <option value="exploring">Just exploring</option>
         </select>
       </label>
+
+      <p className="font-mono text-[0.6rem] tracking-wide text-muted/60">
+        // What you share here is used only to respond to your inquiry. No data is sold or shared with third parties.
+      </p>
 
       <div className="flex flex-wrap items-center gap-4">
         <button
