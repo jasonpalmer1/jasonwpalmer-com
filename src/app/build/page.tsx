@@ -6,23 +6,37 @@ import { profile } from "@/data/profile";
 export const metadata: Metadata = {
   title: `Work With Me — ${profile.name}`,
   description:
-    "Jason Palmer builds AI decision systems for PE/CRE funds, REITs, and fintech operators. Finance operator who ships the software himself.",
+    "Jason Palmer is a finance operator who builds the software himself — custom AI tools, workflow automation, and internal systems for finance and real-estate teams. Series 65, $3B+ transacted.",
   alternates: { canonical: "/build/" },
 };
 
-const caseStudies = [
+// ── Signature example engagement ────────────────────────────────────────────
+const signatureEngagement = {
+  title: "Fund Admin Reconciliation Automation",
+  meta: "// EXAMPLE ENGAGEMENT · TYPICAL WORKFLOW",
+  problem:
+    "A fund admin team manually reconciles investor statements, capital-call notices, and LP reports across multiple custodians — a multi-hour process each period with high error risk and no audit trail.",
+  built:
+    "An AI agent pipeline that ingests raw custodian exports, matches positions, flags discrepancies, drafts the reconciliation memo, and routes exceptions to a human approver before anything goes out. Every step logged with a full audit trail.",
+  result:
+    "Multi-hour reconciliation compressed to minutes per period. Human-in-the-loop approval gate maintained — the system surfaces decisions; your team makes them. Full audit trail for compliance.",
+  note: "This is a named, repeatable workflow — not a sold client engagement. It illustrates what a typical build looks like.",
+};
+
+// ── Real builds (proof of work) ─────────────────────────────────────────────
+const realBuilds = [
   {
     rarity: "LEGENDARY" as const,
     rarityClass: "text-gold",
     glowClass: "glow-border-legendary",
-    meta: "// CASE-01 · INTERNAL · LIVE",
-    title: "CRE Underwriting AI — HPI Command Center",
+    meta: "// INTERNAL · LIVE",
+    title: "HPI Command Center — CRE Underwriting AI",
     problem:
-      "A real estate fund with a live acquisition pipeline was spending ~60 minutes per manual underwrite. Every deal meant hours of document intake, model population, market pulls, and valuation — before a single decision could be made.",
+      "A real estate fund with a live acquisition pipeline was spending ~60 minutes per manual underwrite — document intake, model population, market pulls, valuation — before a single decision.",
     built:
-      "A proprietary AI system (built on personal initiative) that standardizes the data layer, automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite — grounded in the firm's own data and relentlessly tested before it informs a decision.",
+      "A proprietary AI system (built on personal initiative) that standardizes the data layer, automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm's own data. Relentlessly tested before it informs a decision.",
     outcome:
-      "Underwrites that took ~60 minutes now complete in ~3 minutes. The fund team now has a live operating picture of the portfolio alongside the deal pipeline. Used on real acquisitions and dispositions.",
+      "~60-minute underwrites now complete in ~3 minutes. Live operating picture of the portfolio alongside the deal pipeline. Used on real acquisitions and dispositions.",
     tags: ["Claude Code", "AI agents", "DuckDB", "Python", "Data architecture"],
     link: null,
   },
@@ -30,13 +44,13 @@ const caseStudies = [
     rarity: "EPIC" as const,
     rarityClass: "text-accent-3",
     glowClass: "glow-border-epic",
-    meta: "// CASE-02 · PUBLIC · LIVE",
-    title: "Supply-Chain Decision Tool — wafergraph.com",
+    meta: "// PUBLIC · LIVE",
+    title: "wafergraph.com — Supply-Chain Decision Tool",
     problem:
-      "No free, neutral, current map of the semiconductor & AI supply chain existed — just scattered analyst reports and paywalled databases. Investors and operators couldn't quickly understand dependencies, chokepoints, and market share across the full value chain.",
+      "No free, neutral, current map of the semiconductor & AI supply chain existed — just scattered analyst reports and paywalled databases.",
     built:
-      "An interactive decision tool covering 456+ companies across the full semiconductor value chain — materials, equipment, EDA/IP, chip design, foundry, memory, packaging, and AI/data center. Each company profiled with financials, supply-chain dependencies, market share, and chokepoint exposure.",
-    outcome: "Shipped and live at wafergraph.com. A working product with real data — built and deployed end to end.",
+      "An interactive decision tool covering 456+ companies across the full semiconductor value chain — materials, equipment, EDA/IP, chip design, foundry, memory, packaging, and AI/data center. Each company profiled with financials, dependencies, market share, and chokepoint exposure.",
+    outcome: "Shipped and live.",
     outcomeLink: { href: "https://wafergraph.com", label: "→ wafergraph.com" },
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
     link: "https://wafergraph.com",
@@ -45,14 +59,14 @@ const caseStudies = [
     rarity: "EPIC" as const,
     rarityClass: "text-accent-3",
     glowClass: "glow-border-epic",
-    meta: "// CASE-03 · PUBLIC · LIVE",
-    title: "Full Product, Shipped in ~2 Days — whosstarting.com",
+    meta: "// PUBLIC · LIVE",
+    title: "whosstarting.com — Full Product, Shipped in ~2 Days",
     problem:
-      "No good way to check college football depth charts offline at a game. Every existing option was ad-heavy, slow, or required a signal. The problem was simple but no one had solved it cleanly.",
+      "No good way to check college football depth charts offline at a game. Simple problem, no clean solution.",
     built:
-      "A full offline-first PWA covering CFB and MLB depth charts — with player OVR ratings, crowd-debate mechanics, and shareable cards. Zero ads. Built from concept to deployed product.",
+      "A full offline-first PWA covering CFB and MLB depth charts — player OVR ratings, crowd-debate mechanics, shareable cards. Zero ads. Concept to deployed product.",
     outcome:
-      "Live at whosstarting.com. Shipped in approximately two days. Demonstrates build velocity that most development shops quote in months.",
+      "Live. Shipped in approximately two days — a build pace most development shops quote in months.",
     outcomeLink: { href: "https://whosstarting.com", label: "→ whosstarting.com" },
     tags: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
     link: "https://whosstarting.com",
@@ -64,11 +78,13 @@ export default function BuildPage() {
     <>
       <Nav />
       <main>
-        {/* ── 1. Hero ── */}
+
+        {/* ── 1. Hero / Positioning ────────────────────────────────────────── */}
         <section className="relative">
           <div className="mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28">
             <p className="label">// consulting // build</p>
             <div className="mt-6 hud rounded-2xl p-6 sm:p-10">
+
               {/* Status badge */}
               <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs text-accent">
                 <span className="pulse-dot" /> ACCEPTING ENGAGEMENTS
@@ -76,25 +92,43 @@ export default function BuildPage() {
 
               {/* Headline */}
               <h1 className="mt-6 font-display text-4xl font-black tracking-tight sm:text-6xl">
-                <span className="text-glow">The finance operator</span>
+                <span className="text-glow">Custom software built by someone</span>
                 <br />
-                <span className="text-gradient">who builds the AI himself.</span>
+                <span className="text-gradient">who&apos;s actually run the business.</span>
               </h1>
 
-              {/* Subhead */}
+              {/* Core line */}
               <p className="mt-6 max-w-2xl text-lg font-semibold leading-snug text-foreground sm:text-xl">
-                Most &ldquo;AI consultants&rdquo; haven&apos;t underwritten a deal. Most operators
-                can&apos;t ship software. I&apos;ve done both — $3B+ in transactions closed, and a
-                live AI system that compresses hours of underwriting to minutes.
+                I sit with you, find the highest-ROI thing to build or automate, and ship it in
+                weeks — no agency, no committee, one operator who actually understands your
+                business.
               </p>
 
-              {/* Supporting copy */}
+              {/* Credibility / supporting copy */}
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
-                I work with PE/CRE fund operators, REITs, and fintech/proptech founders who need
-                real AI systems — not slide decks. If you&apos;re sitting on messy deal data,
-                bloated analyst workflows, or a blank screen where your decision tools should be,
-                let&apos;s talk.
+                Series 65 licensed. $3B+ in transactions executed across real estate, capital
+                markets, and interest-rate derivatives. I&apos;ve underwritten deals, run
+                dispositions end-to-end, and built the AI that compresses that work to minutes.
+                Most &ldquo;AI consultants&rdquo; haven&apos;t closed a deal in their lives. I
+                built the tool to do mine faster.
               </p>
+
+              {/* Trust signals */}
+              <div className="mt-6 flex flex-wrap gap-3">
+                {[
+                  "JUDGMENT + SPEED",
+                  "NOT PRICE",
+                  "YOUR DATA STAYS IN YOUR ENVIRONMENT",
+                  "ONE ACCOUNTABLE PERSON",
+                ].map((signal) => (
+                  <span
+                    key={signal}
+                    className="rounded border border-border bg-surface px-2 py-1 font-mono text-[0.6rem] tracking-widest text-accent/70"
+                  >
+                    {signal}
+                  </span>
+                ))}
+              </div>
 
               {/* CTA buttons */}
               <div className="mt-8 flex flex-wrap items-center gap-3">
@@ -102,7 +136,7 @@ export default function BuildPage() {
                   href="#consult"
                   className="rounded-md border border-accent bg-accent/10 px-5 py-2.5 font-mono text-sm font-semibold tracking-wide text-accent transition-colors hover:bg-accent hover:text-background"
                 >
-                  [ OPEN A CHANNEL ]
+                  [ WORK WITH ME ]
                 </a>
                 <a
                   href="#services"
@@ -115,7 +149,63 @@ export default function BuildPage() {
           </div>
         </section>
 
-        {/* ── 2. Services ── */}
+        {/* ── 2. Who It&apos;s For ──────────────────────────────────────────────── */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <p className="label">// who this is for</p>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
+              THE RIGHT FIT
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted">
+              Finance and real-estate operators are the warm-start audience — lightly regulated,
+              high data density, painful manual workflows. But increasingly, any business with a
+              process worth automating.
+            </p>
+
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {[
+                {
+                  icon: "🏦",
+                  title: "Private & Non-Bank Lenders",
+                  body: "Manual loan origination, servicing notes, draw requests — one workflow eating analyst hours that software should handle.",
+                },
+                {
+                  icon: "🏢",
+                  title: "Real Estate Operators & Family Offices",
+                  body: "Deal underwriting, asset management reporting, LP communications — the operational surface that scales when you build the right internal tools.",
+                },
+                {
+                  icon: "📊",
+                  title: "Fund Admins & Fund Managers",
+                  body: "Reconciliation, capital-call notices, investor reporting — repeatable, high-stakes, table-stakes for compliance.",
+                },
+                {
+                  icon: "💼",
+                  title: "Quoted Absurd Agency Prices",
+                  body: "If an agency quoted you $200K to build what you actually need, and you suspect it&apos;s a 6-week project — you&apos;re probably right.",
+                },
+                {
+                  icon: "🔧",
+                  title: "Can&apos;t Make SaaS Fit",
+                  body: "Your workflow is too specific, your data too proprietary, or the off-the-shelf tools don&apos;t talk to each other in the way you need.",
+                },
+                {
+                  icon: "⚡",
+                  title: "Any Business With a Process Worth Automating",
+                  body: "Finance and real estate first — and increasingly, any operator running a repeatable, high-value process that&apos;s still done by hand.",
+                },
+              ].map(({ icon, title, body }) => (
+                <div key={title} className="hud rounded-xl p-5">
+                  <span className="text-2xl">{icon}</span>
+                  <h3 className="mt-3 font-display text-base font-bold text-foreground">{title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ── 3. Services ─────────────────────────────────────────────────────── */}
         <section id="services" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <p className="label">// what i build</p>
@@ -123,85 +213,194 @@ export default function BuildPage() {
               SERVICES
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              Four types of engagements. All anchored to real finance and operations problems.
+              Three types of engagements. All anchored to real finance and operations problems —
+              not buzzword theater.
             </p>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-2">
-              {/* Card 1 — Decision & scoring systems */}
+            <div className="mt-10 grid gap-6 sm:grid-cols-3">
+
+              {/* Service 1 — Ship it fast */}
               <div className="hud rounded-xl p-6 glow-border-legendary">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">⚖️</span>
-                  <div>
-                    <span className="font-mono text-[0.65rem] tracking-widest text-gold">
-                      CORE OFFERING
-                    </span>
-                    <h3 className="mt-1 font-display text-lg font-bold text-foreground">
-                      Decision &amp; Scoring Systems
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                      Turn messy deal data into structured, automated decisions. Underwriting tools,
-                      market-screening dashboards, risk-scoring pipelines — built on your data, tuned
-                      to your criteria. The same type of system I built in-house at a live CRE fund.
-                    </p>
-                  </div>
-                </div>
+                <p className="font-mono text-[0.65rem] tracking-widest text-gold">CORE OFFERING</p>
+                <span className="mt-3 block text-2xl">⚡</span>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Ship It Fast
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  Idea to working internal tool or MVP in weeks — not months. I scope the build,
+                  price it, and deliver it. No scope creep, no surprise invoices. If your team has
+                  been talking about a tool for six months, I&apos;ll have a working version before
+                  the next planning cycle.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">
+                  Best for: underwriting tools · internal dashboards · workflow apps
+                </p>
               </div>
 
-              {/* Card 2 — Command center dashboards */}
+              {/* Service 2 — Automate the grind */}
               <div className="hud rounded-xl p-6">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">🖥️</span>
-                  <div>
-                    <h3 className="mt-0 font-display text-lg font-bold text-foreground">
-                      AI Command-Center Dashboards
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                      Live operating picture of your portfolio, fund, or pipeline. Pulls from your
-                      existing data sources, surfaces what matters, and gives your team a single pane
-                      of glass instead of seventeen spreadsheets.
-                    </p>
-                  </div>
-                </div>
+                <span className="mt-1 block text-2xl">🤖</span>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Automate the Grind
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  AI agents for the repetitive analyst and ops work — document intake, data
+                  extraction, report drafting, reconciliation, pipeline triage. Human-in-the-loop
+                  approval gates and full audit trails built in. Decision-support, not black-box
+                  automation.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">
+                  Best for: fund admin · document-heavy ops · analyst workflows
+                </p>
               </div>
 
-              {/* Card 3 — Fast product/MVP builds */}
+              {/* Service 3 — Wire it together */}
               <div className="hud rounded-xl p-6">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">⚡</span>
-                  <div>
-                    <h3 className="mt-0 font-display text-lg font-bold text-foreground">
-                      Fast Product &amp; MVP Builds
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                      I ship. Full products in days, not months. If you have an idea stuck in a Notion
-                      doc or a feature your team keeps pushing, I can take it from concept to working
-                      software at a pace most agencies can&apos;t match.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card 4 — AI workflow automation */}
-              <div className="hud rounded-xl p-6">
-                <div className="flex items-start gap-3">
-                  <span className="text-2xl">🤖</span>
-                  <div>
-                    <h3 className="mt-0 font-display text-lg font-bold text-foreground">
-                      AI Workflow &amp; Agent Automation
-                    </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
-                      Automate the analyst-hours: document intake, data extraction, report drafting,
-                      pipeline triage. AI agents that do the repetitive cognitive work so your team
-                      focuses on judgment calls, not copy-paste.
-                    </p>
-                  </div>
-                </div>
+                <span className="mt-1 block text-2xl">🔗</span>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Wire It Together
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  Connect your existing tools, models, and data into one coherent workflow. CRM to
+                  model to report. Custodian data to reconciliation to memo. The integrations that
+                  no SaaS vendor will build for you because your setup is too specific — and too
+                  valuable.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">
+                  Best for: data integration · existing-tool orchestration · bespoke pipelines
+                </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── 3. Proof / case studies ── */}
+        {/* ── 4. Signature Example Engagement ─────────────────────────────────── */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <p className="label">// what a typical engagement looks like</p>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
+              NAMED WORKFLOW EXAMPLE
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted">
+              This is a named, repeatable workflow — not a sold client engagement. It illustrates
+              the shape and scope of a typical build.
+            </p>
+
+            <div className="mt-10 hud rounded-xl p-6 sm:p-8 glow-border-epic">
+              <div className="mb-4 flex flex-wrap items-center gap-3">
+                <span className="font-mono text-[0.65rem] tracking-widest text-accent-3">EPIC</span>
+                <span className="font-mono text-[0.65rem] tracking-widest text-muted">
+                  {signatureEngagement.meta}
+                </span>
+              </div>
+              <h3 className="font-display text-xl font-bold text-foreground">
+                {signatureEngagement.title}
+              </h3>
+              <div className="mt-6 grid gap-6 sm:grid-cols-3">
+                <div>
+                  <p className="font-mono text-[0.65rem] tracking-widest text-muted">THE PROBLEM</p>
+                  <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+                    {signatureEngagement.problem}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[0.65rem] tracking-widest text-muted">WHAT I BUILD</p>
+                  <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+                    {signatureEngagement.built}
+                  </p>
+                </div>
+                <div>
+                  <p className="font-mono text-[0.65rem] tracking-widest text-muted">THE RESULT</p>
+                  <p className="mt-1 text-sm leading-relaxed text-foreground/80">
+                    {signatureEngagement.result}
+                  </p>
+                </div>
+              </div>
+              <p className="mt-6 border-t border-border pt-4 font-mono text-[0.65rem] tracking-wide text-muted/60">
+                ⚠ {signatureEngagement.note}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 5. How We Work ───────────────────────────────────────────────────── */}
+        <section className="border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <p className="label">// process</p>
+            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
+              HOW WE WORK
+            </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted">
+              Three phases. Every engagement starts with a strategy sprint so we&apos;re building
+              the right thing — not just something.
+            </p>
+
+            {/* Trust model callout */}
+            <div className="mt-8 rounded-xl border border-accent/30 bg-accent/5 p-5">
+              <p className="font-mono text-[0.65rem] tracking-widest text-accent">
+                // FINANCE-GRADE TRUST MODEL
+              </p>
+              <p className="mt-2 text-sm leading-relaxed text-foreground/80">
+                Every system I build is decision-support with{" "}
+                <strong className="text-foreground">human-in-the-loop approval gates</strong> and{" "}
+                <strong className="text-foreground">full audit trails</strong>. AI surfaces the
+                analysis; your team approves before anything goes out. Not a black box — a tool
+                your team controls, with a throat to choke if something goes wrong. Your data
+                stays in your environment.
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-6 sm:grid-cols-3">
+              <div className="hud rounded-xl p-6">
+                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
+                  01 // STRATEGY SPRINT
+                </p>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Diagnose the Highest-ROI Target
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  A focused engagement to map your current workflows, identify the highest-value
+                  automation or build target, and produce a concrete spec. Walk away with a clear
+                  plan — not a slide deck full of buzzwords. Sets up every subsequent engagement
+                  for a clean scope.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement</p>
+              </div>
+
+              <div className="hud rounded-xl p-6">
+                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
+                  02 // FIXED-SCOPE BUILD
+                </p>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Build It
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  You have a defined problem; I build the solution. Fixed scope, fixed price,
+                  delivered. Audit trails, approval gates, and human-in-the-loop controls built
+                  in from the start. Weeks, not months.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">Fixed price · scoped per project</p>
+              </div>
+
+              <div className="hud rounded-xl p-6">
+                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
+                  03 // ONGOING RETAINER
+                </p>
+                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                  Fractional AI Builder in Residence
+                </h3>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  Embedded part-time — your AI systems builder without the full-time headcount.
+                  Ongoing builds, iterations, and ops support. Best for teams who want continuous
+                  leverage without committing to a hire.
+                </p>
+                <p className="mt-4 font-mono text-xs text-muted">Monthly · let&apos;s talk</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ── 6. Proof — Real Builds Only ─────────────────────────────────────── */}
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <p className="label">// real builds</p>
@@ -209,54 +408,55 @@ export default function BuildPage() {
               PROOF OF WORK
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              No invented client names. No fabricated outcomes. These are real systems I built.
+              No invented client names. No fabricated outcomes. These are real systems I built —
+              shown exactly as they are.
             </p>
 
             <div className="mt-10 space-y-6">
-              {caseStudies.map((cs) => (
+              {realBuilds.map((b) => (
                 <div
-                  key={cs.title}
-                  className={`hud rounded-xl p-6 sm:p-8 ${cs.glowClass}`}
+                  key={b.title}
+                  className={`hud rounded-xl p-6 sm:p-8 ${b.glowClass}`}
                 >
                   <div className="mb-4 flex flex-wrap items-center gap-3">
-                    <span className={`font-mono text-[0.65rem] tracking-widest ${cs.rarityClass}`}>
-                      {cs.rarity}
+                    <span className={`font-mono text-[0.65rem] tracking-widest ${b.rarityClass}`}>
+                      {b.rarity}
                     </span>
                     <span className="font-mono text-[0.65rem] tracking-widest text-muted">
-                      {cs.meta}
+                      {b.meta}
                     </span>
                   </div>
-                  <h3 className="font-display text-xl font-bold text-foreground">{cs.title}</h3>
+                  <h3 className="font-display text-xl font-bold text-foreground">{b.title}</h3>
                   <div className="mt-4 grid gap-6 sm:grid-cols-3">
                     <div>
                       <p className="font-mono text-[0.65rem] tracking-widest text-muted">PROBLEM</p>
-                      <p className="mt-1 text-sm leading-relaxed text-foreground/80">{cs.problem}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-foreground/80">{b.problem}</p>
                     </div>
                     <div>
                       <p className="font-mono text-[0.65rem] tracking-widest text-muted">
                         WHAT I BUILT
                       </p>
-                      <p className="mt-1 text-sm leading-relaxed text-foreground/80">{cs.built}</p>
+                      <p className="mt-1 text-sm leading-relaxed text-foreground/80">{b.built}</p>
                     </div>
                     <div>
                       <p className="font-mono text-[0.65rem] tracking-widest text-muted">OUTCOME</p>
                       <p className="mt-1 text-sm leading-relaxed text-foreground/80">
-                        {cs.outcome}{" "}
-                        {cs.outcomeLink && (
+                        {b.outcome}{" "}
+                        {"outcomeLink" in b && b.outcomeLink && (
                           <a
-                            href={cs.outcomeLink.href}
+                            href={b.outcomeLink.href}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="text-accent transition-colors hover:text-accent-2"
                           >
-                            {cs.outcomeLink.label}
+                            {b.outcomeLink.label}
                           </a>
                         )}
                       </p>
                     </div>
                   </div>
                   <div className="mt-4 flex flex-wrap gap-2">
-                    {cs.tags.map((tag) => (
+                    {b.tags.map((tag) => (
                       <span
                         key={tag}
                         className="rounded border border-border bg-surface px-2 py-0.5 font-mono text-[0.6rem] text-accent/70"
@@ -271,77 +471,66 @@ export default function BuildPage() {
           </div>
         </section>
 
-        {/* ── 4. How we work ── */}
+        {/* ── 7. Engagement Models ─────────────────────────────────────────────── */}
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <p className="label">// engagement models</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
-              HOW WE WORK
+              WHAT IT COSTS
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              Three ways to engage. All scoped to your problem — no retainer traps, no vague
-              &ldquo;AI strategy&rdquo; theater.
+              Scoped per engagement — no posted prices because every problem is different. What I
+              can tell you: you&apos;re paying for judgment and speed, not headcount.
             </p>
 
-            <div className="mt-10 grid gap-6 sm:grid-cols-3">
-              {/* Strategy Sprint */}
-              <div className="hud rounded-xl p-6">
-                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
-                  01 // STRATEGY SPRINT
-                </p>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
-                  Strategy Sprint
+            <div className="mt-10 grid gap-6 sm:grid-cols-2">
+
+              {/* Embedded retainer — lead offer */}
+              <div className="hud rounded-xl p-6 glow-border-legendary">
+                <p className="font-mono text-[0.65rem] tracking-widest text-gold">FEATURED MODEL</p>
+                <h3 className="mt-3 font-display text-xl font-bold text-foreground">
+                  Embedded Retainer
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  A focused engagement to diagnose your current workflow, identify the highest-value
-                  AI intervention, and produce a concrete build plan. Walk away with a clear spec —
-                  not a deck full of buzzwords.
+                <p className="mt-1 font-mono text-xs text-muted">Fractional AI Builder-in-Residence</p>
+                <p className="mt-4 text-sm leading-relaxed text-muted">
+                  I join your team on a monthly basis as your embedded AI systems builder — without
+                  the full-time headcount. Ongoing builds, iterations, and automation. You get
+                  continuous leverage; I get deep context on your business. The model that produces
+                  the most value per dollar for operators with more than one thing to build.
                 </p>
-                <p className="mt-4 font-mono text-xs text-muted">
-                  Scoped per engagement · let&apos;s talk
+                {/* ── PRICING PLACEHOLDER ──────────────────────────────── */}
+                {/* Jason: fill in your retainer range here before go-live  */}
+                {/* Realistic range context (for Jason only): $500–$2K/mo   */}
+                {/* ─────────────────────────────────────────────────────── */}
+                <p className="mt-5 font-mono text-xs text-accent">
+                  Monthly · scoped per engagement · let&apos;s talk
                 </p>
               </div>
 
               {/* Fixed-scope build */}
               <div className="hud rounded-xl p-6">
-                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
-                  02 // FIXED-SCOPE BUILD
-                </p>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                <h3 className="mt-1 font-display text-xl font-bold text-foreground">
                   Fixed-Scope Build
                 </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  You have a defined problem; I build the solution. Scoped, priced, and delivered —
-                  no scope creep, no surprise invoices. Best for underwriting tools, dashboards, and
-                  MVP products.
+                <p className="mt-1 font-mono text-xs text-muted">One tool, fully delivered</p>
+                <p className="mt-4 text-sm leading-relaxed text-muted">
+                  A defined problem, scoped and priced before we start. I build it; you own it.
+                  Delivered in weeks. No retainer required — this is the right model if you have a
+                  specific tool in mind and want it done cleanly.
                 </p>
-                <p className="mt-4 font-mono text-xs text-muted">
-                  Fixed price · scoped per project
-                </p>
-              </div>
-
-              {/* Fractional AI builder */}
-              <div className="hud rounded-xl p-6">
-                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
-                  03 // FRACTIONAL
-                </p>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
-                  Fractional AI Builder in Residence
-                </h3>
-                <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Embedded on a part-time basis — your AI systems builder without the full-time
-                  headcount. Ongoing builds, iterations, and ops support. Best for funds and operators
-                  who need continuous leverage.
-                </p>
-                <p className="mt-4 font-mono text-xs text-muted">
-                  Monthly engagement · let&apos;s talk
+                {/* ── PRICING PLACEHOLDER ──────────────────────────────── */}
+                {/* Jason: fill in your build range here before go-live     */}
+                {/* Realistic range context (for Jason only): $10K–$30K     */}
+                {/* ─────────────────────────────────────────────────────── */}
+                <p className="mt-5 font-mono text-xs text-accent">
+                  Fixed price · scoped per project · let&apos;s talk
                 </p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── 5. Consulting contact form ── */}
+        {/* ── 8. Consulting Contact Form ───────────────────────────────────────── */}
         <section id="consult" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="hud mx-auto max-w-2xl rounded-2xl p-8 sm:p-12">
@@ -350,15 +539,17 @@ export default function BuildPage() {
                 LET&apos;S TALK
               </h2>
               <p className="mx-auto mt-3 max-w-md text-center text-sm text-muted">
-                Tell me what you&apos;re trying to build. I&apos;ll respond within 48 hours.
+                Tell me what you&apos;re trying to solve. No commitment — just a conversation. I
+                respond within 48 hours.
               </p>
               <ConsultingForm />
             </div>
           </div>
         </section>
+
       </main>
 
-      {/* ── Footer ── */}
+      {/* ── Footer ───────────────────────────────────────────────────────────── */}
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 font-mono text-xs text-muted sm:flex-row">
           <span className="flex items-center gap-2">
