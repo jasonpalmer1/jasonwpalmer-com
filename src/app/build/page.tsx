@@ -332,7 +332,7 @@ export default function BuildPage() {
                   Build It — Ships in 4&ndash;8 Weeks
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — a throat to choke, and your data stays in your environment.{/* TODO: Jason confirm number */}
+                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — and your data stays in your environment.{/* TODO: Jason confirm number */}
                 </p>
               </div>
 
