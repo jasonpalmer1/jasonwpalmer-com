@@ -6,7 +6,7 @@ import { profile, socials } from "@/data/profile";
 export const metadata: Metadata = {
   title: `Work With Me — ${profile.name}`,
   description:
-    "Jason Palmer builds custom software fast — AI tools, workflow automation, and internal systems for any business running a painful manual process. Series 65, $3B+ transacted. Fixed price. Ships in weeks.",
+    "Jason Palmer builds custom software fast — AI tools, workflow automation, and internal systems for any business running a painful manual process. FINRA Series 65, $3B+ transacted. Fixed price. Ships in weeks.",
   alternates: { canonical: "/build/" },
 };
 
@@ -103,7 +103,7 @@ export default function BuildPage() {
                 >
                   Jason Palmer
                 </a>
-                {" "}— Series 65, $3B+ in real transactions, and I&apos;ve run the ops side of businesses myself.
+                {" "}— FINRA Series 65, $3B+ in real transactions, and I&apos;ve run the ops side of businesses myself.
                 That means I get how your business works and where the real ROI is — not just what&apos;s technically possible.
                 Finance is where I started; any operator with a high-value manual process is who I serve.
               </p>
@@ -141,38 +141,38 @@ export default function BuildPage() {
             <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {[
                 {
-                  icon: "⚙️",
+                  tag: "OPS",
                   title: "Ops & Services Businesses",
                   body: "Any team where skilled people spend hours on work a machine could handle — intake, routing, reporting, reconciliation.",
                 },
                 {
-                  icon: "🚚",
+                  tag: "LOGISTICS",
                   title: "Logistics & Field Ops",
                   body: "Dispatch, scheduling, exception handling, or status reporting that still runs on spreadsheets and phone calls.",
                 },
                 {
-                  icon: "🏢",
+                  tag: "FINANCE / RE",
                   title: "Real Estate & Finance",
                   body: "Deal underwriting, fund reporting, loan origination, LP communications — the ops surface that breaks at scale.",
                 },
                 {
-                  icon: "💼",
+                  tag: "COST",
                   title: "Quoted Absurd Agency Prices",
                   body: "If they quoted $200K for what sounds like a 6-week project — you're probably right to look elsewhere.",
                 },
                 {
-                  icon: "🔧",
+                  tag: "SAAS",
                   title: "Can't Make SaaS Fit",
                   body: "Your data is too proprietary, the workflow is too specific, or the off-the-shelf tools won't connect.",
                 },
                 {
-                  icon: "📊",
+                  tag: "SCALE",
                   title: "High-Repeat, High-Stakes Work",
                   body: "Analyst or ops work that happens weekly — reconciliations, reports, approvals. High error risk, no audit trail.",
                 },
-              ].map(({ icon, title, body }) => (
+              ].map(({ tag, title, body }) => (
                 <div key={title} className="hud rounded-xl p-5">
-                  <span className="text-2xl">{icon}</span>
+                  <p className="font-mono text-[0.6rem] tracking-widest text-accent/70">// {tag}</p>
                   <h3 className="mt-3 font-display text-base font-bold text-foreground">{title}</h3>
                   <p className="mt-2 text-sm leading-relaxed text-muted">{body}</p>
                 </div>
@@ -194,8 +194,7 @@ export default function BuildPage() {
               {/* Service 1 — Ship it fast */}
               <div className="hud rounded-xl p-6 glow-border-legendary">
                 <p className="font-mono text-[0.65rem] tracking-widest text-gold">CORE OFFERING</p>
-                <span className="mt-3 block text-2xl">⚡</span>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                <h3 className="mt-4 font-display text-lg font-bold text-foreground">
                   Ship It Fast
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -208,8 +207,7 @@ export default function BuildPage() {
 
               {/* Service 2 — Automate the grind */}
               <div className="hud rounded-xl p-6">
-                <span className="mt-1 block text-2xl">🤖</span>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                <h3 className="mt-1 font-display text-lg font-bold text-foreground">
                   Automate the Grind
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -222,8 +220,7 @@ export default function BuildPage() {
 
               {/* Service 3 — Wire it together */}
               <div className="hud rounded-xl p-6">
-                <span className="mt-1 block text-2xl">🔗</span>
-                <h3 className="mt-2 font-display text-lg font-bold text-foreground">
+                <h3 className="mt-1 font-display text-lg font-bold text-foreground">
                   Wire It Together
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
@@ -387,8 +384,7 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Map your workflows, identify the highest-value target, produce a concrete spec. A plan — not a slide deck.
                 </p>
-                {/* TODO: Jason confirm — placeholder ~$2,500 */}
-                <p className="mt-4 font-mono text-xs text-accent">~$2,500 · flat fee</p>
+                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
 
               <div className="hud rounded-xl p-6">
@@ -401,8 +397,7 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Fixed scope, fixed price, delivered in 4&ndash;8 weeks. Human-in-the-loop controls and audit trails from day one.
                 </p>
-                {/* TODO: Jason confirm — placeholder starts ~$10K */}
-                <p className="mt-4 font-mono text-xs text-accent">Starts ~$10K · fixed price · scoped per project</p>
+                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
 
               <div className="hud rounded-xl p-6">
@@ -415,19 +410,18 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Embedded part-time — your AI systems builder without the full-time headcount. Ongoing builds, iterations, ops support.
                 </p>
-                {/* TODO: Jason confirm — placeholder from ~$4K/mo */}
-                <p className="mt-4 font-mono text-xs text-accent">From ~$4K/mo · monthly</p>
+                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
             </div>
           </div>
         </section>
 
-        {/* ── 7. Engagement Models / What It Costs ─────────────────────────────── */}
+        {/* ── 7. Engagement Models ─────────────────────────────────────────────── */}
         <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <p className="label">// engagement models</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
-              WHAT IT COSTS
+              ENGAGEMENT MODELS
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
               Fixed scope. Fixed price. You&apos;re paying for judgment and speed — not headcount or agency overhead.
@@ -445,9 +439,8 @@ export default function BuildPage() {
                 <p className="mt-4 text-sm leading-relaxed text-muted">
                   Monthly embedded access — ongoing builds, iterations, automation. Continuous leverage without the full-time hire. Best for operators with more than one thing to build.
                 </p>
-                {/* TODO: Jason confirm — placeholder from ~$4K/mo */}
-                <p className="mt-5 font-mono text-xs text-accent">
-                  From ~$4K/mo · scope sets the rate
+                <p className="mt-5 font-mono text-xs text-muted">
+                  Scoped per engagement — price set before any work begins.
                 </p>
               </div>
 
@@ -460,15 +453,14 @@ export default function BuildPage() {
                 <p className="mt-4 text-sm leading-relaxed text-muted">
                   Defined problem, scoped and priced before we start. I build it; you own it. Delivered in 4&ndash;8 weeks. No retainer required.
                 </p>
-                {/* TODO: Jason confirm — placeholder starts ~$10K */}
-                <p className="mt-5 font-mono text-xs text-accent">
-                  Starts ~$10K · fixed price · scoped per project
+                <p className="mt-5 font-mono text-xs text-muted">
+                  Scoped per engagement — price set before any work begins.
                 </p>
               </div>
             </div>
 
             <p className="mt-6 font-mono text-[0.65rem] tracking-wide text-muted/60">
-              // Pricing shown is a starting range — final scope and price set before any work begins. Strategy Sprint (~$2,500) can precede a build.
+              // Final scope and price set before any work begins. No surprise invoices.
             </p>
           </div>
         </section>
