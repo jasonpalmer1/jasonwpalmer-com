@@ -106,35 +106,7 @@ export default function ConsultingForm() {
         />
       </label>
 
-      {/* Pricing anchor — shown before budget ask */}
-      <div className="rounded-md border border-border bg-surface px-4 py-3 font-mono text-xs text-muted">
-        {/* TODO: Jason confirm pricing — placeholders below */}
-        Strategy Sprint ~$2,500 &middot; Fixed-scope builds start ~$10K &middot; Retainer from ~$4K/mo
-      </div>
-
-      {/* Row 4: Budget range */}
-      <label className="block">
-        <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
-          BUDGET RANGE
-        </span>
-        <select
-          name="budget"
-          required
-          defaultValue=""
-          className={`${inputClass} cursor-pointer`}
-        >
-          <option value="" disabled>
-            -- Select a range --
-          </option>
-          <option value="&lt;$10k">Under $10K</option>
-          <option value="$10k–$30k">$10K – $30K</option>
-          <option value="$30k–$75k">$30K – $75K</option>
-          <option value="$75k+">$75K+</option>
-          <option value="not-sure">Not sure yet — let&apos;s talk</option>
-        </select>
-      </label>
-
-      {/* Row 5: Timeline */}
+      {/* Row 4: Timeline */}
       <label className="block">
         <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
           TIMELINE

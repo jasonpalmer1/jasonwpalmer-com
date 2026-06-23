@@ -372,6 +372,9 @@ export default function BuildPage() {
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
               HOW WE WORK
             </h2>
+            <p className="mt-3 max-w-xl text-sm text-muted">
+              Fixed scope. Fixed price. You&apos;re paying for judgment and speed — not headcount or agency overhead.
+            </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               <div className="hud rounded-xl p-6">
@@ -379,10 +382,10 @@ export default function BuildPage() {
                   01 // STRATEGY SPRINT
                 </p>
                 <h3 className="mt-2 font-display text-lg font-bold text-foreground">
-                  Diagnose the Highest-ROI Target
+                  Diagnose &amp; Scope
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Map your workflows, identify the highest-value target, produce a concrete spec. A plan — not a slide deck.
+                  Map your workflows, identify the highest-value target, produce a concrete spec and price. A plan — not a slide deck.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
@@ -392,70 +395,25 @@ export default function BuildPage() {
                   02 // FIXED-SCOPE BUILD
                 </p>
                 <h3 className="mt-2 font-display text-lg font-bold text-foreground">
-                  Build It
+                  Build It — Ships in 4&ndash;8 Weeks
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Fixed scope, fixed price, delivered in 4&ndash;8 weeks. Human-in-the-loop controls and audit trails from day one.
+                  Defined problem, fixed scope, fixed price. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — a throat to choke, and your data stays in your environment.
                 </p>
                 <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
 
-              <div className="hud rounded-xl p-6">
-                <p className="font-mono text-[0.65rem] tracking-widest text-accent">
-                  03 // ONGOING RETAINER
+              <div className="hud rounded-xl p-6 glow-border-legendary">
+                <p className="font-mono text-[0.65rem] tracking-widest text-gold">
+                  03 // OPTIONAL — ONGOING RETAINER
                 </p>
                 <h3 className="mt-2 font-display text-lg font-bold text-foreground">
-                  Fractional AI Builder in Residence
+                  Fractional Builder-in-Residence
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Embedded part-time — your AI systems builder without the full-time headcount. Ongoing builds, iterations, ops support.
-                </p>
-                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* ── 7. Engagement Models ─────────────────────────────────────────────── */}
-        <section className="border-t border-border">
-          <div className="mx-auto max-w-6xl px-6 py-20">
-            <p className="label">// engagement models</p>
-            <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-gradient">
-              ENGAGEMENT MODELS
-            </h2>
-            <p className="mt-3 max-w-xl text-sm text-muted">
-              Fixed scope. Fixed price. You&apos;re paying for judgment and speed — not headcount or agency overhead.
-            </p>
-
-            <div className="mt-10 grid gap-6 sm:grid-cols-2">
-
-              {/* Embedded retainer — lead offer */}
-              <div className="hud rounded-xl p-6 glow-border-legendary">
-                <p className="font-mono text-[0.65rem] tracking-widest text-gold">FEATURED MODEL</p>
-                <h3 className="mt-3 font-display text-xl font-bold text-foreground">
-                  Embedded Retainer
-                </h3>
-                <p className="mt-1 font-mono text-xs text-muted">Fractional AI Builder-in-Residence</p>
-                <p className="mt-4 text-sm leading-relaxed text-muted">
                   Monthly embedded access — ongoing builds, iterations, automation. Continuous leverage without the full-time hire. Best for operators with more than one thing to build.
                 </p>
-                <p className="mt-5 font-mono text-xs text-muted">
-                  Scoped per engagement — price set before any work begins.
-                </p>
-              </div>
-
-              {/* Fixed-scope build */}
-              <div className="hud rounded-xl p-6">
-                <h3 className="mt-1 font-display text-xl font-bold text-foreground">
-                  Fixed-Scope Build
-                </h3>
-                <p className="mt-1 font-mono text-xs text-muted">One tool, fully delivered</p>
-                <p className="mt-4 text-sm leading-relaxed text-muted">
-                  Defined problem, scoped and priced before we start. I build it; you own it. Delivered in 4&ndash;8 weeks. No retainer required.
-                </p>
-                <p className="mt-5 font-mono text-xs text-muted">
-                  Scoped per engagement — price set before any work begins.
-                </p>
+                <p className="mt-4 font-mono text-xs text-muted">Scoped per engagement — price set before any work begins.</p>
               </div>
             </div>
 
@@ -465,7 +423,7 @@ export default function BuildPage() {
           </div>
         </section>
 
-        {/* ── 8. Consulting Contact Form ───────────────────────────────────────── */}
+        {/* ── 7. Consulting Contact Form ────────────────────────────────────────── */}
         <section id="consult" className="scroll-mt-20 border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <div className="hud mx-auto max-w-2xl rounded-2xl p-8 sm:p-12">
