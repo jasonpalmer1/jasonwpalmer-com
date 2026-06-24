@@ -313,6 +313,9 @@ export default function BuildPage() {
             <p className="mt-4 font-mono text-sm text-foreground/80">
               Most projects start at $10K — exact scope and price fixed in a paid Strategy Sprint before any build.{/* TODO: Jason confirm number */}
             </p>
+            <p className="mt-1 font-mono text-xs text-muted">
+              // Engagements are contracted through my LLC — MSA + SOW before any payment.
+            </p>
 
             <div className="mt-10 grid gap-6 sm:grid-cols-3">
               <div className="hud rounded-xl p-6">
