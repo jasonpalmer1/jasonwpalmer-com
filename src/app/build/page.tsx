@@ -36,18 +36,6 @@ const realBuilds = [
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
     link: "https://wafergraph.com",
   },
-  {
-    meta: "// PUBLIC · LIVE",
-    title: "whosstarting.com — Full Product, Shipped in ~2 Days",
-    problem: "No good way to check college football depth charts offline at a game.",
-    built:
-      "Offline-first PWA covering CFB and MLB depth charts — player OVR ratings, crowd-debate mechanics, shareable cards. Zero ads.",
-    outcome:
-      "Live. Concept to deployed product in approximately two days.",
-    outcomeLink: { href: "https://whosstarting.com", label: "→ whosstarting.com" },
-    tags: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
-    link: "https://whosstarting.com",
-  },
 ];
 
 // Pull real LinkedIn URL from profile data
@@ -84,6 +72,7 @@ export default function BuildPage() {
               </p>
 
               {/* Identity / credibility */}
+              {/* TODO: Jason confirm exact title/firm-type */}
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
                 I&apos;m{" "}
                 <a
@@ -94,9 +83,9 @@ export default function BuildPage() {
                 >
                   Jason Palmer
                 </a>
-                {" "}— $3B+ in real transactions, and I&apos;ve run the ops side of businesses myself.
-                That means I get how your business works and where the real ROI is — not just what&apos;s technically possible.
-                Finance is where I started; any operator with a high-value manual process is who I serve.
+                {" "}— I underwrote $3B+ in commercial real estate at a private investment firm, then built the AI that runs that underwriting now.
+                I&apos;ve been the operator; I know where the real ROI is.
+                Finance is where I started — any business with a painful manual process is who I serve.
               </p>
 
               {/* CTA buttons */}
@@ -292,6 +281,20 @@ export default function BuildPage() {
                 </div>
               ))}
             </div>
+
+            {/* Ship-speed callout — secondary, not a proof card */}
+            <p className="mt-6 font-mono text-xs text-muted">
+              // Ship speed: built{" "}
+              <a
+                href="https://whosstarting.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-accent/70 underline underline-offset-2 transition-colors hover:text-accent"
+              >
+                whosstarting.com
+              </a>
+              {" "}— a full consumer product — concept to live in ~2 days.
+            </p>
           </div>
         </section>
 
@@ -322,6 +325,10 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Map your workflows, identify the highest-value target, produce a concrete spec and price. A plan — not a slide deck. Scope and price set before any build begins.
                 </p>
+                {/* TODO: Jason confirm */}
+                <p className="mt-3 font-mono text-xs text-foreground/70">
+                  $2,500 — credited toward your build if you proceed.
+                </p>
               </div>
 
               <div className="hud rounded-xl p-6">
@@ -332,7 +339,13 @@ export default function BuildPage() {
                   Build It — Ships in 4&ndash;8 Weeks
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in — and your data stays in your environment.{/* TODO: Jason confirm number */}
+                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in.{/* TODO: Jason confirm number */}
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  You own the code outright — delivered in staged milestones with handoff-ready documentation. No lock-in, no single point of failure.
+                </p>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  Built NDA-first. Your data stays in your environment, credentials are handled on a need-to-know basis, and nothing goes to a third party without your sign-off.
                 </p>
               </div>
 
