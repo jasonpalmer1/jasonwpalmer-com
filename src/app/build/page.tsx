@@ -8,6 +8,21 @@ export const metadata: Metadata = {
   description:
     "Jason Palmer builds custom software fast — AI tools, workflow automation, and internal systems for any business running a painful manual process. $3B+ in real transactions. Fixed price. Ships in weeks.",
   alternates: { canonical: "/build/" },
+  openGraph: {
+    title: `Work With Me — ${profile.name}`,
+    description:
+      "Custom software, fast — AI tools and workflow automation for any business with a painful manual process. Fixed price, ships in weeks.",
+    url: `https://${profile.domain}/build/`,
+    type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Work With Me — ${profile.name}`,
+    description:
+      "Custom software, fast — AI tools and workflow automation for any business with a painful manual process.",
+    images: ["/og.png"],
+  },
 };
 
 // ── Real builds (proof of work) ─────────────────────────────────────────────
@@ -87,7 +102,6 @@ export default function BuildPage() {
               </p>
 
               {/* Identity / credibility */}
-              {/* TODO: Jason confirm exact title/firm-type */}
               <p className="mt-4 max-w-2xl text-sm leading-relaxed text-muted">
                 I&apos;m{" "}
                 <a
@@ -212,7 +226,7 @@ export default function BuildPage() {
                   Best for: document-heavy ops · recurring analyst workflows · high-repeat reporting
                 </p>
                 <p className="mt-3 font-mono text-[0.6rem] tracking-wide text-muted/60">
-                  // e.g. vendor intake agent: AI scores submissions, routes to the right approver, logs every step — hours of admin per vendor collapsed to minutes.
+                  Example — a vendor-intake agent that scores each submission, routes it to the right approver, and logs every step: hours of admin per vendor collapsed to minutes.
                 </p>
               </div>
 
@@ -342,7 +356,7 @@ export default function BuildPage() {
 
             {/* Price anchor */}
             <p className="mt-4 font-mono text-sm text-foreground/80">
-              Most projects start at $10K — exact scope and price fixed in a paid Strategy Sprint before any build.{/* TODO: Jason confirm number */}
+              Most projects start at $10K — exact scope and price fixed in a paid Strategy Sprint before any build.
             </p>
             <p className="mt-1 font-mono text-xs text-muted">
               // Engagements are contracted through my LLC — MSA + SOW before any payment.
@@ -359,7 +373,6 @@ export default function BuildPage() {
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   Map your workflows, identify the highest-value target, produce a concrete spec and price. A plan — not a slide deck. Scope and price set before any build begins.
                 </p>
-                {/* TODO: Jason confirm */}
                 <p className="mt-3 font-mono text-xs text-foreground/70">
                   $2,500 — credited toward your build if you proceed.
                 </p>
@@ -373,7 +386,7 @@ export default function BuildPage() {
                   Build It — Ships in 4&ndash;8 Weeks
                 </h3>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
-                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in.{/* TODO: Jason confirm number */}
+                  Defined problem, fixed scope, fixed price — from $10K. I build it; you own it. Human-in-the-loop approval gates and audit trails built in.
                 </p>
                 <p className="mt-3 text-sm leading-relaxed text-muted">
                   You own the code outright — delivered in staged milestones with handoff-ready documentation. No lock-in, no single point of failure.
@@ -420,7 +433,7 @@ export default function BuildPage() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 font-mono text-xs text-muted sm:flex-row">
           <span className="flex items-center gap-2">
-            <span className="pulse-dot" /> SYS.ONLINE · &copy; {profile.name}
+            <span className="pulse-dot" /> SYS.ONLINE · &copy; {new Date().getFullYear()} {profile.name}
           </span>
           <div className="flex gap-4">
             <a href="/" className="tracking-widest transition-colors hover:text-accent">

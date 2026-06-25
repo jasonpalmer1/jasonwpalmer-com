@@ -30,7 +30,7 @@ export default function Home() {
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 font-mono text-xs text-muted sm:flex-row">
           <span className="flex items-center gap-2">
-            <span className="pulse-dot" /> SYS.ONLINE · © {profile.name}
+            <span className="pulse-dot" /> SYS.ONLINE · © {new Date().getFullYear()} {profile.name}
           </span>
           <span className="tracking-widest">
             {game.callsign} // {profile.domain} // BUILT WITH NEXT.JS × CLOUDFLARE

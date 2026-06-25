@@ -8,7 +8,7 @@ import { profile } from "@/data/profile";
 export const metadata: Metadata = {
   title: `Dispatch Log — ${profile.name}`,
   description:
-    "Build log dispatches on AI systems, finance tools, trading infrastructure, and whatever Jason is shipping.",
+    "Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.",
   alternates: { canonical: "/blog/" },
   openGraph: {
     title: `Dispatch Log — ${profile.name}`,
