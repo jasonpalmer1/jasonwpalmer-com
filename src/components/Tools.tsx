@@ -21,13 +21,20 @@ function ToolCard({ tool }: { tool: Tool }) {
       }`}
     >
       {tool.image && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img
-          src={tool.image}
-          alt={tool.imageAlt ?? `${tool.name} screenshot`}
-          loading="lazy"
-          className="mb-5 w-full rounded-lg border border-border"
-        />
+        <figure className="mb-5">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={tool.image}
+            alt={tool.imageAlt ?? `${tool.name} screenshot`}
+            loading="lazy"
+            className="w-full rounded-lg border border-border"
+          />
+          {tool.imageCaption && (
+            <figcaption className="mt-2 font-mono text-[0.65rem] leading-snug text-muted/70">
+              {tool.imageCaption}
+            </figcaption>
+          )}
+        </figure>
       )}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">

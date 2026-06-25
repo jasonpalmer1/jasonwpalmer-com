@@ -23,6 +23,8 @@ export type Tool = {
   // Optional screenshot/cover shown at the top of the card (path under /public).
   image?: string;
   imageAlt?: string;
+  // Optional caption rendered directly under the image (e.g. a data disclaimer).
+  imageCaption?: string;
   // Optional links.
   liveUrl?: string;
   sourceUrl?: string;
@@ -75,6 +77,8 @@ export const tools: Tool[] = [
     image: "/builds/4horn.png",
     imageAlt:
       "Four screens of the 4-Horn Equipment Log app — the live dashboard (units and dollars on rent, returns due, open service), the rentals list, the service-request board, and the revenue-leakage tracker",
+    imageCaption:
+      "Screens shown use sample data — placeholder company names and figures for illustration only, not 4-Horn's actual customers, jobs, or numbers.",
   },
   {
     id: "wafergraph",
