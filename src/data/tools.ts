@@ -62,12 +62,11 @@ export const tools: Tool[] = [
     tagline: "My first paying client — I killed the rental-ops spreadsheet",
     description:
       "First paid client build, for 4-Horn Industrial — a 24/7 Gulf Coast industrial " +
-      "equipment-rental company. Their rental operation ran on a shared spreadsheet and " +
-      "hand-typed text messages, with no live picture of what was on rent, what was due back, " +
-      "or what was idle. I replaced it with a mobile-first ops app: a live dashboard (units and " +
-      "dollars on rent, returns due, open service), one-tap reservation and service forms that " +
-      "output the exact text they already send, a quote builder off their real catalog, and a " +
-      "revenue-leakage tracker. Built and shipped in an afternoon.",
+      "equipment-rental company. They had no live picture of what was on rent, what was due " +
+      "back, or what was sitting idle. I built them a mobile-first ops app: a live dashboard " +
+      "(units and dollars on rent, returns due, open service), one-tap reservation and service " +
+      "forms that output the exact text they already send, a quote builder off their real " +
+      "catalog, and a revenue-leakage tracker. Built and shipped in an afternoon.",
     icon: "🏗️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],

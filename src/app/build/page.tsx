@@ -13,6 +13,21 @@ export const metadata: Metadata = {
 // ── Real builds (proof of work) ─────────────────────────────────────────────
 const realBuilds = [
   {
+    meta: "// CLIENT · PAID · LIVE",
+    title: "Equipment-Rental Field Ops — 4-Horn Industrial",
+    problem:
+      "A 24/7 industrial equipment-rental company needed a purpose-built ops system — no live view of what was on rent, what was due back, or what was sitting idle instead of earning.",
+    built:
+      "A branded, mobile-first ops app: a live dashboard of units and dollars on rent, one-tap reservation and service forms that output the texts they already send, and a revenue-leakage tracker — all built off their real catalog.",
+    outcome:
+      "Scoped, built, and in their hands before a typical agency would finish discovery. Now in daily use — it replaced the spreadsheet.",
+    tags: ["Cloudflare Workers", "D1", "KV", "Mobile-first"],
+    image: "/builds/4horn.png",
+    imageCaption:
+      "Sample data — placeholder company names and figures for illustration only, not 4-Horn's actual customers or numbers.",
+    link: null,
+  },
+  {
     meta: "// INTERNAL · LIVE",
     title: "CRE Underwriting AI — Command Center",
     problem:
@@ -225,7 +240,7 @@ export default function BuildPage() {
               PROOF OF WORK
             </h2>
             <p className="mt-3 max-w-xl text-sm text-muted">
-              No invented client names. No fabricated outcomes. Real systems, shown as-is — across domains, at speed.
+              Real clients, real systems — shown as-is, across domains, at speed. Where a client&apos;s data is confidential, screenshots use clearly-marked sample data.
             </p>
 
             <div className="mt-10 space-y-6">
@@ -240,6 +255,22 @@ export default function BuildPage() {
                     </span>
                   </div>
                   <h3 className="font-display text-xl font-bold text-foreground">{b.title}</h3>
+                  {"image" in b && b.image && (
+                    <figure className="mt-5">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={b.image}
+                        alt={`${b.title} — app screens`}
+                        loading="lazy"
+                        className="w-full rounded-lg border border-border"
+                      />
+                      {"imageCaption" in b && b.imageCaption && (
+                        <figcaption className="mt-2 font-mono text-xs leading-snug text-muted">
+                          {b.imageCaption}
+                        </figcaption>
+                      )}
+                    </figure>
+                  )}
                   <div className="mt-4 grid gap-6 sm:grid-cols-3">
                     <div>
                       <p className="font-mono text-[0.65rem] tracking-widest text-muted">PROBLEM</p>

@@ -30,7 +30,7 @@ function ToolCard({ tool }: { tool: Tool }) {
             className="w-full rounded-lg border border-border"
           />
           {tool.imageCaption && (
-            <figcaption className="mt-2 font-mono text-[0.65rem] leading-snug text-muted/70">
+            <figcaption className="mt-2 font-mono text-xs leading-snug text-muted">
               {tool.imageCaption}
             </figcaption>
           )}
