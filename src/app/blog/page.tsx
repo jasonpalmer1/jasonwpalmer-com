@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
-import Subscribe from "@/components/Subscribe";
+import SubscribeBlock from "@/components/SubscribeBlock";
 import { getAllPosts } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
@@ -87,7 +87,7 @@ export default function BlogIndex() {
 
         {/* Subscribe widget — below the posts so the writing comes first */}
         <div className="mt-16 border-t border-border pt-12">
-          <Subscribe />
+          <SubscribeBlock />
         </div>
       </main>
     </>

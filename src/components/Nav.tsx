@@ -8,6 +8,7 @@ const links = [
   { href: "/#uplink", label: "UPLINK" },
   { href: "/blog/", label: "DISPATCHES" },
   { href: "/build/", label: "BUILD" },
+  { href: "/#subscribe", label: "SUBSCRIBE", cta: true },
 ];
 
 export default function Nav() {
@@ -35,7 +36,11 @@ export default function Nav() {
             <li key={l.href} className="shrink-0">
               <a
                 href={l.href}
-                className="block whitespace-nowrap rounded px-2 py-1.5 tracking-widest text-muted transition-colors hover:bg-surface hover:text-accent"
+                className={
+                  l.cta
+                    ? "block whitespace-nowrap rounded border border-accent/40 bg-accent/10 px-2 py-1.5 tracking-widest text-accent transition-colors hover:bg-accent/20"
+                    : "block whitespace-nowrap rounded px-2 py-1.5 tracking-widest text-muted transition-colors hover:bg-surface hover:text-accent"
+                }
               >
                 {l.label}
               </a>

@@ -6,6 +6,7 @@ import Skills from "@/components/Skills";
 import Resume from "@/components/Resume";
 import Lore from "@/components/Lore";
 import Contact from "@/components/Contact";
+import SubscribeBlock from "@/components/SubscribeBlock";
 import { profile, game } from "@/data/profile";
 
 export default function Home() {
@@ -20,6 +21,11 @@ export default function Home() {
         <Resume />
         <Lore />
         <Contact />
+        <section id="subscribe" className="scroll-mt-20 border-t border-border">
+          <div className="mx-auto max-w-6xl px-6 py-20">
+            <SubscribeBlock />
+          </div>
+        </section>
       </main>
       <footer className="border-t border-border">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-2 px-6 py-8 font-mono text-xs text-muted sm:flex-row">

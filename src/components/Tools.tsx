@@ -20,6 +20,15 @@ function ToolCard({ tool }: { tool: Tool }) {
         tool.featured ? "sm:col-span-2" : ""
       }`}
     >
+      {tool.image && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img
+          src={tool.image}
+          alt={tool.imageAlt ?? `${tool.name} screenshot`}
+          loading="lazy"
+          className="mb-5 h-52 w-full rounded-lg border border-border object-cover object-top"
+        />
+      )}
       <div className="flex items-start justify-between gap-4">
         <div className="flex items-center gap-3">
           <span className="text-3xl" aria-hidden>

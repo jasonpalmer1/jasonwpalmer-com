@@ -20,6 +20,9 @@ export type Tool = {
   status: ToolStatus;
   // Tech used — shown as chips.
   stack: string[];
+  // Optional screenshot/cover shown at the top of the card (path under /public).
+  image?: string;
+  imageAlt?: string;
   // Optional links.
   liveUrl?: string;
   sourceUrl?: string;
@@ -50,6 +53,28 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "legendary",
+  },
+  {
+    id: "four-horn-equipment-log",
+    name: "4-Horn Equipment Log",
+    tagline: "My first paying client — I killed the rental-ops spreadsheet",
+    description:
+      "First paid client build, for 4-Horn Industrial — a 24/7 Gulf Coast industrial " +
+      "equipment-rental company. Their rental operation ran on a shared spreadsheet and " +
+      "hand-typed text messages, with no live picture of what was on rent, what was due back, " +
+      "or what was idle. I replaced it with a mobile-first ops app: a live dashboard (units and " +
+      "dollars on rent, returns due, open service), one-tap reservation and service forms that " +
+      "output the exact text they already send, a quote builder off their real catalog, and a " +
+      "revenue-leakage tracker. Built and shipped in an afternoon.",
+    icon: "🏗️",
+    status: "live",
+    stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
+    year: "2026",
+    featured: true,
+    rarity: "epic",
+    image: "/builds/4horn.png",
+    imageAlt:
+      "4-Horn Equipment Log home dashboard on a phone — live units and dollars on rent, returns due, and open service tiles",
   },
   {
     id: "wafergraph",

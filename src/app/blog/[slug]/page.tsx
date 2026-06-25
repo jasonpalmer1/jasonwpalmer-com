@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
-import Subscribe from "@/components/Subscribe";
+import SubscribeBlock from "@/components/SubscribeBlock";
 import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
@@ -124,7 +124,7 @@ export default async function BlogPost({
 
         {/* Subscribe widget at the end of every post */}
         <div className="mt-16 border-t border-border pt-12">
-          <Subscribe />
+          <SubscribeBlock />
         </div>
       </main>
     </>
