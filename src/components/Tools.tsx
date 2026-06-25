@@ -26,7 +26,7 @@ function ToolCard({ tool }: { tool: Tool }) {
           src={tool.image}
           alt={tool.imageAlt ?? `${tool.name} screenshot`}
           loading="lazy"
-          className="mb-5 h-52 w-full rounded-lg border border-border object-cover object-top"
+          className="mb-5 w-full rounded-lg border border-border"
         />
       )}
       <div className="flex items-start justify-between gap-4">

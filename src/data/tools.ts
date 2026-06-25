@@ -74,7 +74,7 @@ export const tools: Tool[] = [
     rarity: "epic",
     image: "/builds/4horn.png",
     imageAlt:
-      "4-Horn Equipment Log home dashboard on a phone — live units and dollars on rent, returns due, and open service tiles",
+      "Four screens of the 4-Horn Equipment Log app — the live dashboard (units and dollars on rent, returns due, open service), the rentals list, the service-request board, and the revenue-leakage tracker",
   },
   {
     id: "wafergraph",
