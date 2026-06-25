@@ -10,21 +10,21 @@ export default function Subscribe() {
   return <PlaceholderForm />;
 }
 
-// Live Beehiiv v3 embed as a direct, fixed-height iframe.
-// NOTE: the official script-loader (`loader.js`) injects an auto-sized iframe
-// that collapsed to zero height inside our static/React layout — the form was
-// in the DOM but invisible. Embedding the form URL directly with an explicit
-// height renders reliably. The form's own dark background matches the section.
+// Beehiiv subscribe CTA.
+// NOTE: the inline embed (both the official loader.js AND a direct iframe) renders
+// blank in this setup — the Beehiiv form only paints as its own top-level page
+// (likely needs the parent domain whitelisted in Beehiiv's form settings). Rather
+// than risk a blank box, we link straight to the form page, which always renders.
 function BeehiivForm() {
   return (
-    <iframe
-      src={`https://subscribe-forms.beehiiv.com/v3/forms/${BEEHIIV_FORM_ID}`}
-      title="Subscribe to the build log"
-      loading="lazy"
-      scrolling="no"
-      className="mx-auto block w-full max-w-md"
-      style={{ height: 360, border: "none", margin: 0 }}
-    />
+    <a
+      href={`https://subscribe-forms.beehiiv.com/v3/forms/${BEEHIIV_FORM_ID}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="inline-flex items-center gap-2 rounded-md border border-accent bg-accent/10 px-6 py-3 font-mono text-sm font-semibold tracking-widest text-accent transition-colors hover:bg-accent hover:text-background"
+    >
+      SUBSCRIBE →
+    </a>
   );
 }
 
