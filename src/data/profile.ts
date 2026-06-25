@@ -14,7 +14,7 @@ export const profile = {
     "I architect AI systems that underwrite deals, analyze portfolios, and automate the work.",
   // One or two sentences. Your elevator pitch (kept public-safe — no employer internals).
   blurb:
-    "Finance professional, builder, and educator with 5+ years executing $3B+ in " +
+    "Finance professional, builder, and educator with 6+ years executing $3B+ in " +
     "transactions across real estate, capital markets, and interest-rate derivatives. " +
     "I build my own software — AI underwriting systems, trading tools, and automation — " +
     "and founded a financial-education platform that grew to 500+ students. This site is a " +
@@ -46,7 +46,7 @@ export const stats: Stat[] = [
   { label: "Transacted", value: 3, prefix: "$", suffix: "B+" },
   { label: "Faster underwriting", value: 20, suffix: "×" },
   { label: "Students taught", value: 500, suffix: "+" },
-  { label: "Years experience", value: 5, suffix: "+" },
+  { label: "Years experience", value: 6, suffix: "+" },
 ];
 
 export type SocialLink = {

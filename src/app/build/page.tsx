@@ -66,6 +66,21 @@ const realBuilds = [
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
     link: "https://wafergraph.com",
   },
+  {
+    meta: "// PUBLIC · LIVE",
+    title: "Who's Starting — Sports Game Center",
+    problem:
+      "No fast, mobile-first way to check college-football depth charts on game day — every option was a desktop site built for a browser, not the couch.",
+    built:
+      "A mobile-first sports Game Center: live depth charts for all 135 FBS teams, Madden-style OVR player ratings with the math shown, a crowd 'People's Ratings' debate engine, Draft the Country, and live CFB + MLB scores. Offline-capable PWA, zero ads.",
+    outcome: "Concept to shipped consumer product in ~2 days. Live for the season.",
+    outcomeLink: { href: "https://whosstarting.com", label: "→ whosstarting.com" },
+    tags: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
+    image: "/builds/whosstarting.png",
+    imageAlt:
+      "Four screens of Who's Starting — the Game Center home, the 135-team browser, The People's Ratings OVR voting card, and Draft the Country",
+    link: "https://whosstarting.com",
+  },
 ];
 
 // Pull real LinkedIn URL from profile data
@@ -112,7 +127,7 @@ export default function BuildPage() {
                 >
                   Jason Palmer
                 </a>
-                {" "}— I underwrote $3B+ in commercial real estate at a private investment firm, then built the AI that runs that underwriting now.
+                {" "}— I&apos;ve executed $3B+ in transactions across real estate, capital markets, and interest-rate derivatives, then built the AI that runs the underwriting now.
                 I&apos;ve been the operator; I know where the real ROI is.
                 Finance is where I started — any business with a painful manual process is who I serve.
               </p>
@@ -326,20 +341,6 @@ export default function BuildPage() {
                 </div>
               ))}
             </div>
-
-            {/* Ship-speed callout — secondary, not a proof card */}
-            <p className="mt-6 font-mono text-xs text-muted">
-              // Ship speed: built{" "}
-              <a
-                href="https://whosstarting.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-accent/70 underline underline-offset-2 transition-colors hover:text-accent"
-              >
-                whosstarting.com
-              </a>
-              {" "}— a full consumer product — concept to live in ~2 days.
-            </p>
           </div>
         </section>
 

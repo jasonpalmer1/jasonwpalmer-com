@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { BEEHIIV_FORM_ID, BEEHIIV_LOADER_SRC } from "@/data/newsletter";
+import { useState } from "react";
+import { BEEHIIV_FORM_ID } from "@/data/newsletter";
 
 export default function Subscribe() {
   if (BEEHIIV_FORM_ID) {
@@ -10,28 +10,22 @@ export default function Subscribe() {
   return <PlaceholderForm />;
 }
 
-// Live Beehiiv v3 embed. The loader script can't be rendered as raw JSX (React
-// won't execute it), so we inject it into a ref'd container on mount. The loader
-// locates itself via its data-beehiiv-form attribute and renders the form there.
+// Live Beehiiv v3 embed as a direct, fixed-height iframe.
+// NOTE: the official script-loader (`loader.js`) injects an auto-sized iframe
+// that collapsed to zero height inside our static/React layout — the form was
+// in the DOM but invisible. Embedding the form URL directly with an explicit
+// height renders reliably. The form's own dark background matches the section.
 function BeehiivForm() {
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const container = containerRef.current;
-    if (!container) return;
-    // Guard against double-injection (StrictMode re-mount / re-render).
-    if (container.querySelector("script[data-beehiiv-form]")) return;
-
-    const script = document.createElement("script");
-    script.async = true;
-    script.src = BEEHIIV_LOADER_SRC;
-    script.setAttribute("data-beehiiv-form", BEEHIIV_FORM_ID);
-    container.appendChild(script);
-  }, []);
-
-  // No hud wrapper here — the Beehiiv form renders its own card. Just constrain
-  // and center it so it doesn't blow out to full width.
-  return <div ref={containerRef} className="mx-auto w-full max-w-md" />;
+  return (
+    <iframe
+      src={`https://subscribe-forms.beehiiv.com/v3/forms/${BEEHIIV_FORM_ID}`}
+      title="Subscribe to the build log"
+      loading="lazy"
+      scrolling="no"
+      className="mx-auto block w-full max-w-md"
+      style={{ height: 360, border: "none", margin: 0 }}
+    />
+  );
 }
 
 // Placeholder shown when BEEHIIV_FORM_ID is empty.

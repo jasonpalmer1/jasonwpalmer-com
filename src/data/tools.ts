@@ -111,7 +111,11 @@ export const tools: Tool[] = [
     stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
     liveUrl: "https://whosstarting.com",
     year: "2026",
+    featured: true,
     rarity: "epic",
+    image: "/builds/whosstarting.png",
+    imageAlt:
+      "Four screens of the Who's Starting sports app — the Game Center home, the 135-team browser, The People's Ratings OVR voting card, and Draft the Country",
   },
   {
     id: "the-league",
