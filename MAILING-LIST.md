@@ -51,6 +51,17 @@ npx wrangler pages secret put RESEND_API_KEY --project-name jasonwpalmer-com
 
 This keeps the key out of `wrangler.toml` (which is committed). `SITE_URL` and `FROM_EMAIL` are set in `wrangler.toml` [vars] and are non-sensitive.
 
+> ⚠️ **A Pages secret only takes effect on the NEXT deployment.** After setting (or rotating) the secret, you MUST redeploy (`npx wrangler pages deploy`) or the live Functions keep using the old value. Symptom of a missing/stale key: the subscribe form returns "I'll send a confirmation shortly" instead of "check your inbox," and no email arrives.
+
+### Rotating the API key
+
+If the key is ever exposed, rotate it (in order, so the form never breaks):
+1. Resend → **API Keys** → create a NEW key (Sending access).
+2. `npx wrangler pages secret put RESEND_API_KEY --project-name jasonwpalmer-com` (paste new key).
+3. `npx wrangler pages deploy` — **required** for the new secret to take effect.
+4. Update local `.env` `RESEND_API_KEY=` with the new key (for the send script).
+5. Resend → delete the OLD key.
+
 ### 3. Apply the D1 migration
 
 The D1 database is already created. Apply the schema:
