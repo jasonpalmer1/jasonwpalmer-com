@@ -44,7 +44,8 @@ npm run dev        # next dev → http://localhost:3000
 npm run build      # next build → ./out (static)
 npm run lint       # eslint
 npx wrangler pages deploy        # wrangler.toml drives output dir + D1 binding (Functions)
-# (legacy: wrangler pages deploy out --project-name=jasonwpalmer-com — avoid now that wrangler.toml exists)
+# (the old `wrangler pages deploy out --project-name=jasonwpalmer-com` / /ship form still works too —
+#  it also picks up the wrangler.toml D1 binding + Functions bundle. Either is fine.)
 ```
 Prefer `/ship` (build → quality gate → preview; never prod without `--prod` + confirmation).
 
