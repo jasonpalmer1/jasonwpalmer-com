@@ -11,7 +11,7 @@ _Keep this current — it's the fastest way to pick up work._
 - **Content upkeep** (the real ongoing job): keep `src/data/tools.ts` (build cards) and `src/data/profile.ts` (stats/experience) current as Jason ships things. Recent commits added a Who's Starting card and iterated its blurb.
 - **Blog/build-log cadence**: only one post exists (`build-log-001.mdx`). Add build-log posts as projects ship; the blog + RSS plumbing is already wired.
 - **Contact**: recently migrated email → Web3Forms contact form. Confirm the form key is set (see `.env.example`) and the form still posts.
-- **Subscribe**: Beehiiv form is wired (`src/data/newsletter.ts`); verify the form ID renders, or swap to placeholder.
+- **Mailing list (self-hosted, replaced Beehiiv)**: native form → `functions/api/subscribe.js` → **D1** `dispatch-subscribers` (double opt-in via `functions/api/confirm.js`; `unsubscribe.js`). Sending uses **Resend** (`scripts/send-dispatch.mjs`, run `npm run send-dispatch -- <slug>`; `--dry` to preview). One-time setup + ops in **`MAILING-LIST.md`**. Needs `RESEND_API_KEY` as a Pages secret + jasonwpalmer.com verified in Resend before confirmation/dispatch emails send. D1 binding lives in `wrangler.toml`.
 
 ## Tech stack
 - **Next.js 16** (App Router, React 19) — static export (`output: "export"` → `out/`).
@@ -43,7 +43,8 @@ npm install
 npm run dev        # next dev → http://localhost:3000
 npm run build      # next build → ./out (static)
 npm run lint       # eslint
-npx wrangler pages deploy out --project-name=jasonwpalmer-com   # or /ship
+npx wrangler pages deploy        # wrangler.toml drives output dir + D1 binding (Functions)
+# (legacy: wrangler pages deploy out --project-name=jasonwpalmer-com — avoid now that wrangler.toml exists)
 ```
 Prefer `/ship` (build → quality gate → preview; never prod without `--prod` + confirmation).
 

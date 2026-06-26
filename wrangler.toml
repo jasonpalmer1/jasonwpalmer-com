@@ -1,0 +1,12 @@
+name = "jasonwpalmer-com"
+compatibility_date = "2024-11-01"
+pages_build_output_dir = "out"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "dispatch-subscribers"
+database_id = "93ef2925-5d85-44ed-b8bc-4bfead311275"
+
+[vars]
+SITE_URL = "https://jasonwpalmer.com"
+FROM_EMAIL = "Jason Palmer <dispatch@jasonwpalmer.com>"
