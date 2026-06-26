@@ -95,6 +95,9 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
+    image: "/builds/wafergraph.png",
+    imageAlt:
+      "Four views of wafergraph — the landing thesis with live stats, the markets financials table, the revenue-by-country geography view, and the Chokepoint Risk Index",
   },
   {
     id: "whos-starting",

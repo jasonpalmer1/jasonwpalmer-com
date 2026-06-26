@@ -64,6 +64,9 @@ const realBuilds = [
     outcome: "Shipped and live.",
     outcomeLink: { href: "https://wafergraph.com", label: "→ wafergraph.com" },
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
+    image: "/builds/wafergraph.png",
+    imageAlt:
+      "Four views of wafergraph — the landing thesis, the markets financials table, the geography revenue-by-country view, and the Chokepoint Risk Index",
     link: "https://wafergraph.com",
   },
   {
