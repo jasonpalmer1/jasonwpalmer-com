@@ -5,6 +5,7 @@ import "./globals.css";
 import { profile, socials, skills, experience, education } from "@/data/profile";
 import BootSequence from "@/components/BootSequence";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
+import FloatingActions from "@/components/FloatingActions";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -93,6 +94,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
         {children}
+        <FloatingActions />
         {/* Cloudflare Web Analytics — inert when token is unset */}
         {process.env.NEXT_PUBLIC_CF_BEACON_TOKEN && (
           <Script
