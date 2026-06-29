@@ -44,7 +44,7 @@ const ogSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630"
   </g>
 
   <!-- status chip -->
-  <rect x="90" y="72" width="232" height="46" rx="23" fill="${C.mint}" fill-opacity="0.08" stroke="${C.mint}" stroke-opacity="0.4"/>
+  <rect x="90" y="72" width="272" height="46" rx="23" fill="${C.mint}" fill-opacity="0.08" stroke="${C.mint}" stroke-opacity="0.4"/>
   <circle cx="118" cy="95" r="5" fill="${C.mint}"/>
   <text x="136" y="102" font-family="Menlo, monospace" font-size="20" fill="${C.mint}" letter-spacing="2">STATUS: ONLINE</text>
 
