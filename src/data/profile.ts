@@ -115,9 +115,9 @@ export const experience: ExperienceItem[] = [
     org: "HPI Real Estate Services & Investments",
     period: "Mar 2025 – Present",
     summary:
-      "Architected a proprietary in-house AI system (Claude Code) on personal initiative — the " +
-      "HPI Command Center — that underwrites deals end-to-end in minutes, runs a live operating " +
-      "picture of the firm's portfolio, and proactively identifies new investment opportunities. " +
+      "Architected a proprietary in-house AI system (Claude Code) on personal initiative — an " +
+      "internal Command Center — that underwrites deals end-to-end in minutes, runs a live operating " +
+      "picture of the portfolio, and proactively identifies new investment opportunities. " +
       "Closed 9 property transactions ($100M+) including modeling, valuation, diligence, and " +
       "negotiation. Executed interest-rate swaps, refinances, and led monthly performance " +
       "reviews with partners.",

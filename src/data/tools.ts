@@ -38,17 +38,17 @@ export type Tool = {
 
 export const tools: Tool[] = [
   {
-    id: "hpi-command-center",
-    name: "HPI Command Center",
+    id: "command-center",
+    name: "Command Center — CRE Underwriting AI",
     tagline: "AI that underwrites CRE deals, monitors the portfolio, and surfaces new opportunities",
     description:
       "A proprietary AI system I architected in-house (Claude Code, on personal " +
       "initiative) that underwrites a commercial real estate deal end-to-end, runs a live " +
-      "operating picture of the firm's portfolio, and proactively identifies new investment " +
+      "operating picture of the portfolio, and proactively identifies new investment " +
       "opportunities. It compresses a ~60-minute manual underwrite " +
       "to ~3 minutes by standardizing the data layer and automating document intake, modeling, " +
       "valuation, and market analysis. Speed isn't the point — fast and right is: every output " +
-      "is grounded in the firm's own data, relentlessly tested, and backed by as much data as " +
+      "is grounded in real portfolio data, relentlessly tested, and backed by as much data as " +
       "possible before it informs a decision.",
     icon: "🏢",
     status: "active",
@@ -60,9 +60,9 @@ export const tools: Tool[] = [
   {
     id: "four-horn-equipment-log",
     name: "4-Horn Equipment Log",
-    tagline: "My first paying client — I killed the rental-ops spreadsheet",
+    tagline: "A field-ops app for a Gulf Coast rental company — I killed their spreadsheet",
     description:
-      "First paid client build, for 4-Horn Industrial — a 24/7 Gulf Coast industrial " +
+      "A build for 4-Horn Industrial — a 24/7 Gulf Coast industrial " +
       "equipment-rental company. They had no live picture of what was on rent, what was due " +
       "back, or what was sitting idle. I built them a mobile-first ops app: a live dashboard " +
       "(units and dollars on rent, returns due, open service), one-tap reservation and service " +

@@ -7,7 +7,6 @@ const links = [
   { href: "/#log", label: "LOG" },
   { href: "/#uplink", label: "UPLINK" },
   { href: "/blog/", label: "DISPATCHES" },
-  { href: "/build/", label: "BUILD" },
   { href: "/#subscribe", label: "SUBSCRIBE", cta: true },
 ];
 

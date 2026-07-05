@@ -2,23 +2,16 @@
 
 import { useEffect, useState } from "react";
 
-// A bottom-right control cluster that appears once the user scrolls past the
-// fold — so people deep in the page (where the sticky top bar is easy to miss)
-// always have a way back to the top and a one-tap path to the consulting page.
+// A bottom-right control that appears once the user scrolls past the fold — so
+// people deep in the page (where the sticky top bar is easy to miss) always have
+// a quick way back to the top.
 export default function FloatingActions() {
   const [visible, setVisible] = useState(false);
-  const [onBuild, setOnBuild] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 500);
-    // Sync client-only state off the effect body (avoids set-state-in-effect).
-    // /build already IS the consulting page — don't show a redundant CTA there.
-    const sync = () => {
-      setOnBuild(window.location.pathname.replace(/\/$/, "") === "/build");
-      onScroll();
-    };
     window.addEventListener("scroll", onScroll, { passive: true });
-    const raf = requestAnimationFrame(sync);
+    const raf = requestAnimationFrame(onScroll);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
@@ -36,14 +29,6 @@ export default function FloatingActions() {
       }`}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
     >
-      {!onBuild && (
-        <a
-          href="/build/"
-          className="whitespace-nowrap rounded-full border border-accent/40 bg-accent/10 px-4 py-2.5 font-mono text-xs tracking-widest text-accent shadow-lg shadow-accent/10 backdrop-blur-md transition-colors hover:bg-accent/20"
-        >
-          BUILD WITH ME →
-        </a>
-      )}
       <button
         type="button"
         onClick={toTop}
