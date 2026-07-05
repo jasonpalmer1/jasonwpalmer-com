@@ -96,9 +96,9 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/wafergraph.png",
+    image: "/builds/wafergraph.jpg",
     imageAlt:
-      "Four views of wafergraph — the landing thesis with live stats, the markets financials table, the revenue-by-country geography view, and the Chokepoint Risk Index",
+      "wafergraph's interactive network graph — a force-directed map of the semiconductor & AI supply chain centered on NVIDIA's neighborhood, with companies as colored nodes by segment and supplier–customer links between them",
   },
   {
     id: "whos-starting",
