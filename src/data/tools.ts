@@ -40,11 +40,12 @@ export const tools: Tool[] = [
   {
     id: "hpi-command-center",
     name: "HPI Command Center",
-    tagline: "AI that underwrites CRE deals and monitors a portfolio in minutes",
+    tagline: "AI that underwrites CRE deals, monitors the portfolio, and surfaces new opportunities",
     description:
-      "A proprietary AI system I architected and built in-house (Claude Code, on personal " +
-      "initiative) that underwrites a commercial real estate deal end-to-end and runs a live " +
-      "operating picture of the firm's portfolio. It compresses a ~60-minute manual underwrite " +
+      "A proprietary AI system I architected in-house (Claude Code, on personal " +
+      "initiative) that underwrites a commercial real estate deal end-to-end, runs a live " +
+      "operating picture of the firm's portfolio, and proactively identifies new investment " +
+      "opportunities. It compresses a ~60-minute manual underwrite " +
       "to ~3 minutes by standardizing the data layer and automating document intake, modeling, " +
       "valuation, and market analysis. Speed isn't the point — fast and right is: every output " +
       "is grounded in the firm's own data, relentlessly tested, and backed by as much data as " +
