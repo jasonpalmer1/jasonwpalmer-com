@@ -98,7 +98,7 @@ export const tools: Tool[] = [
     rarity: "epic",
     image: "/builds/wafergraph.jpg",
     imageAlt:
-      "wafergraph's interactive network graph — a force-directed map of the semiconductor & AI supply chain centered on NVIDIA's neighborhood, with companies as colored nodes by segment and supplier–customer links between them",
+      "Two views of wafergraph — the force-directed network graph of the semiconductor & AI supply chain, and the supply-chain Flow view showing companies as pills flowing upstream (suppliers) and downstream (customers) around NVIDIA",
   },
   {
     id: "whos-starting",
