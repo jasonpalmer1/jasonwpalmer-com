@@ -67,7 +67,7 @@ export const tools: Tool[] = [
       "back, or what was sitting idle. I built them a mobile-first ops app: a live dashboard " +
       "(units and dollars on rent, returns due, open service), one-tap reservation and service " +
       "forms that output the exact text they already send, a quote builder off their real " +
-      "catalog, and a revenue-leakage tracker. Built and shipped in an afternoon.",
+      "catalog, and a revenue-leakage tracker.",
     icon: "🏗️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
