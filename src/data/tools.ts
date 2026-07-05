@@ -74,9 +74,9 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/4horn.png",
+    image: "/builds/4horn.jpg",
     imageAlt:
-      "Four screens of the 4-Horn Equipment Log app — the live dashboard (units and dollars on rent, returns due, open service), the rentals list, the service-request board, and the revenue-leakage tracker",
+      "Three screens of the equipment-rental ops app, shown with sample demo data — the KPI dashboard (units and dollars on rent, returns due, open service), the service-request board, and the rentals list",
     imageCaption:
       "Screens shown use sample data — placeholder company names and figures for illustration only, not 4-Horn's actual customers, jobs, or numbers.",
   },
