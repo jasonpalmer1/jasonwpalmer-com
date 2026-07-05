@@ -96,7 +96,7 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/wafergraph.jpg",
+    image: "/builds/wafergraph-flow.jpg",
     imageAlt:
       "Two views of wafergraph — the force-directed network graph of the semiconductor & AI supply chain, and the supply-chain Flow view showing companies as pills flowing upstream (suppliers) and downstream (customers) around NVIDIA",
   },
