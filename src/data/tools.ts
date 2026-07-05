@@ -117,9 +117,9 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/whosstarting.png",
+    image: "/builds/whosstarting.jpg",
     imageAlt:
-      "Four screens of the Who's Starting sports app — the Game Center home, the 135-team browser, The People's Ratings OVR voting card, and Draft the Country",
+      "Four screens of Who's Starting — the WS Power 135 rankings table, a team page with dynasty team-color theming and the 'Why This Rating' transparency panel, the Compare field-view matchup engine (Georgia vs Alabama), and The Wire transfer-portal feed",
   },
   {
     id: "the-league",
