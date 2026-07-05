@@ -60,14 +60,14 @@ export const tools: Tool[] = [
   {
     id: "four-horn-equipment-log",
     name: "4-Horn Equipment Log",
-    tagline: "A field-ops app for a Gulf Coast rental company — I killed their spreadsheet",
+    tagline: "The mobile ops app that replaced a 24/7 rental company's spreadsheet",
     description:
-      "A build for 4-Horn Industrial — a 24/7 Gulf Coast industrial " +
-      "equipment-rental company. They had no live picture of what was on rent, what was due " +
-      "back, or what was sitting idle. I built them a mobile-first ops app: a live dashboard " +
-      "(units and dollars on rent, returns due, open service), one-tap reservation and service " +
-      "forms that output the exact text they already send, a quote builder off their real " +
-      "catalog, and a revenue-leakage tracker.",
+      "A mobile-first operations app for 4-Horn Industrial, a 24/7 Gulf Coast " +
+      "equipment-rental company that was running the whole business on a spreadsheet and paper " +
+      "forms. It puts the numbers that matter on one screen — units and dollars on rent, returns " +
+      "due, open service — with one-tap reservation and service forms that output the exact text " +
+      "they already send, a quote builder off their real catalog, and a revenue-leakage tracker. " +
+      "The whole operation, in your pocket.",
     icon: "🏗️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
@@ -83,12 +83,13 @@ export const tools: Tool[] = [
   {
     id: "wafergraph",
     name: "wafergraph",
-    tagline: "The semiconductor & AI supply-chain graph",
+    tagline: "The entire semiconductor & AI supply chain, mapped as a living graph",
     description:
-      "A free, current, neutral map of the semiconductor & AI supply chain: 456+ companies " +
-      "across the full value chain — materials, equipment, EDA/IP, chip design, foundry, memory, " +
-      "packaging, distribution, and AI & data center. Each profiled with financials, supply-chain " +
-      "dependencies, market share, and chokepoint exposure. Built and shipped end to end.",
+      "A free, neutral, always-current map of the semiconductor and AI supply chain — 565+ " +
+      "companies across the full value chain, from raw materials and equipment through chip " +
+      "design, foundries, and memory to the AI and data-center layer. Each is profiled with " +
+      "financials, supplier-and-customer dependencies, market share, and chokepoint exposure — " +
+      "so you can see exactly where the whole thing could break. Designed, built, and shipped end to end.",
     icon: "🔬",
     status: "live",
     stack: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
@@ -125,11 +126,11 @@ export const tools: Tool[] = [
   {
     id: "the-league",
     name: "The League Educational",
-    tagline: "Financial-education platform — 500+ students",
+    tagline: "From zero to 500+ students — a financial-education platform built end to end",
     description:
-      "Founded and built a financial-education platform from zero to 500+ international " +
-      "students, with 200+ hours of original curriculum spanning equities, options, futures, " +
-      "and risk management. Brand, platform, content, and community built from the ground up.",
+      "A financial-education platform I founded and grew from zero to 500+ students around the " +
+      "world, built on 200+ hours of original curriculum spanning equities, options, futures, " +
+      "and risk management. Brand, platform, content, and community — all built from the ground up.",
     icon: "🎓",
     status: "active",
     stack: ["Curriculum design", "Platform", "Community", "Content"],
