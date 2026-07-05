@@ -53,3 +53,5 @@ Prefer `/ship` (build → quality gate → preview; never prod without `--prod` 
 Most edits are in **`src/data/profile.ts`** and **`src/data/tools.ts`**; blog posts in **`src/content/posts/*.mdx`**. Components rarely change. Env keys (contact form) in `.env.example`.
 
 @AGENTS.md
+
+_Machine-local session notes live in `CLAUDE.local.md` (gitignored — never commit it)._
