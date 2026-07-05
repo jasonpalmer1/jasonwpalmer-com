@@ -211,9 +211,13 @@ export type EducationItem = {
 
 export const education: EducationItem[] = [
   {
-    school: "The University of Texas at Austin",
-    degree: "BBA, Finance",
-    detail: "Investment Management & Risk Management Certificate",
+    school: "The University of Texas at Austin — McCombs School of Business",
+    degree: "BBA, Finance - Investment Management",
+    year: "2021",
+  },
+  {
+    school: "The University of Texas at Austin — McCombs School of Business",
+    degree: "Risk Management Certificate",
     year: "2021",
   },
 ];
