@@ -48,9 +48,9 @@ const realBuilds = [
     problem:
       "~60 minutes per manual underwrite — document intake, model population, market pulls, valuation — before a single decision could be made.",
     built:
-      "Proprietary AI system (built on personal initiative) that automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm\'s own data.",
+      "Proprietary AI system (built on personal initiative) that automates document intake, runs the financial model, pulls market comps, and delivers a complete underwrite grounded in the firm\'s own data — plus a live portfolio picture and proactive sourcing of new opportunities.",
     outcome:
-      "~60-minute underwrites now complete in ~3 minutes. Live portfolio picture alongside the deal pipeline. Used on real acquisitions and dispositions. Reference available on request.",
+      "~60-minute underwrites now complete in ~3 minutes. Live portfolio picture alongside the deal pipeline, and new opportunities surfaced proactively. Used on real acquisitions and dispositions. Reference available on request.",
     tags: ["Claude Code", "AI agents", "DuckDB", "Python", "Data architecture"],
     link: null,
   },

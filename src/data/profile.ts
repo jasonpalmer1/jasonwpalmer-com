@@ -11,7 +11,7 @@ export const profile = {
     "I do the work of a finance team — then build the AI that does it in minutes.",
   // Supporting line under the pitch (the "what I do" specifics).
   subtagline:
-    "I architect AI systems that underwrite deals, analyze portfolios, and automate the work.",
+    "I architect AI systems that underwrite deals, run a live portfolio picture, and surface new opportunities.",
   // One or two sentences. Your elevator pitch (kept public-safe — no employer internals).
   blurb:
     "Finance professional, builder, and educator with 6+ years executing $3B+ in " +
@@ -115,11 +115,12 @@ export const experience: ExperienceItem[] = [
     org: "HPI Real Estate Services & Investments",
     period: "Mar 2025 – Present",
     summary:
-      "Architected and built the HPI Command Center on personal initiative — a proprietary " +
-      "in-house AI system (Claude Code) that underwrites deals end-to-end in minutes and runs a " +
-      "live operating picture of the firm's portfolio. Closed 7+ acquisitions and dispositions " +
-      "($90M+), ran two dispositions end-to-end (modeling, valuation, diligence, negotiation), " +
-      "executed interest-rate swaps, and led monthly performance reviews with partners.",
+      "Architected a proprietary in-house AI system (Claude Code) on personal initiative — the " +
+      "HPI Command Center — that underwrites deals end-to-end in minutes, runs a live operating " +
+      "picture of the firm's portfolio, and proactively identifies new investment opportunities. " +
+      "Closed 9 property transactions ($100M+) including modeling, valuation, diligence, and " +
+      "negotiation. Executed interest-rate swaps, refinances, and led monthly performance " +
+      "reviews with partners.",
   },
   {
     role: "Real Estate & Financial Analyst",
