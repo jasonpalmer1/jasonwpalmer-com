@@ -105,11 +105,12 @@ export const tools: Tool[] = [
     name: "Who's Starting",
     tagline: "The ad-free sports app that respects your time and your team",
     description:
-      "Started as a fix for a dumb problem: no good way to check college football depth charts " +
-      "offline at a game. Grew into something more ambitious — a full Game Center covering CFB and " +
-      "MLB, Madden-style OVR player ratings with the math shown, The People's Ratings crowd debate " +
-      "engine (vote players over/underrated vs the algorithm), Draft the Country, and shareable " +
-      "cards. Offline-first PWA. Zero ads.",
+      "Started as a fix for a dumb problem — no good way to check college-football depth charts " +
+      "offline at a game — and grew into a full broadcast-style Game Center. It runs on WS Power, a " +
+      "transparent model that rates all 135 FBS teams with the math shown; team pages that re-skin to " +
+      "your team's colors and explain exactly why they rank where they do; a Compare mode that lines " +
+      "up any two rosters on a real field; and The Wire, a nightly transfer-portal and injury feed. " +
+      "Offline-first PWA. Zero ads.",
     icon: "🏈",
     status: "live",
     stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
