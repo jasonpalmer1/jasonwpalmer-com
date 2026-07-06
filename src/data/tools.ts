@@ -59,24 +59,25 @@ export const tools: Tool[] = [
   },
   {
     id: "four-horn-equipment-log",
-    name: "4-Horn Equipment Log",
-    tagline: "The mobile ops app that replaced a 24/7 rental company's spreadsheet",
+    name: "4-Horn Field Ops",
+    tagline: "The field-ops suite that runs a 24/7 rental company from a phone",
     description:
-      "A mobile-first operations app for 4-Horn Industrial, a 24/7 Gulf Coast " +
-      "equipment-rental company that was running the whole business on a spreadsheet and paper " +
-      "forms. It puts the numbers that matter on one screen — units and dollars on rent, returns " +
-      "due, open service — with one-tap reservation and service forms that output the exact text " +
-      "they already send, a quote builder off their real catalog, and a revenue-leakage tracker. " +
-      "The whole operation, in your pocket.",
+      "What began as a spreadsheet-and-paper replacement for 4-Horn Industrial — a 24/7 Gulf " +
+      "Coast equipment-rental company — is now their whole operation in one mobile app. A live " +
+      "KPI dashboard (units and dollars on rent, returns due, open service), one-tap reservation " +
+      "and service boards that output the exact text they already send, and a quote builder that " +
+      "generates a branded PDF off their real 200-plus-item catalog. Add searchable logging with " +
+      "photos, plus a sales-intel layer that surfaces new construction projects in their region " +
+      "worth chasing. The whole business, in your pocket.",
     icon: "🏗️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/4horn.jpg",
+    image: "/builds/4horn-fieldops.jpg",
     imageAlt:
-      "Three screens of the equipment-rental ops app, shown with sample demo data — the KPI dashboard (units and dollars on rent, returns due, open service), the service-request board, and the rentals list",
+      "Three screens of the 4-Horn Field Ops app, shown with sample demo data — the KPI dashboard (units and dollars on rent, returns due, open service), the quote builder, and the service-request board",
     imageCaption:
       "Screens shown use sample data — placeholder company names and figures for illustration only, not 4-Horn's actual customers, jobs, or numbers.",
   },
