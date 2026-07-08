@@ -135,7 +135,7 @@ export const experience: ExperienceItem[] = [
   {
     role: "Founder",
     org: "The League Educational",
-    period: "Nov 2021 – Present",
+    period: "Nov 2021 – Feb 2023",
     summary:
       "Founded and scaled a financial-education platform from zero to 500+ international students, " +
       "building 200+ hours of original curriculum across equities, options, futures, derivatives, " +

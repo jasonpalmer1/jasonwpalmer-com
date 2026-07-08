@@ -133,9 +133,9 @@ export const tools: Tool[] = [
       "world, built on 200+ hours of original curriculum spanning equities, options, futures, " +
       "and risk management. Brand, platform, content, and community — all built from the ground up.",
     icon: "🎓",
-    status: "active",
+    status: "archived",
     stack: ["Curriculum design", "Platform", "Community", "Content"],
-    year: "2021",
+    year: "2021 – 2023",
     rarity: "rare",
   },
   // ── Add new tools below. Copy the shape above. ──
