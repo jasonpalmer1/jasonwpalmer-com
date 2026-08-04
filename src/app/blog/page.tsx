@@ -16,6 +16,14 @@ export const metadata: Metadata = {
       "Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.",
     url: `https://${profile.domain}/blog/`,
     type: "website",
+    images: [{ url: "/og.png", width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: `Dispatch Log — ${profile.name}`,
+    description:
+      "Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.",
+    images: ["/og.png"],
   },
 };
 
