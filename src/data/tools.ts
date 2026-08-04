@@ -84,16 +84,21 @@ export const tools: Tool[] = [
   {
     id: "wafergraph",
     name: "wafergraph",
-    tagline: "The entire semiconductor & AI supply chain, mapped as a living graph",
+    tagline: "The entire semiconductor & AI supply chain, mapped — and now queryable by AI",
     description:
-      "A free, neutral, always-current map of the semiconductor and AI supply chain — 565+ " +
+      "A free, neutral, always-current map of the semiconductor and AI supply chain — 615 " +
       "companies across the full value chain, from raw materials and equipment through chip " +
-      "design, foundries, and memory to the AI and data-center layer. Each is profiled with " +
-      "financials, supplier-and-customer dependencies, market share, and chokepoint exposure — " +
-      "so you can see exactly where the whole thing could break. Designed, built, and shipped end to end.",
+      "design, foundries, and memory to the AI data-center layer, linked by 3,400+ real supplier " +
+      "and customer relationships. Each company is profiled with financials, dependencies, market " +
+      "share, and chokepoint exposure, and the graph tracks M&A activity as it happens. It's not " +
+      "just a website — wafergraph also runs a live, public MCP server, so an AI assistant like " +
+      "Claude can query the whole graph directly: find single points of failure, simulate what " +
+      "happens if a company or country goes offline, trace a company's full supplier chain, or " +
+      "spot where an industry is consolidating. Dataset, API, and MCP — designed, built, and " +
+      "shipped end to end.",
     icon: "🔬",
     status: "live",
-    stack: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],
+    stack: ["Next.js", "Data pipeline", "Graph model", "MCP server", "Cloudflare"],
     liveUrl: "https://wafergraph.com",
     year: "2026",
     featured: true,
@@ -112,17 +117,65 @@ export const tools: Tool[] = [
       "transparent model that rates all 135 FBS teams with the math shown; team pages that re-skin to " +
       "your team's colors and explain exactly why they rank where they do; a Compare mode that lines " +
       "up any two rosters on a real field; and The Wire, a nightly transfer-portal and injury feed. " +
+      "The newest piece is the one I'm proudest of: Dynasty Mode, a full season-long coaching game — " +
+      "call every play, manage recruiting and the transfer portal, and run an offseason that rebuilds " +
+      "your roster year after year, all against a living 133-team league that plays out around you. " +
+      "Draft the Country turns the app's own player ratings into a season-long fantasy draft. " +
       "Offline-first PWA. Zero ads.",
     icon: "🏈",
     status: "live",
-    stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Data pipeline"],
+    stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Season simulation", "Data pipeline"],
     liveUrl: "https://whosstarting.com",
     year: "2026",
     featured: true,
     rarity: "epic",
     image: "/builds/whosstarting.jpg",
     imageAlt:
-      "Four screens of Who's Starting — the WS Power 135 rankings table, a team page with dynasty team-color theming and the 'Why This Rating' transparency panel, the Compare field-view matchup engine (Georgia vs Alabama), and The Wire transfer-portal feed",
+      "Four screens of Who's Starting — the WS Power 135-team rankings table, Dynasty Mode's coaching-game intro ('You're the coach, call every play'), Draft the Country's fantasy roster builder, and The Wire's nightly transfer-portal feed",
+  },
+  {
+    id: "our-place",
+    name: "Our Place",
+    tagline: "A private world for two, built as a birthday gift",
+    description:
+      "A private, just-for-us app I built for my girlfriend as a birthday gift, for staying close " +
+      "across a long distance. Real-time chat and voice notes, a YouTube-synced Listening Room so " +
+      "we can watch or listen together from two cities, a photo keepsake wall, a celestial " +
+      "milestone timeline, open-when letters that unlock on the recipient's terms, and a trip " +
+      "tracker with its own constellation map for places we've been together. A quiet presence " +
+      "indicator and a countdown to the next visit round it out. Under the hood: Supabase " +
+      "real-time sync and row-level security scope every record to the two of us, and nothing " +
+      "here is public — this one's just ours.",
+    icon: "🌌",
+    status: "live",
+    stack: ["React", "Supabase", "Realtime sync", "Cloudflare Pages"],
+    year: "2025 – 2026",
+    rarity: "epic",
+  },
+  {
+    id: "mission-hq",
+    name: "Mission HQ",
+    tagline: "A private mission-control system for running my own work like an operator",
+    description:
+      "A personal command center I built and use daily to run everything else here — a single " +
+      "password-gated dashboard that keeps me systemized instead of scattered across tabs. A live " +
+      "traffic panel shows real visitor sessions across my sites — where they came from, the pages " +
+      "they moved through, roughly where in the world they are — powered by a first-party tracker " +
+      "I built rather than a third-party analytics vendor. A second panel tracks my own AI usage " +
+      "like a P&L: spend by day, so the cost of building with AI agents is a number I actually " +
+      "watch, not a surprise. Everything else I ship rolls up here: project status, deploy health, " +
+      "a running log. It's the control room behind the rest of this page.",
+    icon: "🛰️",
+    status: "live",
+    stack: ["Cloudflare Workers", "D1", "Real-time analytics", "AI agents", "Automation"],
+    year: "2026",
+    featured: true,
+    rarity: "epic",
+    image: "/builds/mission-hq.jpg",
+    imageAlt:
+      "Two panels of Mission HQ shown with sanitized sample data — a visitor-traffic dashboard with session origins and page trails, and a daily AI token-spend tracker",
+    imageCaption:
+      "Screens shown use sanitized sample data — placeholder sessions and figures for illustration only, not real visitors, spend, or personal content.",
   },
   {
     id: "the-league",
@@ -136,6 +189,21 @@ export const tools: Tool[] = [
     status: "archived",
     stack: ["Curriculum design", "Platform", "Community", "Content"],
     year: "2021 – 2023",
+    rarity: "rare",
+  },
+  {
+    id: "classified-fantasy-tracker",
+    name: "[ CLASSIFIED — In Development ]",
+    tagline: "A real-time, game-tracking fantasy sports app — not ready to name yet",
+    description:
+      "Currently in development: a proprietary, real-time tracker for a competitive esports scene, " +
+      "paired with its own fantasy layer — live event scoring, power rankings built from a custom " +
+      "formula (not just raw stats), and a free-to-play fantasy draft on top of it. Confidential " +
+      "until it's ready to show. More soon.",
+    icon: "🔒",
+    status: "prototype",
+    stack: ["Cloudflare Workers", "D1", "Real-time data", "Automation"],
+    year: "2026",
     rarity: "rare",
   },
   // ── Add new tools below. Copy the shape above. ──

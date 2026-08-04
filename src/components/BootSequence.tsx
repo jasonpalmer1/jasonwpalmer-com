@@ -1,13 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { tools } from "@/data/tools";
 
 const LINES = (name: string) => [
   "> initializing operator terminal v2.7 …",
   "> establishing secure uplink … OK",
   `> loading profile: ${name.toUpperCase().replace(/\s+/g, "_")} …`,
   "> decrypting credentials … OK",
-  "> mounting builds [3] … OK",
+  `> mounting builds [${tools.length}] … OK`,
   "> ACCESS GRANTED",
 ];
 
