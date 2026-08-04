@@ -196,7 +196,7 @@ export const tools: Tool[] = [
     name: "[ CLASSIFIED — In Development ]",
     tagline: "A real-time, game-tracking fantasy sports app — not ready to name yet",
     description:
-      "Currently in development: a proprietary, real-time tracker for a competitive esports scene, " +
+      "Currently in development: a proprietary, real-time tracker for a competitive gaming scene, " +
       "paired with its own fantasy layer — live event scoring, power rankings built from a custom " +
       "formula (not just raw stats), and a free-to-play fantasy draft on top of it. Confidential " +
       "until it's ready to show. More soon.",
