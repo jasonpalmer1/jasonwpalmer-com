@@ -48,14 +48,10 @@ export const tools: Tool[] = [
     name: "Command Center — CRE Underwriting AI",
     tagline: "AI that underwrites CRE deals, monitors the portfolio, and surfaces new opportunities",
     description:
-      "A proprietary AI system I architected in-house (Claude Code, on personal " +
-      "initiative) that underwrites a commercial real estate deal end-to-end, runs a live " +
-      "operating picture of the portfolio, and proactively identifies new investment " +
-      "opportunities. It compresses a ~60-minute manual underwrite " +
-      "to ~3 minutes by standardizing the data layer and automating document intake, modeling, " +
-      "valuation, and market analysis. Speed isn't the point — fast and right is: every output " +
-      "is grounded in real portfolio data, relentlessly tested, and backed by as much data as " +
-      "possible before it informs a decision.",
+      "A proprietary AI system I built in-house that underwrites a commercial real estate deal " +
+      "end-to-end, runs a live portfolio picture, and surfaces new opportunities. Compresses a " +
+      "~60-minute manual underwrite to ~3 minutes. Fast and right: every output is grounded in " +
+      "real portfolio data and relentlessly tested.",
     icon: "🏢",
     status: "active",
     stack: ["Claude Code", "AI agents", "DuckDB", "Data architecture", "Python", "Automation"],
@@ -68,13 +64,10 @@ export const tools: Tool[] = [
     name: "4-Horn Field Ops",
     tagline: "The field-ops suite that runs a 24/7 rental company from a phone",
     description:
-      "What began as a spreadsheet-and-paper replacement for 4-Horn Industrial — a 24/7 Gulf " +
-      "Coast equipment-rental company — is now their whole operation in one mobile app. A live " +
-      "KPI dashboard (units and dollars on rent, returns due, open service), one-tap reservation " +
-      "and service boards that output the exact text they already send, and a quote builder that " +
-      "generates a branded PDF off their real 200-plus-item catalog. Add searchable logging with " +
-      "photos, plus a sales-intel layer that surfaces new construction projects in their region " +
-      "worth chasing. The whole business, in your pocket.",
+      "What began as a spreadsheet replacement for a 24/7 equipment-rental company is now their " +
+      "whole operation in one phone app. A live KPI dashboard, one-tap reservation and service " +
+      "boards, a quote builder off a real 200-item catalog, searchable logging with photos, and a " +
+      "sales-intel layer surfacing local leads. The whole business, in your pocket.",
     icon: "🏗️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
@@ -115,16 +108,10 @@ export const tools: Tool[] = [
     name: "wafergraph",
     tagline: "The entire semiconductor & AI supply chain, mapped — and now queryable by AI",
     description:
-      "A free, neutral, always-current map of the semiconductor and AI supply chain — 615 " +
-      "companies across the full value chain, from raw materials and equipment through chip " +
-      "design, foundries, and memory to the AI data-center layer, linked by 3,400+ real supplier " +
-      "and customer relationships. Each company is profiled with financials, dependencies, market " +
-      "share, and chokepoint exposure, and the graph tracks M&A activity as it happens. It's not " +
-      "just a website — wafergraph also runs a live, public MCP server, so an AI assistant like " +
-      "Claude can query the whole graph directly: find single points of failure, simulate what " +
-      "happens if a company or country goes offline, trace a company's full supplier chain, or " +
-      "spot where an industry is consolidating. Dataset, API, and MCP — designed, built, and " +
-      "shipped end to end.",
+      "A free, always-current map of the semiconductor and AI supply chain — 615 companies, " +
+      "3,400+ real supplier and customer links. It also runs a live, public MCP server, so an AI " +
+      "like Claude can query it directly: find single points of failure, trace a supply chain, " +
+      "simulate a company going offline. Dataset, API, MCP — built end to end.",
     icon: "🔬",
     status: "live",
     stack: ["Next.js", "Data pipeline", "Graph model", "MCP server", "Cloudflare"],
@@ -134,12 +121,12 @@ export const tools: Tool[] = [
     rarity: "epic",
     images: [
       {
-        src: "/builds/wafergraph-network.jpg",
-        alt: "The force-directed Network view, centered on NVIDIA — 120 connected companies, 497 links, glowing by segment",
+        src: "/builds/wafergraph-network-r3.jpg",
+        alt: "The Network view's live graph, centered on NVIDIA — a dense, glowing cluster of 120 connected companies",
       },
       {
-        src: "/builds/wafergraph-flow-view.jpg",
-        alt: "The Flow view tracing TSMC's supply chain — real suppliers upstream and customers downstream, with single-source dependency warnings flagged",
+        src: "/builds/wafergraph-flow-r3.jpg",
+        alt: "The Flow view tracing NVIDIA's real suppliers and customers, with single-source dependency risk flagged",
       },
     ],
   },
@@ -148,16 +135,10 @@ export const tools: Tool[] = [
     name: "Who's Starting",
     tagline: "The ad-free sports app that respects your time and your team",
     description:
-      "Started as a fix for a dumb problem — no good way to check college-football depth charts " +
-      "offline at a game — and grew into a full broadcast-style Game Center. It runs on WS Power, a " +
-      "transparent model that rates all 135 FBS teams with the math shown; team pages that re-skin to " +
-      "your team's colors and explain exactly why they rank where they do; a Compare mode that lines " +
-      "up any two rosters on a real field; and The Wire, a nightly transfer-portal and injury feed. " +
-      "The newest piece is the one I'm proudest of: Dynasty Mode, a full season-long coaching game — " +
-      "call every play, manage recruiting and the transfer portal, and run an offseason that rebuilds " +
-      "your roster year after year, all against a living 133-team league that plays out around you. " +
-      "Draft the Country turns the app's own player ratings into a season-long fantasy draft. " +
-      "Offline-first PWA. Zero ads.",
+      "Started as a fix for checking depth charts offline at a game, and grew into a full sports " +
+      "app. WS Power rates all 135 FBS teams, math shown. Dynasty Mode: a season-long coaching " +
+      "game — call every play, manage recruiting, rebuild your roster every year. Draft the " +
+      "Country turns real ratings into a fantasy draft. Zero ads.",
     icon: "🏈",
     status: "live",
     stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Season simulation", "Data pipeline"],
@@ -167,20 +148,20 @@ export const tools: Tool[] = [
     rarity: "epic",
     images: [
       {
-        src: "/builds/whosstarting-power.jpg",
-        alt: "WS Power — every FBS team rated on one number, sortable by conference and tier",
+        src: "/builds/whosstarting-power-r3.jpg",
+        alt: "The WS Power ranked table — Ohio State, Georgia, Notre Dame and more, rated 0-99",
       },
       {
-        src: "/builds/whosstarting-dynasty.jpg",
-        alt: "Dynasty Mode's intro screen — 'You're the coach. Call every play.' — pick a school and start a season",
+        src: "/builds/whosstarting-dynasty-r3.jpg",
+        alt: "A live Dynasty Mode game in progress — scoreboard, win probability, and the on-field formation",
       },
       {
-        src: "/builds/whosstarting-draft.jpg",
+        src: "/builds/whosstarting-draft-r3.jpg",
         alt: "Draft the Country — building a 13-slot fantasy roster from the app's own player ratings",
       },
       {
-        src: "/builds/whosstarting-wire.jpg",
-        alt: "The Wire — nightly transfer-portal adds and depth-chart moves across college football",
+        src: "/builds/whosstarting-wire-r3.jpg",
+        alt: "The Wire — real transfer-portal moves, ranked by player rating",
       },
     ],
   },
@@ -189,14 +170,10 @@ export const tools: Tool[] = [
     name: "Our Place",
     tagline: "A private world for two, built as a birthday gift",
     description:
-      "A private, just-for-us app I built for my girlfriend as a birthday gift, for staying close " +
-      "across a long distance. Real-time chat and voice notes, a YouTube-synced Listening Room so " +
-      "we can watch or listen together from two cities, a photo keepsake wall, a celestial " +
-      "milestone timeline, open-when letters that unlock on the recipient's terms, and a trip " +
-      "tracker with its own constellation map for places we've been together. A quiet presence " +
-      "indicator and a countdown to the next visit round it out. Under the hood: Supabase " +
-      "real-time sync and row-level security scope every record to the two of us, and nothing " +
-      "here is public — this one's just ours.",
+      "A private app I built for my girlfriend as a birthday gift, for staying close across a " +
+      "long distance. Real-time chat and voice notes, a synced Listening Room, a photo keepsake " +
+      "wall, a milestone timeline, open-when letters, and a trip tracker with its own " +
+      "constellation map. Nothing here is public — this one's just ours.",
     icon: "🌌",
     status: "live",
     stack: ["React", "Supabase", "Realtime sync", "Cloudflare Pages"],
@@ -233,19 +210,10 @@ export const tools: Tool[] = [
     name: "Mission HQ",
     tagline: "A private mission-control system for running my own work like an operator",
     description:
-      "A personal command center I built and use daily to run everything else here — a single " +
-      "password-gated dashboard that keeps me systemized instead of scattered across tabs. A live " +
-      "traffic panel tracks real visitor sessions across my sites — origins, page trails, rough " +
-      "geography — off a first-party tracker I built instead of a third-party analytics vendor, " +
-      "and a token-spend panel tracks my own AI usage like a P&L, so building with AI agents has a " +
-      "real cost line instead of a surprise bill. Underneath it all sits a persistent memory " +
-      "system: a typed, linked graph of everything I've learned running this operation, which " +
-      "every AI session reads before it starts and writes back to when it's done, so nothing has " +
-      "to be re-explained twice. A Fleet panel shows every AI session I have running right now in " +
-      "one place, with a live status on each — working, waiting on me, or done. And a feature " +
-      "called Mirror keeps a running self-model — strengths, weaknesses, hard truths, a growth " +
-      "log — the closest thing I have to a coach that never forgets. It's the control room behind " +
-      "the rest of this page.",
+      "A personal command center I built and use daily — one password-gated dashboard instead of " +
+      "scattered tabs. A live traffic panel tracks real visitor sessions off a first-party " +
+      "tracker I built; a spend panel tracks my AI usage like a P&L. A persistent memory graph " +
+      "and a Fleet status view keep it all running.",
     icon: "🛰️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "Real-time analytics", "AI agents", "Automation"],

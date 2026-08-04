@@ -28,14 +28,19 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
         if (e.key === "ArrowLeft") prev();
       }}
     >
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={images[i].src}
-        alt={images[i].alt}
-        loading="lazy"
+      <div
+        className="w-full cursor-pointer overflow-hidden rounded-lg border border-border"
+        style={{ aspectRatio: "16 / 10", maxHeight: 260 }}
         onClick={next}
-        className="w-full cursor-pointer rounded-lg border border-border transition-opacity active:opacity-80"
-      />
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={images[i].src}
+          alt={images[i].alt}
+          loading="lazy"
+          className="h-full w-full object-cover transition-opacity active:opacity-80"
+        />
+      </div>
 
       {n > 1 && (
         <>
