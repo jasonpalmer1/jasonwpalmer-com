@@ -213,7 +213,8 @@ export const tools: Tool[] = [
       "A personal command center I built and use daily — one password-gated dashboard instead of " +
       "scattered tabs. A live traffic panel tracks real visitor sessions off a first-party " +
       "tracker I built; a spend panel tracks my AI usage like a P&L. A persistent memory graph " +
-      "and a Fleet status view keep it all running.",
+      "and a Fleet status view keep it all running. And Mirror keeps a running self-model — " +
+      "strengths, weaknesses, hard truths — a coach that never forgets.",
     icon: "🛰️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "Real-time analytics", "AI agents", "Automation"],
