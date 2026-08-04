@@ -125,12 +125,12 @@ export const tools: Tool[] = [
         alt: "The Network explorer's live graph, centered on NVIDIA — 120 connected companies across the supply chain, colored by segment",
       },
       {
-        src: "/builds/wafergraph-flow-r5.jpg",
-        alt: "The Flow view tracing NVIDIA's real suppliers and customers, with single-source dependency risk flagged",
+        src: "/builds/wafergraph-flow-r6.jpg",
+        alt: "NVIDIA's real single points of failure — 342 companies depend on it, and 5 of its own suppliers (Ajinomoto, ASML, Carl Zeiss SMT, TRUMPF, Lasertec) are irreplaceable",
       },
       {
-        src: "/builds/wafergraph-macro-r5.jpg",
-        alt: "Macro Indicators — semiconductor production, pricing, and orders pulled live from Federal Reserve (FRED) data series",
+        src: "/builds/wafergraph-macro-r6.jpg",
+        alt: "Live Federal Reserve (FRED) data proving the chip boom in numbers — production up 14.4% YoY, prices up 25.3%, sourced and dated",
       },
       {
         src: "/builds/wafergraph-minerals-r5.jpg",
@@ -141,12 +141,12 @@ export const tools: Tool[] = [
         alt: "The Chokepoint Risk Index — companies ranked by downstream dependence, fragility, and direct market exposure",
       },
       {
-        src: "/builds/wafergraph-aibuildout-r5.jpg",
-        alt: "The AI Buildout Tracker — real, dated infrastructure deals (Stargate, OpenAI-Oracle, OpenAI-Azure) and capex totals",
+        src: "/builds/wafergraph-aibuildout-r6.jpg",
+        alt: "The AI capex race in real numbers — $1.57T committed, the $500B Stargate deal, OpenAI's $300B and $250B cloud commitments",
       },
       {
-        src: "/builds/wafergraph-marketshare-r5.jpg",
-        alt: "Market Share by Segment — concentration index and real revenue figures across silicon wafer suppliers",
+        src: "/builds/wafergraph-marketshare-r6.jpg",
+        alt: "Silicon wafer supply is concentrated in 5 companies — Shin-Etsu Chemical leads at 28%, with real revenue figures for each",
       },
     ],
   },
