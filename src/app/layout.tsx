@@ -54,44 +54,7 @@ export const metadata: Metadata = {
   },
 };
 
-// visit-log — first-party visit tracer (Jason's own D1-backed collector, see
-// ~/projects/visit-log/CLAUDE.md). Separate from the CF Web Analytics beacon
-// below, which is cookieless/aggregate by design and can't show per-visitor
-// origin, route trail, or geo/IP — this can. No cookies (sessionStorage
-// only), fires on initial load AND every client-side route change (Next's
-// router does a real history.pushState under the hood for soft navigation,
-// so patching pushState/replaceState + popstate catches it — same technique
-// Cloudflare's own beacon.min.js uses for SPA instrumentation). Inline (not
-// next/script) so it runs immediately, before hydration. Fire-and-forget;
-// never throws into the app.
-const VISIT_LOG_SNIPPET = `(function(){try{
-var ENDPOINT='https://visit-log.jwpalm99.workers.dev/collect';
-var SITE='jasonwpalmer';
-var SID_KEY='vl_sid',SEQ_KEY='vl_seq',SRC_KEY='vl_src';
-var sid=sessionStorage.getItem(SID_KEY);
-if(!sid){sid=crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2);sessionStorage.setItem(SID_KEY,sid);sessionStorage.setItem(SEQ_KEY,'0');}
-var src=sessionStorage.getItem(SRC_KEY)||'';
-var params=new URLSearchParams(location.search);
-var urlSrc=params.get('src');
-if(urlSrc){
-  if(!src){src=urlSrc;sessionStorage.setItem(SRC_KEY,urlSrc);}
-  if(window.history&&window.history.replaceState){params.delete('src');var qs=params.toString();window.history.replaceState(history.state,'',location.pathname+(qs?'?'+qs:'')+location.hash);}
-}
-function send(path){
-  var seq=parseInt(sessionStorage.getItem(SEQ_KEY)||'0',10)+1;
-  sessionStorage.setItem(SEQ_KEY,String(seq));
-  var payload=JSON.stringify({site:SITE,path:path,referrer:document.referrer||'',src:src,sessionId:sid,seq:seq});
-  try{
-    if(navigator.sendBeacon){navigator.sendBeacon(ENDPOINT,new Blob([payload],{type:'text/plain'}));}
-    else{fetch(ENDPOINT,{method:'POST',body:payload,headers:{'Content-Type':'text/plain'},keepalive:true,mode:'cors'}).catch(function(){});}
-  }catch(e){}
-}
-send(location.pathname);
-var lastPath=location.pathname;
-function onRouteMaybeChanged(){if(location.pathname!==lastPath){lastPath=location.pathname;send(lastPath);}}
-['pushState','replaceState'].forEach(function(fn){var orig=history[fn];history[fn]=function(){var ret=orig.apply(this,arguments);onRouteMaybeChanged();return ret;};});
-window.addEventListener('popstate',onRouteMaybeChanged);
-}catch(e){}})();`;
+
 
 export default function RootLayout({
   children,
@@ -150,7 +113,15 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
-        <script dangerouslySetInnerHTML={{ __html: VISIT_LOG_SNIPPET }} />
+        {/* shared visit-log tracker — replaces the old pageview-only inline
+            snippet. Auto-captures pageviews, clicks, scroll depth, engaged
+            time, outbound links, downloads, form submits, rage/dead clicks,
+            and a durable per-visitor id. Source of truth is one file served by
+            the collector (~/projects/visit-log/src/beacon.js), so tracking
+            changes ship by deploying that Worker, not by editing three sites.
+            Plain <script defer>, not next/script, to keep the same early-firing
+            behavior the inline snippet had. */}
+        <script defer src="https://visit-log.jwpalm99.workers.dev/v.js" />
         {children}
         <FloatingActions />
         {/* Cloudflare Web Analytics — inert when token is unset */}
