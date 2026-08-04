@@ -276,13 +276,13 @@ export const tools: Tool[] = [
   {
     id: "sous",
     name: "Sous",
-    tagline: "An AI project about what to eat — confidential for now",
+    tagline: "Proprietary & Confidential — an AI project about what to eat",
     description:
-      "In development: an AI project about what to eat. Confidential for now — more when it's " +
-      "ready to show.",
+      "Actively in development: an AI project about what to eat. Proprietary and confidential, " +
+      "so no further details yet — more when it's ready to show.",
     icon: "🍳",
     status: "prototype",
-    stack: ["AI agents"],
+    stack: ["AI"],
     year: "2026",
     rarity: "rare",
   },
