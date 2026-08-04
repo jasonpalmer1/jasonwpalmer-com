@@ -129,7 +129,7 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/whosstarting.jpg",
+    image: "/builds/whosstarting-2026-08.jpg",
     imageAlt:
       "Four screens of Who's Starting — the WS Power 135-team rankings table, Dynasty Mode's coaching-game intro ('You're the coach, call every play'), Draft the Country's fantasy roster builder, and The Wire's nightly transfer-portal feed",
   },
