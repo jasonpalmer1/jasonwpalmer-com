@@ -121,12 +121,32 @@ export const tools: Tool[] = [
     rarity: "epic",
     images: [
       {
-        src: "/builds/wafergraph-network.jpg",
-        alt: "The Network view's live graph, centered on NVIDIA — a dense, glowing cluster of 120 connected companies",
+        src: "/builds/wafergraph-network-r5.jpg",
+        alt: "The Network explorer's live graph, centered on NVIDIA — 120 connected companies across the supply chain, colored by segment",
       },
       {
-        src: "/builds/wafergraph-flow-view.jpg",
+        src: "/builds/wafergraph-flow-r5.jpg",
         alt: "The Flow view tracing NVIDIA's real suppliers and customers, with single-source dependency risk flagged",
+      },
+      {
+        src: "/builds/wafergraph-macro-r5.jpg",
+        alt: "Macro Indicators — semiconductor production, pricing, and orders pulled live from Federal Reserve (FRED) data series",
+      },
+      {
+        src: "/builds/wafergraph-minerals-r5.jpg",
+        alt: "Critical Minerals — USGS-sourced production and US import-reliance data for the raw materials chips depend on",
+      },
+      {
+        src: "/builds/wafergraph-risk-r5.jpg",
+        alt: "The Chokepoint Risk Index — companies ranked by downstream dependence, fragility, and direct market exposure",
+      },
+      {
+        src: "/builds/wafergraph-aibuildout-r5.jpg",
+        alt: "The AI Buildout Tracker — real, dated infrastructure deals (Stargate, OpenAI-Oracle, OpenAI-Azure) and capex totals",
+      },
+      {
+        src: "/builds/wafergraph-marketshare-r5.jpg",
+        alt: "Market Share by Segment — concentration index and real revenue figures across silicon wafer suppliers",
       },
     ],
   },
