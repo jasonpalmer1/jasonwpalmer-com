@@ -1,4 +1,5 @@
 import { tools, statusLabels, type Tool, type Rarity } from "@/data/tools";
+import Gallery from "./Gallery";
 
 const rarityClass: Record<Rarity, string> = {
   legendary: "rarity-legendary",
@@ -20,15 +21,9 @@ function ToolCard({ tool }: { tool: Tool }) {
         tool.featured ? "sm:col-span-2" : ""
       }`}
     >
-      {tool.image && (
+      {tool.images && tool.images.length > 0 && (
         <figure className="mb-5">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={tool.image}
-            alt={tool.imageAlt ?? `${tool.name} screenshot`}
-            loading="lazy"
-            className="w-full rounded-lg border border-border"
-          />
+          <Gallery images={tool.images} />
           {tool.imageCaption && (
             <figcaption className="mt-2 font-mono text-xs leading-snug text-muted">
               {tool.imageCaption}

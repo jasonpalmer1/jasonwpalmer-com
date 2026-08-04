@@ -7,6 +7,11 @@ export type ToolStatus = "live" | "active" | "prototype" | "archived";
 
 export type Rarity = "legendary" | "epic" | "rare";
 
+export type GalleryImage = {
+  src: string;
+  alt: string;
+};
+
 export type Tool = {
   // Stable id, used for anchors/keys. kebab-case.
   id: string;
@@ -20,10 +25,11 @@ export type Tool = {
   status: ToolStatus;
   // Tech used — shown as chips.
   stack: string[];
-  // Optional screenshot/cover shown at the top of the card (path under /public).
-  image?: string;
-  imageAlt?: string;
-  // Optional caption rendered directly under the image (e.g. a data disclaimer).
+  // Optional tap-through gallery of screenshots (path under /public). One full-size
+  // shot per feature reads far better than a squeezed composite — prefer several
+  // images over one collage.
+  images?: GalleryImage[];
+  // Optional caption rendered directly under the gallery (e.g. a data disclaimer).
   imageCaption?: string;
   // Optional links.
   liveUrl?: string;
@@ -75,9 +81,32 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/4horn-fieldops.jpg",
-    imageAlt:
-      "Three screens of the 4-Horn Field Ops app, shown with sample demo data — the KPI dashboard (units and dollars on rent, returns due, open service), the quote builder, and the service-request board",
+    images: [
+      {
+        src: "/builds/4horn-home.jpg",
+        alt: "The Home dashboard — units and dollars on rent, returns due, open service, at a glance",
+      },
+      {
+        src: "/builds/4horn-rentals.jpg",
+        alt: "The Rentals board — one-tap reservation status from Reserved through On Rent",
+      },
+      {
+        src: "/builds/4horn-service.jpg",
+        alt: "The Service board — open, in-progress, and done service requests, grouped for the field",
+      },
+      {
+        src: "/builds/4horn-quote.jpg",
+        alt: "The Quote builder — a branded quote assembled from the real equipment catalog",
+      },
+      {
+        src: "/builds/4horn-log.jpg",
+        alt: "The searchable Log — missed-rent and re-rent history with dollar impact called out",
+      },
+      {
+        src: "/builds/4horn-targets.jpg",
+        alt: "The Targets sales-intel layer — construction leads and subcontractors worth calling",
+      },
+    ],
     imageCaption:
       "Screens shown use sample data — placeholder company names and figures for illustration only, not 4-Horn's actual customers, jobs, or numbers.",
   },
@@ -103,9 +132,16 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/wafergraph-flow.jpg",
-    imageAlt:
-      "Two views of wafergraph — the force-directed network graph of the semiconductor & AI supply chain, and the supply-chain Flow view showing companies as pills flowing upstream (suppliers) and downstream (customers) around NVIDIA",
+    images: [
+      {
+        src: "/builds/wafergraph-network.jpg",
+        alt: "The force-directed Network view, centered on NVIDIA — 120 connected companies, 497 links, glowing by segment",
+      },
+      {
+        src: "/builds/wafergraph-flow-view.jpg",
+        alt: "The Flow view tracing TSMC's supply chain — real suppliers upstream and customers downstream, with single-source dependency warnings flagged",
+      },
+    ],
   },
   {
     id: "whos-starting",
@@ -129,9 +165,24 @@ export const tools: Tool[] = [
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/whosstarting-2026-08.jpg",
-    imageAlt:
-      "Four screens of Who's Starting — the WS Power 135-team rankings table, Dynasty Mode's coaching-game intro ('You're the coach, call every play'), Draft the Country's fantasy roster builder, and The Wire's nightly transfer-portal feed",
+    images: [
+      {
+        src: "/builds/whosstarting-power.jpg",
+        alt: "WS Power — every FBS team rated on one number, sortable by conference and tier",
+      },
+      {
+        src: "/builds/whosstarting-dynasty.jpg",
+        alt: "Dynasty Mode's intro screen — 'You're the coach. Call every play.' — pick a school and start a season",
+      },
+      {
+        src: "/builds/whosstarting-draft.jpg",
+        alt: "Draft the Country — building a 13-slot fantasy roster from the app's own player ratings",
+      },
+      {
+        src: "/builds/whosstarting-wire.jpg",
+        alt: "The Wire — nightly transfer-portal adds and depth-chart moves across college football",
+      },
+    ],
   },
   {
     id: "our-place",
@@ -150,7 +201,32 @@ export const tools: Tool[] = [
     status: "live",
     stack: ["React", "Supabase", "Realtime sync", "Cloudflare Pages"],
     year: "2025 – 2026",
+    featured: true,
     rarity: "epic",
+    images: [
+      {
+        src: "/builds/our-place-listening.jpg",
+        alt: "The Listening Room — a YouTube-synced now-playing screen for watching or listening together from two cities",
+      },
+      {
+        src: "/builds/our-place-letters.jpg",
+        alt: "Open-When Letters — sealed messages that stay closed until the moment they're written for",
+      },
+      {
+        src: "/builds/our-place-tour.jpg",
+        alt: "Quantum Love Tour — a constellation map tracking every city visited together",
+      },
+      {
+        src: "/builds/our-place-story.jpg",
+        alt: "Our Story — a celestial milestone timeline marking the relationship's key dates",
+      },
+      {
+        src: "/builds/our-place-keepsakes.jpg",
+        alt: "The Note Wall — a polaroid-style keepsake grid for pinning photos and captions",
+      },
+    ],
+    imageCaption:
+      "Screens shown are a fabricated demo — placeholder names, photos, dates, and locations, not real content from the actual app. Built and rendered separately for this page; never pulled from the live private app or its real data.",
   },
   {
     id: "mission-hq",
@@ -159,23 +235,56 @@ export const tools: Tool[] = [
     description:
       "A personal command center I built and use daily to run everything else here — a single " +
       "password-gated dashboard that keeps me systemized instead of scattered across tabs. A live " +
-      "traffic panel shows real visitor sessions across my sites — where they came from, the pages " +
-      "they moved through, roughly where in the world they are — powered by a first-party tracker " +
-      "I built rather than a third-party analytics vendor. A second panel tracks my own AI usage " +
-      "like a P&L: spend by day, so the cost of building with AI agents is a number I actually " +
-      "watch, not a surprise. Everything else I ship rolls up here: project status, deploy health, " +
-      "a running log. It's the control room behind the rest of this page.",
+      "traffic panel tracks real visitor sessions across my sites — origins, page trails, rough " +
+      "geography — off a first-party tracker I built instead of a third-party analytics vendor, " +
+      "and a token-spend panel tracks my own AI usage like a P&L, so building with AI agents has a " +
+      "real cost line instead of a surprise bill. Underneath it all sits a persistent memory " +
+      "system: a typed, linked graph of everything I've learned running this operation, which " +
+      "every AI session reads before it starts and writes back to when it's done, so nothing has " +
+      "to be re-explained twice. A Fleet panel shows every AI session I have running right now in " +
+      "one place, with a live status on each — working, waiting on me, or done. And a feature " +
+      "called Mirror keeps a running self-model — strengths, weaknesses, hard truths, a growth " +
+      "log — the closest thing I have to a coach that never forgets. It's the control room behind " +
+      "the rest of this page.",
     icon: "🛰️",
     status: "live",
     stack: ["Cloudflare Workers", "D1", "Real-time analytics", "AI agents", "Automation"],
     year: "2026",
     featured: true,
     rarity: "epic",
-    image: "/builds/mission-hq.jpg",
-    imageAlt:
-      "Two panels of Mission HQ shown with sanitized sample data — a visitor-traffic dashboard with session origins and page trails, and a daily AI token-spend tracker",
+    images: [
+      {
+        src: "/builds/mission-hq-visitors.jpg",
+        alt: "Visitor-traffic panel — real sessions across my sites, where they came from, the pages they moved through",
+      },
+      {
+        src: "/builds/mission-hq-spend.jpg",
+        alt: "AI token-spend panel — daily spend and a model-by-model breakdown, tracked like a P&L",
+      },
+      {
+        src: "/builds/mission-hq-memory.jpg",
+        alt: "Memory panel — the persistent, linked memory graph every AI session reads and writes to, so nothing has to be re-explained",
+      },
+      {
+        src: "/builds/mission-hq-fleet.jpg",
+        alt: "Fleet panel — every AI session running right now in one place, with a live busy / waiting / idle status on each",
+      },
+    ],
     imageCaption:
-      "Screens shown use sanitized sample data — placeholder sessions and figures for illustration only, not real visitors, spend, or personal content.",
+      "Screens shown use sanitized sample data — placeholder sessions, figures, and names for illustration only, not real visitors, spend, or personal content.",
+  },
+  {
+    id: "sous",
+    name: "Sous",
+    tagline: "An AI project about what to eat — confidential for now",
+    description:
+      "In development: an AI project about what to eat. Confidential for now — more when it's " +
+      "ready to show.",
+    icon: "🍳",
+    status: "prototype",
+    stack: ["AI agents"],
+    year: "2026",
+    rarity: "rare",
   },
   {
     id: "the-league",
