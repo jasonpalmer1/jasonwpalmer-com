@@ -38,7 +38,7 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
           src={images[i].src}
           alt={images[i].alt}
           loading="lazy"
-          className="h-full w-full object-cover transition-opacity active:opacity-80"
+          className="h-full w-full object-contain transition-opacity active:opacity-80"
         />
       </div>
 

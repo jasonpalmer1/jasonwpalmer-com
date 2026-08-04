@@ -121,11 +121,11 @@ export const tools: Tool[] = [
     rarity: "epic",
     images: [
       {
-        src: "/builds/wafergraph-network-r3.jpg",
+        src: "/builds/wafergraph-network.jpg",
         alt: "The Network view's live graph, centered on NVIDIA — a dense, glowing cluster of 120 connected companies",
       },
       {
-        src: "/builds/wafergraph-flow-r3.jpg",
+        src: "/builds/wafergraph-flow-view.jpg",
         alt: "The Flow view tracing NVIDIA's real suppliers and customers, with single-source dependency risk flagged",
       },
     ],
@@ -148,19 +148,19 @@ export const tools: Tool[] = [
     rarity: "epic",
     images: [
       {
-        src: "/builds/whosstarting-power-r3.jpg",
+        src: "/builds/whosstarting-power.jpg",
         alt: "The WS Power ranked table — Ohio State, Georgia, Notre Dame and more, rated 0-99",
       },
       {
-        src: "/builds/whosstarting-dynasty-r3.jpg",
+        src: "/builds/whosstarting-dynasty.jpg",
         alt: "A live Dynasty Mode game in progress — scoreboard, win probability, and the on-field formation",
       },
       {
-        src: "/builds/whosstarting-draft-r3.jpg",
+        src: "/builds/whosstarting-draft.jpg",
         alt: "Draft the Country — building a 13-slot fantasy roster from the app's own player ratings",
       },
       {
-        src: "/builds/whosstarting-wire-r3.jpg",
+        src: "/builds/whosstarting-wire.jpg",
         alt: "The Wire — real transfer-portal moves, ranked by player rating",
       },
     ],
