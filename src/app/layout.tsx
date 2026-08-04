@@ -27,7 +27,10 @@ export const metadata: Metadata = {
   metadataBase: new URL(`https://${profile.domain}`),
   title: `${profile.name} — ${profile.title}`,
   description: profile.blurb,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    types: { "application/rss+xml": "/rss.xml" },
+  },
   openGraph: {
     title: `${profile.name} — ${profile.title}`,
     description: `${profile.tagline} ${profile.subtagline}`,
@@ -117,6 +120,17 @@ export default function RootLayout({
       .map((s) => s.href),
   };
 
+  // WebSite JSON-LD so search engines can attribute the site itself
+  // (distinct from the Person entity above), e.g. for a sitelinks search box.
+  const websiteJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: profile.name,
+    url: `https://${profile.domain}`,
+    description: profile.blurb,
+    publisher: { "@type": "Person", name: profile.name },
+  };
+
   return (
     <html
       lang="en"
@@ -131,6 +145,10 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteJsonLd) }}
         />
         <script dangerouslySetInnerHTML={{ __html: VISIT_LOG_SNIPPET }} />
         {children}
