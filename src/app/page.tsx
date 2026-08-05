@@ -2,6 +2,7 @@ import Nav from "@/components/Nav";
 import Hero from "@/components/Hero";
 import Stats from "@/components/Stats";
 import Tools from "@/components/Tools";
+import Platforms from "@/components/Platforms";
 import Skills from "@/components/Skills";
 import Resume from "@/components/Resume";
 import Lore from "@/components/Lore";
@@ -17,6 +18,7 @@ export default function Home() {
         <Hero />
         <Stats />
         <Tools />
+        <Platforms />
         <Skills />
         <Resume />
         <Lore />

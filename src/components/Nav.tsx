@@ -3,6 +3,7 @@ import { game } from "@/data/profile";
 // Section links are absolute (/#…) so they work from any page, not just home.
 const links = [
   { href: "/#builds", label: "BUILDS" },
+  { href: "/#platforms", label: "PLATFORMS" },
   { href: "/#skills", label: "SKILLS" },
   { href: "/#log", label: "LOG" },
   { href: "/#uplink", label: "UPLINK" },

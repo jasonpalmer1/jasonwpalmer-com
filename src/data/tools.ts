@@ -288,20 +288,6 @@ export const tools: Tool[] = [
     rarity: "rare",
   },
   {
-    id: "the-league",
-    name: "The League Educational",
-    tagline: "From zero to 500+ students — a financial-education platform built end to end",
-    description:
-      "A financial-education platform I founded and grew from zero to 500+ students around the " +
-      "world, built on 200+ hours of original curriculum spanning equities, options, futures, " +
-      "and risk management. Brand, platform, content, and community — all built from the ground up.",
-    icon: "🎓",
-    status: "archived",
-    stack: ["Curriculum design", "Platform", "Community", "Content"],
-    year: "2021 – 2023",
-    rarity: "rare",
-  },
-  {
     id: "classified-fantasy-tracker",
     name: "[ CLASSIFIED — In Development ]",
     tagline: "A real-time, game-tracking fantasy sports app — not ready to name yet",
