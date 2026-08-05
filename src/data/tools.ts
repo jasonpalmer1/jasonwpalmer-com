@@ -263,6 +263,18 @@ export const tools: Tool[] = [
       "Screens shown use sanitized sample data — placeholder sessions, figures, and names for illustration only, not real visitors, spend, or personal content.",
   },
   {
+    id: "can-ai-feel",
+    name: "canaifeel.com",
+    tagline: "Can AI feel?",
+    description:
+      "The questions people actually Google about AI — why does ChatGPT lie? will AI take my " +
+      "job? — answered in plain English with games instead of lectures. Free, no signup.",
+    icon: "🤖",
+    status: "live",
+    stack: ["AI education", "Interactive games"],
+    liveUrl: "https://canaifeel.com",
+  },
+  {
     id: "sous",
     name: "Sous",
     tagline: "Proprietary & Confidential — an AI project about what to eat",

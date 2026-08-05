@@ -19,6 +19,14 @@ export const profile = {
     "I build my own software — AI underwriting systems, trading tools, and automation — " +
     "and founded a financial-education platform that grew to 500+ students. This site is a " +
     "live, always-current record of what I've built.",
+  // The connective thread across every build below — why the projects look so different
+  // from each other on the surface.
+  mission:
+    "I take things that feel too complicated for normal people and turn them into " +
+    "something they can touch.",
+  missionDetail:
+    "Chip supply chains became an explorable map. Game day became one glance. AI itself " +
+    "became a game anyone can play.",
   location: "Austin, TX",
   domain: "jasonwpalmer.com",
 };

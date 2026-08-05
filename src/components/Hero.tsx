@@ -91,6 +91,15 @@ export default function Hero() {
             {profile.blurb}
           </p>
 
+          <div className="mt-6 max-w-2xl border-l-2 border-accent/40 pl-4">
+            <p className="text-base font-semibold leading-snug text-foreground sm:text-lg">
+              {profile.mission}
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-muted">
+              {profile.missionDetail}
+            </p>
+          </div>
+
           {/* Rank + XP bar */}
           <div className="mt-8 max-w-md">
             <div className="flex items-end justify-between font-mono text-xs">
