@@ -17,7 +17,7 @@ export const profile = {
     "Finance professional, builder, and educator with 6+ years executing $3B+ in " +
     "transactions across real estate, capital markets, and interest-rate derivatives. " +
     "I build my own software — AI underwriting systems, trading tools, and automation — " +
-    "and founded a financial-education platform that grew to 500+ students. This site is a " +
+    "and founded a financial-education platform that grew to 750+ students. This site is a " +
     "live, always-current record of what I've built.",
   // The connective thread across every build below — why the projects look so different
   // from each other on the surface.
@@ -145,7 +145,7 @@ export const experience: ExperienceItem[] = [
     org: "The League Educational",
     period: "Nov 2021 – Feb 2023",
     summary:
-      "Founded and scaled a financial-education platform from zero to 500+ international students, " +
+      "Founded and scaled a financial-education platform from zero to 750+ international students, " +
       "building 200+ hours of original curriculum across equities, options, futures, derivatives, " +
       "and risk management — brand, platform, and content from the ground up.",
   },
