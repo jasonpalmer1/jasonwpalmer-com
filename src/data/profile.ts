@@ -53,7 +53,7 @@ export type Stat = {
 export const stats: Stat[] = [
   { label: "Transacted", value: 3, prefix: "$", suffix: "B+" },
   { label: "Faster underwriting", value: 20, suffix: "×" },
-  { label: "Students taught", value: 500, suffix: "+" },
+  { label: "Students taught", value: 750, suffix: "+" },
   { label: "Years experience", value: 6, suffix: "+" },
 ];
 
