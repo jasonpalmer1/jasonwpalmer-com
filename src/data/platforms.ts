@@ -28,7 +28,7 @@ export const platforms: Platform[] = [
     name: "The League Educational",
     tagline: "A financial-education platform, grown from zero — entirely organic",
     description:
-      "Founded and grew a financial-education platform to 500+ students around the world, " +
+      "Founded and grew a financial-education platform to 750+ students around the world, " +
       "built on 200+ hours of original curriculum spanning equities, options, futures, and " +
       "risk management — taught as an hour of video six nights a week for 14 straight months. " +
       "Brand, platform, content, and community — all built from the ground up.",
@@ -38,7 +38,7 @@ export const platforms: Platform[] = [
       { label: "Twitter followers", value: 50, suffix: "K" },
       { label: "YouTube subscribers", value: 2000, suffix: "+" },
       { label: "Video content", value: 365, suffix: "+ hrs" },
-      { label: "Students taught", value: 500, suffix: "+" },
+      { label: "Students taught", value: 750, suffix: "+" },
       { label: "Revenue", value: 800, prefix: "$", suffix: "K+" },
     ],
     note: "100% organic growth — zero paid acquisition, ever.",
