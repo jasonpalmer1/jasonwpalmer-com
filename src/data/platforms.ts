@@ -30,7 +30,8 @@ export const platforms: Platform[] = [
     description:
       "Founded and grew a financial-education platform to 500+ students around the world, " +
       "built on 200+ hours of original curriculum spanning equities, options, futures, and " +
-      "risk management. Brand, platform, content, and community — all built from the ground up.",
+      "risk management — taught as an hour of video six nights a week for 14 straight months. " +
+      "Brand, platform, content, and community — all built from the ground up.",
     icon: "🎓",
     year: "2021 – 2023",
     stats: [
