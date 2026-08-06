@@ -35,7 +35,15 @@ export default function Home() {
             <span className="pulse-dot" /> SYS.ONLINE · © {new Date().getFullYear()} {profile.name}
           </span>
           <span className="tracking-widest">
-            {game.callsign} // {profile.domain} // BUILT WITH NEXT.JS × CLOUDFLARE
+            {game.callsign} // {profile.domain} // BUILT WITH NEXT.JS × CLOUDFLARE //{" "}
+            <a
+              href="https://x.com/gototownhq"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-foreground"
+            >
+              @GOTOTOWNHQ
+            </a>
           </span>
         </div>
         <p className="pb-6 text-center font-mono text-[0.6rem] tracking-widest text-muted/40">
