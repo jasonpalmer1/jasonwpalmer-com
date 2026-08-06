@@ -146,8 +146,9 @@ export const experience: ExperienceItem[] = [
     period: "Nov 2021 – Feb 2023",
     summary:
       "Founded and scaled a financial-education platform from zero to 750+ international students, " +
-      "building 200+ hours of original curriculum across equities, options, futures, derivatives, " +
-      "and risk management — brand, platform, and content from the ground up.",
+      "building original curriculum across equities, options, futures, derivatives, " +
+      "and risk management — an hour of video six nights a week for 14 straight months, 365+ hours in all. " +
+      "Brand, platform, and content from the ground up.",
   },
   {
     role: "Finance Intern",
