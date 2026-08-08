@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // A bottom-right control that appears once the user scrolls past the fold — so
 // people deep in the page (where the sticky top bar is easy to miss) always have
 // a quick way back to the top.
 export default function FloatingActions() {
   const [visible, setVisible] = useState(false);
+  const btnRef = useRef<HTMLButtonElement>(null);
+  const wasVisible = useRef(false);
 
   useEffect(() => {
     const onScroll = () => setVisible(window.scrollY > 500);
@@ -17,6 +19,22 @@ export default function FloatingActions() {
       window.removeEventListener("scroll", onScroll);
     };
   }, []);
+
+  // If the control hides while focused, move focus to main (avoid aria-hidden trap).
+  useEffect(() => {
+    if (wasVisible.current && !visible) {
+      if (btnRef.current && document.activeElement === btnRef.current) {
+        const main = document.getElementById("main");
+        if (main instanceof HTMLElement) {
+          if (!main.hasAttribute("tabindex")) main.tabIndex = -1;
+          main.focus({ preventScroll: true });
+        } else {
+          btnRef.current.blur();
+        }
+      }
+    }
+    wasVisible.current = visible;
+  }, [visible]);
 
   const toTop = () => {
     let behavior: ScrollBehavior = "smooth";
@@ -30,7 +48,6 @@ export default function FloatingActions() {
     window.scrollTo({ top: 0, behavior });
     const main = document.getElementById("main");
     if (main instanceof HTMLElement) {
-      // Prefer focusing main for keyboard users after jump-to-top.
       if (!main.hasAttribute("tabindex")) main.tabIndex = -1;
       main.focus({ preventScroll: true });
     }
@@ -44,9 +61,10 @@ export default function FloatingActions() {
           : "pointer-events-none translate-y-3 opacity-0"
       }`}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
-      aria-hidden={!visible}
+      inert={!visible ? true : undefined}
     >
       <button
+        ref={btnRef}
         type="button"
         onClick={toTop}
         aria-label="Back to top"

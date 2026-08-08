@@ -30,7 +30,7 @@ git checkout main
 git merge origin/cursor/bug-audit-documentation-0f3d   # if not yet merged
 # or: gh pr checkout 1 && /ship --prod after preview
 
-npm run lint && npm run build
+npm run check   # lint + check:assets + build
 npx wrangler d1 execute dispatch-subscribers --remote --file=migrations/0002_token_unique.sql
 # Deploy site (Functions + CSP + mailing-list hardening):
 # /ship --prod   OR   npx wrangler pages deploy
@@ -82,9 +82,7 @@ Never commit `CLAUDE.local.md`.
 
 ```bash
 cd ~/projects/jasonwpalmer-com
-npm run lint
-npm run check:assets   # gallery paths exist under public/
-npm run build
+npm run check   # lint + check:assets + build
 # then /ship (preview) → /ship --prod with confirmation
 ```
 

@@ -78,6 +78,7 @@ export default function RootLayout({
     "@type": "Person",
     name: profile.name,
     url: `https://${profile.domain}`,
+    image: `https://${profile.domain}/og.png`,
     jobTitle: profile.title,
     description: profile.subtagline,
     address: {

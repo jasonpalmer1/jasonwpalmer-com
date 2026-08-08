@@ -14,6 +14,11 @@ import {
   getRelatedPosts,
   readingMinutes,
 } from "@/lib/posts";
+import {
+  childrenToText,
+  createHeadingIdAllocator,
+  extractToc,
+} from "@/lib/mdx-headings";
 import { profile } from "@/data/profile";
 import { tools } from "@/data/tools";
 
@@ -93,6 +98,8 @@ export default async function BlogPost({
   const relatedBuilds = (post.meta.builds ?? [])
     .map((id) => tools.find((t) => t.id === id))
     .filter((t): t is (typeof tools)[number] => Boolean(t));
+  const toc = extractToc(post.content);
+  const mdxComponents = makeMdxComponents();
 
   // Article JSON-LD — mirrors the Person JSON-LD pattern in layout.tsx.
   const articleJsonLd = {
@@ -159,6 +166,30 @@ export default async function BlogPost({
             {post.meta.summary}
           </p>
         </header>
+
+        {toc.length >= 2 && (
+          <nav
+            aria-label="On this page"
+            className="mb-10 rounded-xl border border-border bg-surface/40 p-5"
+          >
+            <p className="label">{"// on this page"}</p>
+            <ol className="mt-3 space-y-1.5 font-mono text-xs">
+              {toc.map((item) => (
+                <li
+                  key={item.id}
+                  className={item.level === 3 ? "pl-3 text-muted" : ""}
+                >
+                  <a
+                    href={`#${item.id}`}
+                    className="text-accent/80 transition-colors hover:text-accent"
+                  >
+                    {item.text}
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        )}
 
         {/* MDX body — custom components styled to the theme */}
         <article className="prose-blog">
@@ -242,88 +273,103 @@ export default async function BlogPost({
 
 // ── Custom MDX components ──────────────────────────────────────────────────────
 
-const mdxComponents = {
-  h1: ({ children }: React.PropsWithChildren) => (
-    <h1 className="mt-10 mb-4 font-display text-3xl font-bold tracking-tight text-foreground">
-      {children}
-    </h1>
-  ),
-  h2: ({ children }: React.PropsWithChildren) => (
-    <h2 className="mt-8 mb-3 font-display text-2xl font-bold tracking-tight text-foreground">
-      {children}
-    </h2>
-  ),
-  h3: ({ children }: React.PropsWithChildren) => (
-    <h3 className="mt-6 mb-2 font-display text-xl font-bold text-foreground">
-      {children}
-    </h3>
-  ),
-  p: ({ children }: React.PropsWithChildren) => (
-    <p className="my-4 text-base leading-7 text-foreground/85">{children}</p>
-  ),
-  a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
-    // Reject javascript:/data: etc. Solo-authored MDX is trusted, but PRs aren't.
-    const safe =
-      typeof href === "string" && /^(https?:\/\/|\/|#|mailto:)/i.test(href)
-        ? href
-        : undefined;
-    return (
-      <a
-        href={safe}
-        target={safe?.startsWith("http") ? "_blank" : undefined}
-        rel={safe?.startsWith("http") ? "noopener noreferrer" : undefined}
-        className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
-      >
+function makeMdxComponents() {
+  const nextId = createHeadingIdAllocator();
+  return {
+    h1: ({ children }: React.PropsWithChildren) => (
+      <h1 className="mt-10 mb-4 scroll-mt-24 font-display text-3xl font-bold tracking-tight text-foreground">
         {children}
-      </a>
-    );
-  },
-  ul: ({ children }: React.PropsWithChildren) => (
-    <ul className="my-4 space-y-1.5 pl-5 text-base leading-7 text-foreground/85 list-disc">
-      {children}
-    </ul>
-  ),
-  ol: ({ children }: React.PropsWithChildren) => (
-    <ol className="my-4 space-y-1.5 pl-5 text-base leading-7 text-foreground/85 list-decimal">
-      {children}
-    </ol>
-  ),
-  li: ({ children }: React.PropsWithChildren) => (
-    <li className="leading-7">{children}</li>
-  ),
-  blockquote: ({ children }: React.PropsWithChildren) => (
-    <blockquote className="my-5 border-l-2 border-accent/50 pl-4 font-mono text-sm italic text-muted">
-      {children}
-    </blockquote>
-  ),
-  code: ({
-    children,
-    className,
-  }: React.PropsWithChildren<{ className?: string }>) => {
-    // Fenced blocks render as <pre><code class="language-…"> — skip the
-    // inline chip styles so they aren't double-padded.
-    if (className) {
-      return <code className={`${className} font-mono text-sm`}>{children}</code>;
-    }
-    return (
-      <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-accent/90">
+      </h1>
+    ),
+    h2: ({ children }: React.PropsWithChildren) => {
+      const id = nextId(childrenToText(children));
+      return (
+        <h2
+          id={id}
+          className="mt-8 mb-3 scroll-mt-24 font-display text-2xl font-bold tracking-tight text-foreground"
+        >
+          {children}
+        </h2>
+      );
+    },
+    h3: ({ children }: React.PropsWithChildren) => {
+      const id = nextId(childrenToText(children));
+      return (
+        <h3
+          id={id}
+          className="mt-6 mb-2 scroll-mt-24 font-display text-xl font-bold text-foreground"
+        >
+          {children}
+        </h3>
+      );
+    },
+    p: ({ children }: React.PropsWithChildren) => (
+      <p className="my-4 text-base leading-7 text-foreground/85">{children}</p>
+    ),
+    a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+      // Reject javascript:/data: etc. Solo-authored MDX is trusted, but PRs aren't.
+      const safe =
+        typeof href === "string" && /^(https?:\/\/|\/|#|mailto:)/i.test(href)
+          ? href
+          : undefined;
+      return (
+        <a
+          href={safe}
+          target={safe?.startsWith("http") ? "_blank" : undefined}
+          rel={safe?.startsWith("http") ? "noopener noreferrer" : undefined}
+          className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
+        >
+          {children}
+        </a>
+      );
+    },
+    ul: ({ children }: React.PropsWithChildren) => (
+      <ul className="my-4 list-disc space-y-1.5 pl-5 text-base leading-7 text-foreground/85">
         {children}
-      </code>
-    );
-  },
-  pre: ({ children }: React.PropsWithChildren) => (
-    <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-5 font-mono text-sm leading-6 text-foreground/90 [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
-      {children}
-    </pre>
-  ),
-  hr: () => <hr className="my-8 border-border" />,
-  strong: ({ children }: React.PropsWithChildren) => (
-    <strong className="font-semibold text-foreground">{children}</strong>
-  ),
-  em: ({ children }: React.PropsWithChildren) => (
-    <em className="italic text-foreground/80">{children}</em>
-  ),
-};
+      </ul>
+    ),
+    ol: ({ children }: React.PropsWithChildren) => (
+      <ol className="my-4 list-decimal space-y-1.5 pl-5 text-base leading-7 text-foreground/85">
+        {children}
+      </ol>
+    ),
+    li: ({ children }: React.PropsWithChildren) => (
+      <li className="leading-7">{children}</li>
+    ),
+    blockquote: ({ children }: React.PropsWithChildren) => (
+      <blockquote className="my-5 border-l-2 border-accent/50 pl-4 font-mono text-sm italic text-muted">
+        {children}
+      </blockquote>
+    ),
+    code: ({
+      children,
+      className,
+    }: React.PropsWithChildren<{ className?: string }>) => {
+      if (className) {
+        return (
+          <code className={`${className} font-mono text-sm`}>{children}</code>
+        );
+      }
+      return (
+        <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-accent/90">
+          {children}
+        </code>
+      );
+    },
+    pre: ({ children }: React.PropsWithChildren) => (
+      <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-5 font-mono text-sm leading-6 text-foreground/90 [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
+        {children}
+      </pre>
+    ),
+    hr: () => <hr className="my-8 border-border" />,
+    strong: ({ children }: React.PropsWithChildren) => (
+      <strong className="font-semibold text-foreground">{children}</strong>
+    ),
+    em: ({ children }: React.PropsWithChildren) => (
+      <em className="italic text-foreground/80">{children}</em>
+    ),
+  };
+}
 
 function formatDate(iso: string): string {
   return new Date(iso).toLocaleDateString("en-US", {

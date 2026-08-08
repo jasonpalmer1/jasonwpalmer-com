@@ -29,30 +29,24 @@ Content lives in plain TS data files; components render it; Next statically expo
 - `src/app/page.tsx` composes the homepage from components in a fixed order.
 
 ## File map
-- `src/app/` — App Router. `page.tsx` (homepage composition), `layout.tsx` (root + SEO metadata/JSON-LD + visit-log beacon), `globals.css` (Tailwind + theme), `sitemap.ts`, `rss.xml/route.ts`, `blog/page.tsx` + `blog/[slug]/page.tsx`, app icons (`icon.png`, `favicon.ico`, `apple-icon.png`). (`/build` still redirects home via `public/_redirects`.)
-- `src/components/` — UI: `Nav` (skip link), `Hero` + `HeroXp` + `LastShipped` (newest MDX dispatch), `Stats`, `Tools`, `Platforms`, `Skills` + `SkillRow`, `Resume`, `Lore`, `Contact`, `ContactForm` (Web3Forms via `lib/web3forms.ts`), `Subscribe` / `SubscribeBlock` (native D1 list), `Gallery`, `FloatingActions`, `SiteFooter`, `BootSequence` (homepage-only; `buildCount` — do not import `tools[]` into it), `KonamiEasterEgg`, `Counter`.
-- `src/data/` — `profile.ts`, `tools.ts`, `platforms.ts`. **Edit content here.** (Beehiiv `newsletter.ts` is gone.)
-- `src/content/posts/` — blog `.mdx` files.
-- `src/lib/` — `posts.ts` (MDX loader), `useInView.ts` (scroll-reveal hook).
-- `functions/api/` — Pages Functions: `subscribe.js`, `confirm.js`, `unsubscribe.js`.
-- `public/` — `og.png`, `robots.txt`, `_headers` (CSP allows visit-log + CF insights; Beehiiv removed), `_redirects`, `builds/` screenshots.
-- `docs/bug-audits/` — portfolio audit + APPLY bundles for other repos.
-- `scripts/` — `gen-brand-assets.js`, `send-dispatch.mjs`.
-- `FOR-CLAUDE.md` — **local-first handoff** (start here after cloud-agent work).
-- `BUG-AUDIT.md` — audit status board; `docs/bug-audits/` bundles; `docs/feature-scaffolds/` optional work.
-- `scripts/apply-audit-bundles.sh` — copy sibling-repo fixes into `~/projects/<repo>`.
+- `src/app/` — App Router. `page.tsx` (home), `layout.tsx` (SEO/JSON-LD/visit-log), `not-found.tsx`, `error.tsx`, `global-error.tsx`, `manifest.ts`, `globals.css`, `sitemap.ts`, `rss.xml/route.ts`, `rss/tag/[tag]/route.ts`, `blog/page.tsx`, `blog/[slug]/page.tsx`, `blog/tag/[tag]/page.tsx`, icons. (`/build` → home via `public/_redirects`.)
+- `src/components/` — `Nav`, `Hero`/`HeroXp`/`LastShipped`, `Stats`, `Tools`, `Platforms`, `Skills`/`SkillRow`, `Resume`, `Lore`, `Contact`/`ContactForm`, `Subscribe`/`SubscribeBlock`, `Gallery`, `FloatingActions`, `SiteFooter`, `BootSequence` (homepage-only; `buildCount` only), `KonamiEasterEgg`, `Counter`, `TagChip`, `CopyButton`.
+- `src/data/` — `profile.ts`, `tools.ts`, `platforms.ts`. **Edit content here.**
+- `src/content/posts/` — blog `.mdx` (optional `builds:`, `cover:`).
+- `src/lib/` — `posts.ts`, `rss.ts`, `mdx-headings.ts`, `web3forms.ts`, `useInView.ts`.
+- `functions/api/` — `subscribe.js`, `confirm.js`, `unsubscribe.js`.
+- `public/` — `og.png`, `robots.txt`, `_headers`, `_redirects`, `builds/`.
+- `docs/bug-audits/`, `docs/feature-scaffolds/`, `FOR-CLAUDE.md`, `BUG-AUDIT.md`.
+- `scripts/` — `apply-audit-bundles.sh`, `check-build-assets.mjs`, `send-dispatch.mjs`, `gen-post-og.mjs` (stub), `print-visit-log-csp-snippet.mjs`, `gen-brand-assets.js`.
 - Config: `next.config.ts`, `eslint.config.mjs`, `postcss.config.mjs`, `tsconfig.json`, `wrangler.toml`, `.env.example`.
 
 ## Entry points — run / build / deploy
 ```bash
 npm install
 npm run dev        # next dev → http://localhost:3000
-npm run build      # next build → ./out (static)
-npm run lint       # eslint
-npm run check:assets # gallery paths under public/
-npx wrangler pages deploy        # wrangler.toml drives output dir + D1 binding (Functions)
-# (the old `wrangler pages deploy out --project-name=jasonwpalmer-com` / /ship form still works too —
-#  it also picks up the wrangler.toml D1 binding + Functions bundle. Either is fine.)
+npm run check      # lint + check:assets + build → ./out
+npm start          # serve static out/ (not next start)
+npx wrangler pages deploy        # wrangler.toml → out/ + D1 + Functions
 ```
 Prefer `/ship` (build → quality gate → preview; never prod without `--prod` + confirmation).
 
