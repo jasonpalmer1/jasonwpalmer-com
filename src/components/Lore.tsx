@@ -5,8 +5,10 @@ export default function Lore() {
     <section id="lore" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <details className="hud group rounded-xl">
-          <summary className="lore-summary flex items-center gap-3 px-5 py-4 sm:px-6">
-            <span className="lore-chevron font-mono text-accent">▸</span>
+          <summary className="lore-summary flex cursor-pointer list-none items-center gap-3 px-5 py-4 sm:px-6 [&::-webkit-details-marker]:hidden">
+            <span className="lore-chevron font-mono text-accent" aria-hidden>
+              ▸
+            </span>
             <span className="font-display text-sm font-bold tracking-widest text-foreground">
               PERSONNEL FILE
             </span>

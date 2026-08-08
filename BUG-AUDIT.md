@@ -45,7 +45,7 @@ UX/perf/org: portrait galleries, boot a11y, in-view counters, posts/RSS hardenin
 
 Scaffolding for Claude: `FOR-CLAUDE.md`, `scripts/apply-audit-bundles.sh`, build-log `_TEMPLATE`, Turnstile feature doc, `PORTFOLIO-QUEUE.md`.
 
-**Still optional:** Activate Turnstile keys; CF WAF on `/api/subscribe`; Web3Forms domain lock (dashboard); ship or delete `_build` consulting draft.
+**Still optional:** Activate Turnstile keys; CF WAF on `/api/subscribe`; Web3Forms domain lock (dashboard).
 
 ---
 

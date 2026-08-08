@@ -20,6 +20,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@gototownhq",
+    creator: "@gototownhq",
     title: `Dispatch Log — ${profile.name}`,
     description:
       "Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.",

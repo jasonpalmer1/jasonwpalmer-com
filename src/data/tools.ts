@@ -80,26 +80,38 @@ export const tools: Tool[] = [
       {
         src: "/builds/4horn-home.jpg",
         alt: "The Home dashboard — units and dollars on rent, returns due, open service, at a glance",
+        width: 780,
+        height: 1520,
       },
       {
         src: "/builds/4horn-rentals.jpg",
         alt: "The Rentals board — one-tap reservation status from Reserved through On Rent",
+        width: 780,
+        height: 1520,
       },
       {
         src: "/builds/4horn-service.jpg",
         alt: "The Service board — open, in-progress, and done service requests, grouped for the field",
+        width: 780,
+        height: 1520,
       },
       {
         src: "/builds/4horn-quote.jpg",
         alt: "The Quote builder — a branded quote assembled from the real equipment catalog",
+        width: 780,
+        height: 1520,
       },
       {
         src: "/builds/4horn-log.jpg",
         alt: "The searchable Log — missed-rent and re-rent history with dollar impact called out",
+        width: 780,
+        height: 1520,
       },
       {
         src: "/builds/4horn-targets.jpg",
         alt: "The Targets sales-intel layer — construction leads and subcontractors worth calling",
+        width: 780,
+        height: 1520,
       },
     ],
     imageCaption:
@@ -124,30 +136,44 @@ export const tools: Tool[] = [
       {
         src: "/builds/wafergraph-network-r5.jpg",
         alt: "The Network explorer's live graph, centered on NVIDIA — 120 connected companies across the supply chain, colored by segment",
+        width: 1400,
+        height: 984,
       },
       {
         src: "/builds/wafergraph-flow-r6.jpg",
         alt: "NVIDIA's real single points of failure — 342 companies depend on it, and 5 of its own suppliers (Ajinomoto, ASML, Carl Zeiss SMT, TRUMPF, Lasertec) are irreplaceable",
+        width: 1200,
+        height: 463,
       },
       {
         src: "/builds/wafergraph-macro-r6.jpg",
         alt: "Live Federal Reserve (FRED) data proving the chip boom in numbers — production up 14.4% YoY, prices up 25.3%, sourced and dated",
+        width: 1200,
+        height: 767,
       },
       {
         src: "/builds/wafergraph-minerals-r5.jpg",
         alt: "Critical Minerals — USGS-sourced production and US import-reliance data for the raw materials chips depend on",
+        width: 1400,
+        height: 1827,
       },
       {
         src: "/builds/wafergraph-risk-r5.jpg",
         alt: "The Chokepoint Risk Index — companies ranked by downstream dependence, fragility, and direct market exposure",
+        width: 1400,
+        height: 853,
       },
       {
         src: "/builds/wafergraph-aibuildout-r6.jpg",
         alt: "The AI capex race in real numbers — $1.57T committed, the $500B Stargate deal, OpenAI's $300B and $250B cloud commitments",
+        width: 1200,
+        height: 582,
       },
       {
         src: "/builds/wafergraph-marketshare-r6.jpg",
         alt: "Silicon wafer supply is concentrated in 5 companies — Shin-Etsu Chemical leads at 28%, with real revenue figures for each",
+        width: 1200,
+        height: 814,
       },
     ],
   },
@@ -170,18 +196,26 @@ export const tools: Tool[] = [
       {
         src: "/builds/whosstarting-power.jpg",
         alt: "The WS Power ranked table — Ohio State, Georgia, Notre Dame and more, rated 0-99",
+        width: 780,
+        height: 1320,
       },
       {
         src: "/builds/whosstarting-dynasty.jpg",
         alt: "A live Dynasty Mode game in progress — scoreboard, win probability, and the on-field formation",
+        width: 780,
+        height: 1320,
       },
       {
         src: "/builds/whosstarting-draft.jpg",
         alt: "Draft the Country — building a 13-slot fantasy roster from the app's own player ratings",
+        width: 780,
+        height: 1320,
       },
       {
         src: "/builds/whosstarting-wire.jpg",
         alt: "The Wire — real transfer-portal moves, ranked by player rating",
+        width: 780,
+        height: 1320,
       },
     ],
   },
@@ -203,22 +237,32 @@ export const tools: Tool[] = [
       {
         src: "/builds/our-place-listening.jpg",
         alt: "The Listening Room — a YouTube-synced now-playing screen for watching or listening together from two cities",
+        width: 780,
+        height: 1276,
       },
       {
         src: "/builds/our-place-letters.jpg",
         alt: "Open-When Letters — sealed messages that stay closed until the moment they're written for",
+        width: 780,
+        height: 1170,
       },
       {
         src: "/builds/our-place-tour.jpg",
         alt: "Quantum Love Tour — a constellation map tracking every city visited together",
+        width: 780,
+        height: 1160,
       },
       {
         src: "/builds/our-place-story.jpg",
         alt: "Our Story — a celestial milestone timeline marking the relationship's key dates",
+        width: 780,
+        height: 1070,
       },
       {
         src: "/builds/our-place-keepsakes.jpg",
         alt: "The Note Wall — a polaroid-style keepsake grid for pinning photos and captions",
+        width: 780,
+        height: 1468,
       },
     ],
     imageCaption:
@@ -243,18 +287,26 @@ export const tools: Tool[] = [
       {
         src: "/builds/mission-hq-visitors.jpg",
         alt: "Visitor-traffic panel — real sessions across my sites, where they came from, the pages they moved through",
+        width: 780,
+        height: 1198,
       },
       {
         src: "/builds/mission-hq-spend.jpg",
         alt: "AI token-spend panel — daily spend and a model-by-model breakdown, tracked like a P&L",
+        width: 780,
+        height: 978,
       },
       {
         src: "/builds/mission-hq-memory.jpg",
         alt: "Memory panel — the persistent, linked memory graph every AI session reads and writes to, so nothing has to be re-explained",
+        width: 780,
+        height: 992,
       },
       {
         src: "/builds/mission-hq-fleet.jpg",
         alt: "Fleet panel — every AI session running right now in one place, with a live busy / waiting / idle status on each",
+        width: 780,
+        height: 904,
       },
     ],
     imageCaption:

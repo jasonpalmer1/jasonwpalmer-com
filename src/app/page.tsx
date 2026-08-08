@@ -41,14 +41,18 @@ export default function Home() {
             {" // "}
             {profile.domain}
             {" // BUILT WITH NEXT.JS × CLOUDFLARE // "}
-            <a
-              href="https://x.com/gototownhq"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hover:text-foreground"
-            >
-              @GOTOTOWNHQ
-            </a>
+            {xSocial ? (
+              <a
+                href={xSocial.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hover:text-foreground"
+              >
+                @GOTOTOWNHQ
+              </a>
+            ) : (
+              "@GOTOTOWNHQ"
+            )}
           </span>
         </div>
         <p className="pb-6 text-center font-mono text-[0.6rem] tracking-widest text-muted/40">
