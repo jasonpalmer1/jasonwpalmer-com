@@ -14,7 +14,10 @@ export default function Resume() {
             const active = /present/i.test(item.period);
             const id = String(experience.length - i).padStart(2, "0");
             return (
-              <li key={i} className="hud rounded-xl p-5 sm:p-6">
+              <li
+                key={`${item.org}-${item.role}-${item.period}`}
+                className="hud rounded-xl p-5 sm:p-6"
+              >
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <span className="font-mono text-xs text-accent">
                     MSN-{id}

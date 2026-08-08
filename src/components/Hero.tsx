@@ -1,5 +1,6 @@
 import { profile, game, socials, credentials, education } from "@/data/profile";
 import HeroXp from "./HeroXp";
+import LastShipped from "./LastShipped";
 
 const credLine = [
   credentials[0]?.name?.replace(/^FINRA\s+/i, "") ?? "Series 65",
@@ -59,6 +60,7 @@ export default function Hero() {
           </div>
 
           <HeroXp />
+          <LastShipped />
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
@@ -72,7 +74,11 @@ export default function Hero() {
                 key={s.label}
                 href={s.href}
                 target={s.href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
+                rel={
+                  s.href.startsWith("http")
+                    ? "me noopener noreferrer"
+                    : undefined
+                }
                 className="rounded-md border border-border bg-surface px-5 py-2.5 font-mono text-sm tracking-wide text-foreground/90 transition-colors hover:border-accent/60 hover:text-accent"
               >
                 {s.label}

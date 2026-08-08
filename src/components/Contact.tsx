@@ -22,7 +22,11 @@ export default function Contact() {
                 key={s.label}
                 href={s.href}
                 target={s.href.startsWith("http") ? "_blank" : undefined}
-                rel="noopener noreferrer"
+                rel={
+                  s.href.startsWith("http")
+                    ? "me noopener noreferrer"
+                    : undefined
+                }
                 className="tracking-widest transition-colors hover:text-accent"
               >
                 {s.label.toUpperCase()}
