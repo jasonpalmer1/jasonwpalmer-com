@@ -80,7 +80,8 @@ body {
 .fx-scanlines {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  /* Keep under sticky nav (z-50) so chrome stays crisp */
+  z-index: 40;
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,

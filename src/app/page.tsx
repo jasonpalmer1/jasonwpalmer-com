@@ -8,7 +8,9 @@ import Resume from "@/components/Resume";
 import Lore from "@/components/Lore";
 import Contact from "@/components/Contact";
 import SubscribeBlock from "@/components/SubscribeBlock";
-import { profile, game } from "@/data/profile";
+import { profile, game, socials } from "@/data/profile";
+
+const xSocial = socials.find((s) => s.label === "X");
 
 export default function Home() {
   return (

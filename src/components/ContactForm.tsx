@@ -47,7 +47,10 @@ export default function ContactForm() {
 
   if (status === "ok") {
     return (
-      <div className="mt-8 rounded-md border border-accent/40 bg-accent/10 p-6 text-center font-mono text-sm text-accent">
+      <div
+        role="status"
+        className="mt-8 rounded-md border border-accent/40 bg-accent/10 p-6 text-center font-mono text-sm text-accent"
+      >
         ✓ TRANSMISSION RECEIVED — I&apos;ll get back to you soon.
       </div>
     );

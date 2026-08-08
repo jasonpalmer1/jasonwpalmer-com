@@ -18,10 +18,11 @@ A finance operator & systems builder's portfolio, styled as a cyberpunk "operato
 
 ## Structure
 
-Content is data-driven — most edits happen in two files:
+Content is data-driven — most edits happen in:
 
 - `src/data/profile.ts` — bio, value pitch, stats, skills, experience, education, socials
 - `src/data/tools.ts` — the build/tool showcase cards
+- `src/data/platforms.ts` — audience/distribution platforms (e.g. The League)
 
 Components live in `src/components/`; the page composition is `src/app/page.tsx`.
 

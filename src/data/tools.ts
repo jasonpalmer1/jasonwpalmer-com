@@ -10,6 +10,9 @@ export type Rarity = "legendary" | "epic" | "rare";
 export type GalleryImage = {
   src: string;
   alt: string;
+  /** Intrinsic pixel size — optional, improves CLS when set. */
+  width?: number;
+  height?: number;
 };
 
 export type Tool = {
@@ -72,7 +75,6 @@ export const tools: Tool[] = [
     status: "live",
     stack: ["Cloudflare Workers", "D1", "KV", "Vanilla JS", "Mobile-first"],
     year: "2026",
-    featured: true,
     rarity: "epic",
     images: [
       {
@@ -117,7 +119,6 @@ export const tools: Tool[] = [
     stack: ["Next.js", "Data pipeline", "Graph model", "MCP server", "Cloudflare"],
     liveUrl: "https://wafergraph.com",
     year: "2026",
-    featured: true,
     rarity: "epic",
     images: [
       {
@@ -164,7 +165,6 @@ export const tools: Tool[] = [
     stack: ["Next.js", "Cloudflare Pages", "PWA / offline", "Season simulation", "Data pipeline"],
     liveUrl: "https://whosstarting.com",
     year: "2026",
-    featured: true,
     rarity: "epic",
     images: [
       {
@@ -198,7 +198,6 @@ export const tools: Tool[] = [
     status: "live",
     stack: ["React", "Supabase", "Realtime sync", "Cloudflare Pages"],
     year: "2025 – 2026",
-    featured: true,
     rarity: "epic",
     images: [
       {
@@ -239,7 +238,6 @@ export const tools: Tool[] = [
     status: "live",
     stack: ["Cloudflare Workers", "D1", "Real-time analytics", "AI agents", "Automation"],
     year: "2026",
-    featured: true,
     rarity: "epic",
     images: [
       {
@@ -273,6 +271,8 @@ export const tools: Tool[] = [
     status: "live",
     stack: ["AI education", "Interactive games"],
     liveUrl: "https://canaifeel.com",
+    year: "2026",
+    rarity: "rare",
   },
   {
     id: "sous",

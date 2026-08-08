@@ -5,13 +5,20 @@ import type { GalleryImage } from "@/data/tools";
 
 export type { GalleryImage };
 
-// Most build screenshots are phone portraits (~780×1520). Default to that so
-// the first paint isn't a landscape letterbox; onLoad snaps to the real ratio.
-const DEFAULT_RATIO = "9 / 16";
+// Most build screenshots are phone portraits (~780×1520).
+const DEFAULT_W = 780;
+const DEFAULT_H = 1520;
 
-export default function Gallery({ images }: { images: GalleryImage[] }) {
+export default function Gallery({
+  images,
+  priority = false,
+}: {
+  images: GalleryImage[];
+  /** Only true if this gallery can be LCP (homepage galleries stay lazy). */
+  priority?: boolean;
+}) {
   const [i, setI] = useState(0);
-  const [ratio, setRatio] = useState(DEFAULT_RATIO);
+  const [ratio, setRatio] = useState(`${DEFAULT_W} / ${DEFAULT_H}`);
 
   const n = images.length;
   const next = useCallback(() => {
@@ -24,6 +31,8 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
   }, [n]);
 
   if (n === 0) return null;
+
+  const current = images[i];
 
   return (
     <div
@@ -46,10 +55,12 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          key={images[i].src}
-          src={images[i].src}
-          alt={images[i].alt}
-          loading={i === 0 ? "eager" : "lazy"}
+          key={current.src}
+          src={current.src}
+          alt={current.alt}
+          width={current.width ?? DEFAULT_W}
+          height={current.height ?? DEFAULT_H}
+          loading={priority && i === 0 ? "eager" : "lazy"}
           decoding="async"
           onLoad={(e) => {
             const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
@@ -60,7 +71,7 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
       </div>
 
       <p className="absolute h-px w-px overflow-hidden whitespace-nowrap" aria-live="polite">
-        Screenshot {i + 1} of {n}: {images[i].alt}
+        Screenshot {i + 1} of {n}: {current.alt}
       </p>
 
       {n > 1 && (

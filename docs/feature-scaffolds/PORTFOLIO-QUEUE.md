@@ -20,7 +20,7 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [ ] New build-log from `_TEMPLATE.build-log.mdx` when something ships
 - [ ] Activate Turnstile if subscribe spam appears (`docs/feature-scaffolds/turnstile-subscribe.md`)
 - [ ] CF WAF rate rule on `/api/subscribe` (dashboard)
-- [ ] Decide fate of private `_build` consulting page (ship or delete `ConsultingForm` + `_build`)
+- [x] Deleted private `_build` consulting draft + `ConsultingForm` (2026-08-08) — restore from git if needed
 
 ## P3 — private apps (separate sessions; not in cloud agent scope)
 

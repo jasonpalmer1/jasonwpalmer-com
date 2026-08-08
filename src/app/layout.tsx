@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Orbitron } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { profile, socials, skills, experience, education } from "@/data/profile";
+import { tools } from "@/data/tools";
 import BootSequence from "@/components/BootSequence";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 import FloatingActions from "@/components/FloatingActions";
@@ -10,30 +11,40 @@ import FloatingActions from "@/components/FloatingActions";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+  display: "swap",
 });
 
 const orbitron = Orbitron({
   variable: "--font-display",
   subsets: ["latin"],
   weight: ["500", "700", "900"],
+  display: "swap",
 });
+
+const metaDescription = `${profile.tagline} ${profile.subtagline}`;
+
+export const viewport = {
+  themeColor: "#05060a",
+  colorScheme: "dark" as const,
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(`https://${profile.domain}`),
   title: `${profile.name} — ${profile.title}`,
-  description: profile.blurb,
+  description: metaDescription,
   alternates: {
     canonical: "/",
     types: { "application/rss+xml": "/rss.xml" },
   },
   openGraph: {
     title: `${profile.name} — ${profile.title}`,
-    description: `${profile.tagline} ${profile.subtagline}`,
+    description: metaDescription,
     url: `https://${profile.domain}`,
     siteName: profile.name,
     type: "website",
@@ -48,8 +59,10 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+    site: "@gototownhq",
+    creator: "@gototownhq",
     title: `${profile.name} — ${profile.title}`,
-    description: `${profile.tagline} ${profile.subtagline}`,
+    description: metaDescription,
     images: ["/og.png"],
   },
 };
@@ -99,11 +112,16 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://visit-log.jwpalm99.workers.dev" />
+        <link rel="dns-prefetch" href="https://visit-log.jwpalm99.workers.dev" />
+      </head>
       <body className="min-h-full flex flex-col">
         <div className="fx-grid" aria-hidden />
         <div className="fx-glow" aria-hidden />
         <div className="fx-scanlines" aria-hidden />
-        <BootSequence name={profile.name} />
+        {/* buildCount only — never import tools[] into the client BootSequence */}
+        <BootSequence name={profile.name} buildCount={tools.length} />
         <KonamiEasterEgg />
         <script
           type="application/ld+json"

@@ -1,16 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { tools } from "@/data/tools";
-
-const LINES = (name: string) => [
-  "> initializing operator terminal v2.7 …",
-  "> establishing secure uplink … OK",
-  `> loading profile: ${name.toUpperCase().replace(/\s+/g, "_")} …`,
-  "> decrypting credentials … OK",
-  `> mounting builds [${tools.length}] … OK`,
-  "> ACCESS GRANTED",
-];
+import { useEffect, useRef, useState } from "react";
 
 function storageGet(key: string): string | null {
   try {
@@ -24,21 +14,33 @@ function storageSet(key: string, value: string) {
   try {
     sessionStorage.setItem(key, value);
   } catch {
-    // Private mode / blocked storage — boot still works for this session.
+    /* private mode */
   }
 }
 
-export default function BootSequence({ name }: { name: string }) {
-  const lines = LINES(name);
+export default function BootSequence({
+  name,
+  buildCount,
+}: {
+  name: string;
+  buildCount: number;
+}) {
+  const lines = [
+    "> initializing operator terminal v2.7 …",
+    "> establishing secure uplink … OK",
+    `> loading profile: ${name.toUpperCase().replace(/\s+/g, "_")} …`,
+    "> decrypting credentials … OK",
+    `> mounting builds [${buildCount}] … OK`,
+    "> ACCESS GRANTED",
+  ];
   const [shown, setShown] = useState(0);
   const [done, setDone] = useState(false);
   const [hidden, setHidden] = useState(false);
-  // Start as not-mounted so SSR markup matches; decide after mount.
   const [active, setActive] = useState(false);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (storageGet("booted") === "1") return;
-    // Skip the theatrical boot when the user prefers reduced motion.
     try {
       if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
         storageSet("booted", "1");
@@ -47,17 +49,16 @@ export default function BootSequence({ name }: { name: string }) {
     } catch {
       /* ignore */
     }
-    // Defer past the effect body — avoids cascading-render lint on an
-    // intentional client-only mount gate (SSR must render inactive).
     const t = requestAnimationFrame(() => setActive(true));
     return () => cancelAnimationFrame(t);
   }, []);
 
-  // Lock scroll + Escape to skip while the overlay is up.
   useEffect(() => {
     if (!active || hidden) return;
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
+    // Focus the skip hint so keyboard users aren't trapped under the overlay.
+    panelRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
         e.preventDefault();
@@ -108,7 +109,11 @@ export default function BootSequence({ name }: { name: string }) {
         done ? "opacity-0" : "opacity-100"
       }`}
     >
-      <div className="w-full max-w-lg px-8 font-mono text-sm">
+      <div
+        ref={panelRef}
+        tabIndex={-1}
+        className="w-full max-w-lg px-8 font-mono text-sm outline-none"
+      >
         {lines.slice(0, shown).map((l, i) => {
           const granted = l.includes("ACCESS GRANTED");
           return (

@@ -70,6 +70,13 @@ Never commit `CLAUDE.local.md`.
 | Turnstile on subscribe | `docs/feature-scaffolds/turnstile-subscribe.md` + code hooks | Inactive until env keys set |
 | Portfolio work queue | `docs/feature-scaffolds/PORTFOLIO-QUEUE.md` | Prioritized backlog for future Claude sessions |
 
+## Also removed / changed after the first audit pass
+
+- Deleted dead `_build` consulting page + `ConsultingForm` (restore from git if Jason wants it back)
+- BootSequence no longer imports `tools[]` (pass `buildCount` from layout) — keep it that way
+- Galleries default to `loading="lazy"`; send-dispatch skips `_` posts
+- X/`@gototownhq` is in `socials` + Twitter meta `site`/`creator`
+
 ## Don’t
 
 - Don’t assume GitHub merge = live site  

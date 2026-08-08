@@ -15,14 +15,32 @@ const SEQUENCE = [
   "a",
 ];
 
+function prefersReducedMotion(): boolean {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
+
 export default function KonamiEasterEgg() {
   const [active, setActive] = useState(false);
   const progress = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
-  // Listen for the Konami code.
+  // Listen for the Konami code — ignore typing inside form fields.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.tagName === "INPUT" ||
+          t.tagName === "TEXTAREA" ||
+          t.tagName === "SELECT" ||
+          t.isContentEditable)
+      ) {
+        return;
+      }
       const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
       if (key === SEQUENCE[progress.current]) {
         progress.current += 1;
@@ -38,13 +56,27 @@ export default function KonamiEasterEgg() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  // Matrix rain while active.
+  // Matrix rain while active (skipped when user prefers reduced motion).
   useEffect(() => {
     if (!active) return;
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActive(false);
+    };
+    window.addEventListener("keydown", onKey);
+
+    if (prefersReducedMotion()) {
+      return () => window.removeEventListener("keydown", onKey);
+    }
+
     const canvas = canvasRef.current;
-    if (!canvas) return;
+    if (!canvas) {
+      return () => window.removeEventListener("keydown", onKey);
+    }
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
+    if (!ctx) {
+      return () => window.removeEventListener("keydown", onKey);
+    }
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
@@ -77,11 +109,6 @@ export default function KonamiEasterEgg() {
     };
     draw();
 
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(false);
-    };
-    window.addEventListener("keydown", onKey);
-
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
@@ -95,6 +122,9 @@ export default function KonamiEasterEgg() {
     <div
       className="fixed inset-0 z-[90] cursor-pointer"
       onClick={() => setActive(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Developer mode unlocked"
     >
       <canvas ref={canvasRef} className="h-full w-full" />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

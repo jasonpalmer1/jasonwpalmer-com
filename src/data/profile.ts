@@ -65,6 +65,7 @@ export type SocialLink = {
 export const socials: SocialLink[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/jasonwpalmer" },
   { label: "GitHub", href: "https://github.com/jasonpalmer1" },
+  { label: "X", href: "https://x.com/gototownhq" },
 ];
 
 export type SkillGroup = {

@@ -95,7 +95,10 @@ async function resolvePost() {
   }
 
   // Find newest by frontmatter date
-  const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
+  // Mirror src/lib/posts.ts — skip _TEMPLATE / draft scaffolds.
+  const files = readdirSync(POSTS_DIR).filter(
+    (f) => f.endsWith(".mdx") && !f.startsWith("_")
+  );
   if (files.length === 0) {
     console.error("[dispatch] ERROR: No .mdx files found in src/content/posts/");
     process.exit(1);

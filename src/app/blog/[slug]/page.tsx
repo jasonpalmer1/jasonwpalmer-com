@@ -66,13 +66,14 @@ export default async function BlogPost({
     headline: post.meta.title,
     description: post.meta.summary,
     datePublished: post.meta.date,
+    dateModified: post.meta.date,
     author: {
       "@type": "Person",
       name: profile.name,
       url: `https://${profile.domain}`,
     },
     url,
-    ...(post.meta.cover ? { image: post.meta.cover } : {}),
+    image: post.meta.cover || `https://${profile.domain}/og.png`,
     keywords: post.meta.tags.join(", "),
   };
 

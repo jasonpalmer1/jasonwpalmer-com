@@ -18,7 +18,17 @@ export default function FloatingActions() {
     };
   }, []);
 
-  const toTop = () => window.scrollTo({ top: 0, behavior: "smooth" });
+  const toTop = () => {
+    let behavior: ScrollBehavior = "smooth";
+    try {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        behavior = "auto";
+      }
+    } catch {
+      /* ignore */
+    }
+    window.scrollTo({ top: 0, behavior });
+  };
 
   return (
     <div
