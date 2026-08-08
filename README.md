@@ -39,10 +39,13 @@ npx next build                                              # -> ./out (static)
 npx wrangler pages deploy out --project-name=jasonwpalmer-com
 ```
 
+Prefer `/ship` from Claude Code on the local machine (preview first; `--prod` only with confirmation). **Deploys are local** — see `FOR-CLAUDE.md` if you're picking up cloud-agent work.
+
 ## Notes
 
 - SEO: OpenGraph share card, JSON-LD `Person` schema, canonical URL, sitemap/robots.
 - Privacy: contact goes through Web3Forms (no plain `mailto:` in the HTML). Lock the form key to this domain in the Web3Forms dashboard.
+- Agents: start at `FOR-CLAUDE.md` / `CLAUDE.md`.
 - Built and iterated with [Claude Code](https://claude.com/claude-code).
 
 ## License

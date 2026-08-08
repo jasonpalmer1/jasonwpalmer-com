@@ -12,6 +12,7 @@
  *  - RESEND_API_KEY never logged or returned.
  *  - Honeypot field `botcheck` (filled = silent success, no write/send).
  *  - Per-IP Cache API rate limit + per-email confirm cooldown.
+ *  - Optional Turnstile when env.TURNSTILE_SECRET_KEY is set (no-op otherwise).
  *  - Uniform success copy (no email enumeration).
  *  - Missing RESEND_API_KEY → subscriber stored, ok returned (no 500).
  */
@@ -91,6 +92,30 @@ function ok() {
   return Response.json({ ok: true, message: SUCCESS_MSG });
 }
 
+/** Optional Cloudflare Turnstile — skipped when secret unset (scaffold). */
+async function verifyTurnstile(token, env, ip) {
+  if (!env.TURNSTILE_SECRET_KEY) return true;
+  if (!token || typeof token !== "string") return false;
+  try {
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: env.TURNSTILE_SECRET_KEY,
+          response: token,
+          ...(ip ? { remoteip: ip } : {}),
+        }),
+      }
+    );
+    const data = await res.json();
+    return !!data.success;
+  } catch {
+    return false;
+  }
+}
+
 /** Cheap per-IP throttle via Cache API (best-effort on the edge). */
 async function isIpRateLimited(request) {
   try {
@@ -134,6 +159,15 @@ export async function onRequestPost({ request, env }) {
   // Honeypot — bots fill hidden fields; humans leave them empty.
   if (body.botcheck || body.website) {
     return ok();
+  }
+
+  const ip = request.headers.get("cf-connecting-ip") || "";
+  const turnstileOk = await verifyTurnstile(body.turnstileToken, env, ip);
+  if (!turnstileOk) {
+    return Response.json(
+      { ok: false, error: "Verification failed — please try again." },
+      { status: 403 }
+    );
   }
 
   if (await isIpRateLimited(request)) {

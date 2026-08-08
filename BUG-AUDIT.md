@@ -1,95 +1,60 @@
 # Portfolio bug audit — handoff for Claude Code
 
-**Status:** Fixes implemented for jasonwpalmer-com in this PR (security + UX/perf round 2); other-repo fixes ready to apply (push blocked from this agent)  
-**Auditor/fixer run:** Cursor cloud agent “Mistral AI code review”  
+**Status:** Site fixes + local-first Claude handoff ready. Sibling-repo fixes are **bundles** — deploy from Jason’s machine.  
+**Auditor/fixer:** Cursor cloud agent “Mistral AI code review”  
 **Agent URL:** https://cursor.com/agents/bc-019fe37e-4f87-7e91-8d87-7c53ad270f3d  
 **Date:** 2026-08-08  
-**Branch:** `cursor/bug-audit-documentation-0f3d`  
-**Scope:** Real bugs / security / correctness.
+**Branch:** `cursor/bug-audit-documentation-0f3d`
 
-> **Prior Mistral work:** None at start. This run audited, then implemented what it could.
-> **Sous:** out of scope (separate chat).
-> **Push limit:** `cursor[bot]` can push **only** `jasonwpalmer-com`. Other repos → see [`docs/bug-audits/APPLY.md`](./docs/bug-audits/APPLY.md).
+> **START HERE:** [`FOR-CLAUDE.md`](./FOR-CLAUDE.md) — local deploy model, ordered tasks, scaffolds.  
+> **Sous:** out of scope (separate chat).  
+> **Cloud cannot deploy your sites.** Copy/merge locally → `/ship` or wrangler from `~/projects/…`.
 
 ---
 
 ## How Claude should use this
 
-1. Merge/deploy **this** PR (jasonwpalmer-com fixes are live code, not docs-only anymore).
-2. Apply other-repo bundles via [`docs/bug-audits/APPLY.md`](./docs/bug-audits/APPLY.md) — **worldcup-bracket first**.
-3. Private apps still need separate checkouts (not visible to this token).
+1. Read **`FOR-CLAUDE.md`** (local-first workflow).  
+2. Merge this branch into local `~/projects/jasonwpalmer-com` and **deploy from that machine**.  
+3. Run `bash scripts/apply-audit-bundles.sh worldcup-bracket` (then migrate + deploy).  
+4. Walk [`docs/feature-scaffolds/PORTFOLIO-QUEUE.md`](./docs/feature-scaffolds/PORTFOLIO-QUEUE.md).
 
-Companion audit detail: [`docs/bug-audits/OTHER-PUBLIC-REPOS.md`](./docs/bug-audits/OTHER-PUBLIC-REPOS.md)
+Companion: [`docs/bug-audits/OTHER-PUBLIC-REPOS.md`](./docs/bug-audits/OTHER-PUBLIC-REPOS.md) · apply: [`docs/bug-audits/APPLY.md`](./docs/bug-audits/APPLY.md)
 
 ---
 
 ## Status board
 
-| Codebase | Audited | Fixed here? | Notes |
+| Codebase | Audited | Fixed? | Claude action |
 |---|---|---|---|
-| **jasonwpalmer-com** | ✅ | ✅ **shipped in this branch** | CSP, subscribe abuse, confirm/unsub interstitial, token rotate, List-Unsubscribe, honeypot |
-| **worldcup-bracket** | ✅ | ✅ code ready, **push 403** | Bundle + patch in `docs/bug-audits/` — **migrate 002 then deploy** |
-| **wafergraph-mcp** | ✅ | ✅ code ready, **push 403** | unique counterparties + upstream guard + version/docs |
-| **go-no-go** | ✅ | ✅ code ready, **push 403** | parallel null filter + incomplete-lens fail |
-| **react-canvas-force-graph** | ✅ | ✅ code ready, **push 403** | onNodePick ref + hexA |
-| **claude-code-setup** | ✅ | n/a | No material bugs |
-| **Sous** + private apps | ❌ | — | Need local/private agent sessions |
+| **jasonwpalmer-com** | ✅ | ✅ in this branch | Merge locally → lint/build → D1 `0002` → `/ship` |
+| **worldcup-bracket** | ✅ | ✅ bundle only | `apply-audit-bundles.sh` → migrate → `npm run deploy` |
+| **wafergraph-mcp** | ✅ | ✅ bundle only | apply script → typecheck → deploy |
+| **go-no-go** | ✅ | ✅ bundle only | apply script → commit |
+| **react-canvas-force-graph** | ✅ | ✅ bundle only | apply script → commit |
+| **claude-code-setup** | ✅ | n/a | — |
+| **Sous** + private apps | ❌ | — | Separate local sessions |
 
 ---
 
-## jasonwpalmer-com — what changed in this branch
+## jasonwpalmer-com — what this branch changed
 
-| Was | Now |
-|---|---|
-| H1 Subscribe abuse (no rate limit / re-send) | Per-IP Cache API limit, 15m per-email confirm cooldown, honeypot `botcheck`, uniform success copy |
-| H2 CSP Beehiiv / blocked visit-log + CF | `public/_headers` allowlists visit-log + cloudflareinsights; Beehiiv removed |
-| M1 Email enumeration | Same success message always |
-| M2 GET prefetch confirm/unsub | GET = interstitial; POST mutates; confirm only `pending`; token rotated on confirm |
-| M3 Resend failures | `res.ok` checked (still non-fatal for row write) |
-| M6 List-Unsubscribe | Headers added in `send-dispatch.mjs` |
-| M7 Function HTML headers | CSP/nosniff/frame on confirm + unsubscribe pages |
-| L7 JSON-LD `<` breakout | Escaped `\u003c` in `layout.tsx` + blog article JSON-LD |
-| Gallery portrait letterboxing | Aspect ratio follows natural image size (default 9:16) |
-| BootSequence a11y | Scroll lock, Esc skip, sessionStorage try/catch, dialog role |
-| FloatingActions focus | `tabIndex={-1}` when hidden |
-| Counter off-screen animate | Removed 2s fallback; `useInView` sync-checks already-visible |
-| posts.ts unchecked frontmatter | Defaults + slug allowlist |
-| RSS CDATA / categories | Hardened |
-| Content drift (wafergraph 456 vs 615) | Synced build-log-001 + `_build` draft |
-| Lint red / featured grid clutter | Labels braced; Nav/blog `Link`; only legendary spans 2 cols; eslint ignores draft/bundles |
+Security: subscribe rate limit/cooldown/honeypot, optional Turnstile hooks (off until keys set), confirm/unsub interstitial + token rotate, CSP (visit-log, CF insights, Turnstile origins), List-Unsubscribe, JSON-LD escape, MDX `javascript:` reject.
 
-**Still open / optional on this site:** Turnstile (stronger than honeypot), MDX sanitize for untrusted authors, `UNIQUE(token)` migration, Web3Forms domain-lock (dashboard action — documented in `.env.example`), extract Hero XP island from full client Hero.
+UX/perf/org: portrait galleries, boot a11y, in-view counters, posts/RSS hardening, Hero/Skills RSC islands, legendary-only featured span, content number sync, lint green.
+
+Scaffolding for Claude: `FOR-CLAUDE.md`, `scripts/apply-audit-bundles.sh`, build-log `_TEMPLATE`, Turnstile feature doc, `PORTFOLIO-QUEUE.md`.
+
+**Still optional:** Activate Turnstile keys; CF WAF on `/api/subscribe`; Web3Forms domain lock (dashboard); ship or delete `_build` consulting draft.
 
 ---
 
-## Priority remaining for Claude
+## Priority remaining for Claude (local)
 
 | Pri | Action |
 |---|---|
-| 1 | Apply + migrate + deploy **worldcup-bracket** (`APPLY.md`) |
-| 2 | Deploy **jasonwpalmer-com** (this PR) so Functions + CSP ship |
-| 3 | Apply wafergraph-mcp / go-no-go / force-graph bundles |
-| 4 | Private codebase audits (Sous chat; others need checkout) |
-| 5 | Optional: CF WAF rate rule on `/api/subscribe` as belt-and-suspenders |
-
----
-
-## Suggested Claude follow-ups
-
-```
-Task A — worldcup-bracket (do first)
-  Follow docs/bug-audits/APPLY.md
-  npm run db:migrate:remote && npm run deploy
-  Warn pool players: edit tokens rotated for pre-existing rows
-
-Task B — jasonwpalmer-com
-  Merge this PR and deploy Pages (secrets already set)
-  Confirm Web3Forms domain lock in dashboard
-
-Task C — other public repos
-  Apply remaining ready-to-apply bundles / patches
-
-Task D — private codebases
-  Sous (other chat), Command Center, 4-Horn, wafergraph app,
-  Who’s Starting, Our Place, canaifeel, visit-log, classified fantasy
-```
+| 1 | Local merge + deploy **jasonwpalmer-com** |
+| 2 | Apply + migrate + deploy **worldcup-bracket** |
+| 3 | Other bundles via `apply-audit-bundles.sh` |
+| 4 | Private app audits in their own checkouts |
+| 5 | Pick from `docs/feature-scaffolds/PORTFOLIO-QUEUE.md` |

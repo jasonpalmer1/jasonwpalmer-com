@@ -47,8 +47,15 @@ function readPost(filename: string): Post {
 }
 
 /** Return all posts sorted newest-first. */
+function listPostFiles(): string[] {
+  // Skip _TEMPLATE.* and other underscore-prefixed drafts/scaffolds.
+  return fs
+    .readdirSync(POSTS_DIR)
+    .filter((f) => f.endsWith(".mdx") && !f.startsWith("_"));
+}
+
 export function getAllPosts(): Post[] {
-  const files = fs.readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
+  const files = listPostFiles();
   const posts = files.map(readPost);
   return posts.sort(
     (a, b) => new Date(b.meta.date).getTime() - new Date(a.meta.date).getTime()
@@ -65,9 +72,7 @@ export function getPostBySlug(slug: string): Post | null {
 
 /** Return all slugs — used by generateStaticParams. */
 export function getAllSlugs(): string[] {
-  return fs
-    .readdirSync(POSTS_DIR)
-    .filter((f) => f.endsWith(".mdx"))
+  return listPostFiles()
     .map((f) => f.replace(/\.mdx$/, ""))
     .filter((slug) => SLUG_RE.test(slug));
 }

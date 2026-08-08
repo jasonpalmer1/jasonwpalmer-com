@@ -8,7 +8,7 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
-- **Bug audit + fixes (2026-08-08):** Start at **`BUG-AUDIT.md`**. This site’s HIGH/MEDIUM mailing-list + CSP issues are **fixed in-branch** (deploy to ship). Other public repos have ready-to-apply bundles under `docs/bug-audits/` (this agent cannot push those remotes — see `docs/bug-audits/APPLY.md`). **worldcup-bracket** is still the #1 portfolio deploy. **Sous** = separate chat. Private apps not accessible here.
+- **⭐ Cloud-agent handoff (2026-08-08):** Read **`FOR-CLAUDE.md` first.** Deploys happen from **this machine** (`~/projects` + `/ship` / wrangler), not from Cursor cloud. Site fixes are on branch `cursor/bug-audit-documentation-0f3d` / PR #1 — merge locally, run D1 `0002`, deploy. Sibling fixes: `bash scripts/apply-audit-bundles.sh worldcup-bracket` (then migrate+deploy). Queue + scaffolds: `docs/feature-scaffolds/`. Details: `BUG-AUDIT.md`. **Sous** = separate chat.
 - **Content upkeep** (the real ongoing job): keep `src/data/tools.ts` (build cards), `src/data/platforms.ts`, and `src/data/profile.ts` current as Jason ships things.
 - **Blog/build-log cadence**: posts live in `src/content/posts/` (currently `build-log-001`, `build-log-002`, `valley-of-death-financing`). Add build-log posts as projects ship; blog + RSS plumbing is already wired.
 - **Contact**: Web3Forms (`ContactForm.tsx` / `ConsultingForm.tsx`) — access key is hardcoded client-side by design; confirm domain lock in the Web3Forms dashboard. Form still posts to `https://api.web3forms.com/submit`.
@@ -38,7 +38,9 @@ Content lives in plain TS data files; components render it; Next statically expo
 - `public/` — `og.png`, `robots.txt`, `_headers` (CSP allows visit-log + CF insights; Beehiiv removed), `_redirects`, `builds/` screenshots.
 - `docs/bug-audits/` — portfolio audit + APPLY bundles for other repos.
 - `scripts/` — `gen-brand-assets.js`, `send-dispatch.mjs`.
-- `BUG-AUDIT.md` — portfolio bug-audit handoff for Claude.
+- `FOR-CLAUDE.md` — **local-first handoff** (start here after cloud-agent work).
+- `BUG-AUDIT.md` — audit status board; `docs/bug-audits/` bundles; `docs/feature-scaffolds/` optional work.
+- `scripts/apply-audit-bundles.sh` — copy sibling-repo fixes into `~/projects/<repo>`.
 - Config: `next.config.ts`, `eslint.config.mjs`, `postcss.config.mjs`, `tsconfig.json`, `wrangler.toml`, `.env.example`.
 
 ## Entry points — run / build / deploy

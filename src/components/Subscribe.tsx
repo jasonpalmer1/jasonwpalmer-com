@@ -1,27 +1,51 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+
 // Just the form mechanics (email input + button + states). Presentation —
 // heading, card, copy — lives in SubscribeBlock so there's a single header.
+// Turnstile: only mounts when NEXT_PUBLIC_TURNSTILE_SITE_KEY is set (see
+// docs/feature-scaffolds/turnstile-subscribe.md).
 export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const id = "cf-turnstile-api";
+    if (document.getElementById(id)) return;
+    const s = document.createElement("script");
+    s.id = id;
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
     setMessage("");
     const form = e.currentTarget;
-    const honeypot = new FormData(form).get("botcheck");
+    const data = new FormData(form);
+    const honeypot = data.get("botcheck");
+    const turnstileToken =
+      (data.get("cf-turnstile-response") as string) ||
+      (data.get("turnstileToken") as string) ||
+      "";
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, botcheck: honeypot || "" }),
+        body: JSON.stringify({
+          email,
+          botcheck: honeypot || "",
+          turnstileToken,
+        }),
       });
       const json = await res.json();
       if (json.ok) {
@@ -80,6 +104,13 @@ export default function Subscribe() {
           {status === "submitting" ? "SENDING…" : "SUBSCRIBE"}
         </button>
       </div>
+      {TURNSTILE_SITE_KEY ? (
+        <div
+          className="cf-turnstile mt-3"
+          data-sitekey={TURNSTILE_SITE_KEY}
+          data-theme="dark"
+        />
+      ) : null}
       {status === "error" && (
         <p className="mt-2 font-mono text-xs text-red-400" role="alert">
           {message}
