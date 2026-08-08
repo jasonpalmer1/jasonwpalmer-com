@@ -6,6 +6,7 @@ import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import TagChip from "@/components/TagChip";
+import CopyButton from "@/components/CopyButton";
 import {
   getAllPosts,
   getAllSlugs,
@@ -105,6 +106,7 @@ export default async function BlogPost({
     url,
     image: post.meta.cover || `https://${profile.domain}/og.png`,
     keywords: post.meta.tags.join(", "),
+    timeRequired: `PT${mins}M`,
   };
 
   return (
@@ -137,6 +139,11 @@ export default async function BlogPost({
             <span className="font-mono text-[0.65rem] text-muted">
               {mins} min read
             </span>
+            <CopyButton
+              value={url}
+              label="COPY LINK"
+              className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-muted transition-colors hover:border-accent/40 hover:text-accent"
+            />
             {post.meta.tags.map((tag) => (
               <TagChip key={tag} tag={tag} />
             ))}

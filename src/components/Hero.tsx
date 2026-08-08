@@ -1,6 +1,7 @@
 import { profile, game, socials, credentials, education } from "@/data/profile";
 import HeroXp from "./HeroXp";
 import LastShipped from "./LastShipped";
+import CopyButton from "./CopyButton";
 
 const credLine = [
   credentials[0]?.name?.replace(/^FINRA\s+/i, "") ?? "Series 65",
@@ -20,8 +21,13 @@ export default function Hero() {
             <span className="inline-flex items-center gap-2 rounded-full border border-accent/40 bg-accent/10 px-3 py-1 font-mono text-xs text-accent">
               <span className="pulse-dot" /> STATUS: ONLINE
             </span>
-            <span className="font-mono text-xs text-muted">
+            <span className="inline-flex items-center gap-2 font-mono text-xs text-muted">
               CALLSIGN: <span className="text-foreground">{game.callsign}</span>
+              <CopyButton
+                value={game.callsign}
+                label="COPY"
+                className="rounded border border-border px-1.5 py-0.5 text-[0.6rem] tracking-widest text-muted transition-colors hover:border-accent/40 hover:text-accent"
+              />
             </span>
             <span className="font-mono text-xs text-muted">
               LOC: <span className="text-foreground">{profile.location}</span>

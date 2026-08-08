@@ -69,7 +69,14 @@ export default function HeroXp() {
           {daysSince}/{daysInYear} DAYS → LVL {nextLevel}
         </span>
       </div>
-      <div className="bar-track mt-2">
+      <div
+        className="bar-track mt-2"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={Math.round(xp)}
+        aria-label={`Year XP ${Math.round(xp)} percent`}
+      >
         <div className="bar-fill" style={{ width: `${xp}%` }} />
       </div>
     </div>

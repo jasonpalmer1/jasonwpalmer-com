@@ -85,6 +85,15 @@ export default async function TagArchive({
             {posts.length} dispatch{posts.length === 1 ? "" : "es"} tagged{" "}
             <span className="text-accent">#{slug}</span>
           </p>
+          <div className="mt-4 flex flex-wrap items-center gap-2">
+            <Link
+              href="/blog/"
+              className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-muted transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              ALL
+            </Link>
+            <TagChip tag={slug} active />
+          </div>
         </div>
 
         <ol className="space-y-6" aria-label={`Posts tagged ${slug}`}>

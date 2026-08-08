@@ -232,3 +232,33 @@ details[open] .lore-body {
   html { scroll-behavior: auto; }
   .hud { transition: none; }
 }
+
+/* Print: strip terminal chrome; keep dispatch prose readable */
+@media print {
+  .fx-grid,
+  .fx-glow,
+  .fx-scanlines,
+  header,
+  footer,
+  [aria-label="Back to top"],
+  [role="dialog"] {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #444;
+  }
+  a[href^="#"]::after,
+  a[href^="/"]::after {
+    content: "";
+  }
+}

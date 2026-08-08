@@ -23,7 +23,14 @@ export default function SkillRow({
           <span className="text-muted"> · {level}/100</span>
         </span>
       </div>
-      <div className="bar-track mt-3">
+      <div
+        className="bar-track mt-3"
+        role="progressbar"
+        aria-valuemin={0}
+        aria-valuemax={100}
+        aria-valuenow={level}
+        aria-label={`${category} skill level ${level} of 100`}
+      >
         <div className="bar-fill" style={{ width: inView ? `${level}%` : 0 }} />
       </div>
       <ul className="mt-4 flex flex-wrap gap-2">
