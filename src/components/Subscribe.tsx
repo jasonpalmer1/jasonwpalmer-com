@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -14,6 +14,9 @@ export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  const [turnstileReady, setTurnstileReady] = useState(!TURNSTILE_SITE_KEY);
+  const inFlight = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   useEffect(() => {
     if (!TURNSTILE_SITE_KEY) return;
@@ -26,10 +29,26 @@ export default function Subscribe() {
     document.body.appendChild(s);
   }, []);
 
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const form = formRef.current;
+    if (!form) return;
+    const poll = window.setInterval(() => {
+      const token =
+        (form.querySelector(
+          '[name="cf-turnstile-response"]',
+        ) as HTMLInputElement | null)?.value || "";
+      if (token) {
+        setTurnstileReady(true);
+        window.clearInterval(poll);
+      }
+    }, 250);
+    return () => window.clearInterval(poll);
+  }, []);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    setStatus("submitting");
-    setMessage("");
+    if (inFlight.current || status === "submitting") return;
     const form = e.currentTarget;
     const data = new FormData(form);
     const honeypot = data.get("botcheck");
@@ -37,6 +56,14 @@ export default function Subscribe() {
       (data.get("cf-turnstile-response") as string) ||
       (data.get("turnstileToken") as string) ||
       "";
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setMessage("Complete the verification challenge, then try again.");
+      return;
+    }
+    inFlight.current = true;
+    setStatus("submitting");
+    setMessage("");
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
@@ -59,6 +86,8 @@ export default function Subscribe() {
     } catch {
       setStatus("error");
       setMessage("Network error — please try again.");
+    } finally {
+      inFlight.current = false;
     }
   }
 
@@ -73,8 +102,15 @@ export default function Subscribe() {
     );
   }
 
+  const busy = status === "submitting";
+  const submitDisabled = busy || (Boolean(TURNSTILE_SITE_KEY) && !turnstileReady);
+
   return (
-    <form onSubmit={handleSubmit} className="relative mx-auto max-w-md">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className="relative mx-auto max-w-md"
+    >
       {/* Honeypot — leave empty. Server drops submissions when filled. */}
       <input
         type="text"
@@ -92,16 +128,17 @@ export default function Subscribe() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           aria-label="Email address"
+          autoComplete="email"
           required
-          disabled={status === "submitting"}
+          disabled={busy}
           className="w-full rounded-md border border-border bg-background/60 px-3 py-2 font-mono text-sm text-foreground outline-none transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent/40 sm:flex-1 disabled:opacity-50"
         />
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={submitDisabled}
           className="rounded-md border border-accent bg-accent/10 px-5 py-2 font-mono text-sm font-semibold tracking-wide text-accent transition-colors hover:bg-accent hover:text-background disabled:opacity-50"
         >
-          {status === "submitting" ? "SENDING…" : "SUBSCRIBE"}
+          {busy ? "SENDING…" : "SUBSCRIBE"}
         </button>
       </div>
       {TURNSTILE_SITE_KEY ? (

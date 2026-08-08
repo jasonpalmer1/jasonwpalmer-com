@@ -60,6 +60,12 @@ export default function BootSequence({
     // Focus the skip hint so keyboard users aren't trapped under the overlay.
     panelRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        // Keep focus inside the dialog — no other tabbables while booting.
+        e.preventDefault();
+        panelRef.current?.focus();
+        return;
+      }
       if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
         e.preventDefault();
         storageSet("booted", "1");

@@ -18,9 +18,9 @@ npm run send-dispatch -- <slug>
 ```
 
 **Files:**
-- `functions/api/subscribe.js` — POST handler (validate, store, send confirmation)
-- `functions/api/confirm.js` — GET handler (confirm token → status=confirmed)
-- `functions/api/unsubscribe.js` — GET handler (token → status=unsubscribed, idempotent)
+- `functions/api/subscribe.js` — POST handler (validate, store, send confirmation; cooldown only after Resend succeeds)
+- `functions/api/confirm.js` — GET interstitial + POST confirm (pending only; rotates token)
+- `functions/api/unsubscribe.js` — GET interstitial + POST unsubscribe (idempotent)
 - `migrations/0001_subscribers.sql` — D1 schema
 - `migrations/0002_token_unique.sql` — unique index on `token` (run after 0001)
 - `scripts/send-dispatch.mjs` — manual send script
@@ -52,7 +52,7 @@ npx wrangler pages secret put RESEND_API_KEY --project-name jasonwpalmer-com
 
 This keeps the key out of `wrangler.toml` (which is committed). `SITE_URL` and `FROM_EMAIL` are set in `wrangler.toml` [vars] and are non-sensitive.
 
-> ⚠️ **A Pages secret only takes effect on the NEXT deployment.** After setting (or rotating) the secret, you MUST redeploy (`npx wrangler pages deploy`) or the live Functions keep using the old value. Symptom of a missing/stale key: the subscribe form returns "I'll send a confirmation shortly" instead of "check your inbox," and no email arrives.
+> ⚠️ **A Pages secret only takes effect on the NEXT deployment.** After setting (or rotating) the secret, you MUST redeploy (`npx wrangler pages deploy`) or the live Functions keep using the old value. Symptom of a missing/stale key: the form still returns the uniform success copy ("Almost there — check your inbox to confirm.") but **no email arrives**. Retry is allowed immediately when Resend did not succeed (confirm cooldown only starts after a delivered mail).
 
 ### Rotating the API key
 

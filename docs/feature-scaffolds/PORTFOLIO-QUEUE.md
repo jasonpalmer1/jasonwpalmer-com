@@ -39,6 +39,9 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - Static asset long-cache + RSS `lastBuildDate` / Content-Type; gallery `aria-current`
 - Nav: client `Link` for dispatches + pinned SUBSCRIBE CTA; post OG/twitter parity
 - Dispatch `List-Id` header in `send-dispatch.mjs`
+- Subscribe: validate before rate limit; no confirm cooldown unless Resend succeeded; double-submit + Turnstile ready gate
+- Post slug filter aligned across index/RSS/sitemap; Counter announces final value; BootSequence Tab trap
+- `MAILING-LIST.md` matches GET interstitial + POST confirm/unsub
 
 ## Ideas worth scaffolding later (not started)
 

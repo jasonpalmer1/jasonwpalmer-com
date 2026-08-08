@@ -161,6 +161,20 @@ export async function onRequestPost({ request, env }) {
     return ok();
   }
 
+  // --- Validate email before rate limit / Turnstile so junk doesn't burn budget ---
+  const raw = typeof body.email === "string" ? body.email : "";
+  const email = raw.trim().toLowerCase();
+
+  if (!email) {
+    return Response.json({ ok: false, error: "Email address is required." }, { status: 400 });
+  }
+  if (email.length > 254) {
+    return Response.json({ ok: false, error: "Email address is too long." }, { status: 400 });
+  }
+  if (!EMAIL_RE.test(email)) {
+    return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+  }
+
   const ip = request.headers.get("cf-connecting-ip") || "";
   const turnstileOk = await verifyTurnstile(body.turnstileToken, env, ip);
   if (!turnstileOk) {
@@ -175,20 +189,6 @@ export async function onRequestPost({ request, env }) {
       { ok: false, error: "Too many requests — try again later." },
       { status: 429 }
     );
-  }
-
-  // --- Validate email ---
-  const raw = typeof body.email === "string" ? body.email : "";
-  const email = raw.trim().toLowerCase();
-
-  if (!email) {
-    return Response.json({ ok: false, error: "Email address is required." }, { status: 400 });
-  }
-  if (email.length > 254) {
-    return Response.json({ ok: false, error: "Email address is too long." }, { status: 400 });
-  }
-  if (!EMAIL_RE.test(email)) {
-    return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
   }
 
   const db = env.DB;
@@ -249,6 +249,7 @@ export async function onRequestPost({ request, env }) {
   }
 
   // --- Send confirmation email (best-effort) ---
+  let confirmSent = false;
   if (env.RESEND_API_KEY) {
     const confirmUrl = `${siteUrl}/api/confirm?token=${encodeURIComponent(token)}`;
     try {
@@ -265,12 +266,27 @@ export async function onRequestPost({ request, env }) {
           html: buildConfirmationHtml(confirmUrl, siteUrl),
         }),
       });
-      if (!res.ok) {
+      if (res.ok) {
+        confirmSent = true;
+      } else {
         // Non-fatal for the subscriber row; do not leak status details or the key.
         await res.text().catch(() => "");
       }
     } catch {
       // Intentional: send failure is non-fatal — subscriber is already stored.
+    }
+  }
+
+  // No mail delivered → don't start the 15m confirm cooldown (allow immediate retry).
+  // Uniform success copy still applies (no enumeration / key-status leak).
+  if (!confirmSent) {
+    try {
+      await db
+        .prepare("UPDATE subscribers SET created_at = ? WHERE email = ?")
+        .bind("1970-01-01 00:00:00", email)
+        .run();
+    } catch {
+      /* ignore */
     }
   }
 

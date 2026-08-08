@@ -51,12 +51,22 @@ export default function Counter({
   const display = Number.isInteger(value)
     ? Math.round(n).toLocaleString()
     : n.toFixed(1);
+  const finalLabel = Number.isInteger(value)
+    ? value.toLocaleString()
+    : value.toFixed(1);
 
+  // Announce the final value only — ticking digits stay decorative.
   return (
-    <span ref={ref} className={className}>
-      {prefix}
-      {display}
-      {suffix}
+    <span
+      ref={ref}
+      className={className}
+      aria-label={`${prefix}${finalLabel}${suffix}`}
+    >
+      <span aria-hidden="true">
+        {prefix}
+        {display}
+        {suffix}
+      </span>
     </span>
   );
 }

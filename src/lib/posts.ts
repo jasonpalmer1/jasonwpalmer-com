@@ -48,10 +48,12 @@ function readPost(filename: string): Post {
 
 /** Return all posts sorted newest-first. */
 function listPostFiles(): string[] {
-  // Skip _TEMPLATE.* and other underscore-prefixed drafts/scaffolds.
+  // Skip _TEMPLATE.* / underscore drafts, and anything outside SLUG_RE so
+  // index/RSS/sitemap never link to slugs that generateStaticParams omits.
   return fs
     .readdirSync(POSTS_DIR)
-    .filter((f) => f.endsWith(".mdx") && !f.startsWith("_"));
+    .filter((f) => f.endsWith(".mdx") && !f.startsWith("_"))
+    .filter((f) => SLUG_RE.test(f.replace(/\.mdx$/, "")));
 }
 
 export function getAllPosts(): Post[] {
