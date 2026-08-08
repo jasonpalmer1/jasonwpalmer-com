@@ -12,6 +12,22 @@ const LINES = (name: string) => [
   "> ACCESS GRANTED",
 ];
 
+function storageGet(key: string): string | null {
+  try {
+    return sessionStorage.getItem(key);
+  } catch {
+    return null;
+  }
+}
+
+function storageSet(key: string, value: string) {
+  try {
+    sessionStorage.setItem(key, value);
+  } catch {
+    // Private mode / blocked storage — boot still works for this session.
+  }
+}
+
 export default function BootSequence({ name }: { name: string }) {
   const lines = LINES(name);
   const [shown, setShown] = useState(0);
@@ -21,9 +37,32 @@ export default function BootSequence({ name }: { name: string }) {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
-    if (sessionStorage.getItem("booted") === "1") return;
-    setActive(true);
+    if (storageGet("booted") === "1") return;
+    // Defer past the effect body — avoids cascading-render lint on an
+    // intentional client-only mount gate (SSR must render inactive).
+    const t = requestAnimationFrame(() => setActive(true));
+    return () => cancelAnimationFrame(t);
   }, []);
+
+  // Lock scroll + Escape to skip while the overlay is up.
+  useEffect(() => {
+    if (!active || hidden) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" || e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        storageSet("booted", "1");
+        setDone(true);
+        setShown(lines.length);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [active, hidden, lines.length]);
 
   useEffect(() => {
     if (!active) return;
@@ -37,13 +76,13 @@ export default function BootSequence({ name }: { name: string }) {
 
   useEffect(() => {
     if (!done) return;
-    sessionStorage.setItem("booted", "1");
+    storageSet("booted", "1");
     const t = setTimeout(() => setHidden(true), 650);
     return () => clearTimeout(t);
   }, [done]);
 
   const skip = () => {
-    sessionStorage.setItem("booted", "1");
+    storageSet("booted", "1");
     setDone(true);
     setShown(lines.length);
   };
@@ -52,6 +91,9 @@ export default function BootSequence({ name }: { name: string }) {
 
   return (
     <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Boot sequence"
       onClick={skip}
       className={`fixed inset-0 z-[100] flex items-center justify-center bg-background transition-opacity duration-500 ${
         done ? "opacity-0" : "opacity-100"
@@ -73,7 +115,7 @@ export default function BootSequence({ name }: { name: string }) {
           <span className="text-accent blink">█</span>
         )}
         <p className="mt-8 text-[0.65rem] tracking-widest text-muted/60">
-          [ click to skip ]
+          [ click or Esc to skip ]
         </p>
       </div>
     </div>

@@ -25,7 +25,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // is exactly as fresh as its newest post; the homepage is the newer of that
   // post or the last real edit to the homepage's own copy (SITE_UPDATED below,
   // which is why it is a hand-bumped constant and not a timestamp).
-  const SITE_UPDATED = "2026-08-05"; // bump when the homepage copy changes
+  const SITE_UPDATED = "2026-08-08"; // bump when the homepage copy changes
   const newestPost = posts
     .map((p) => p.meta.date)
     .sort()

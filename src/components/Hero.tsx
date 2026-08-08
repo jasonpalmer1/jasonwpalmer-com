@@ -1,7 +1,14 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { profile, game, socials } from "@/data/profile";
+import { profile, game, socials, credentials, education } from "@/data/profile";
+
+const credLine = [
+  credentials[0]?.name?.replace(/^FINRA\s+/i, "") ?? "Series 65",
+  education[0]?.school?.includes("Texas") ? "UT Austin Finance" : education[0]?.school,
+]
+  .filter(Boolean)
+  .join(" · ");
 
 type AgeStats = {
   level: number;
@@ -42,9 +49,14 @@ export default function Hero() {
   const [xp, setXp] = useState(0);
   useEffect(() => {
     const a = computeAge(game.birthDate);
-    setAge(a);
-    const t = setTimeout(() => setXp(a.xpPct), 400);
-    return () => clearTimeout(t);
+    // Client-only age (avoids SSR/hydration mismatch). Defer setState out of
+    // the effect body; animate XP shortly after.
+    const t0 = requestAnimationFrame(() => setAge(a));
+    const t1 = setTimeout(() => setXp(a.xpPct), 400);
+    return () => {
+      cancelAnimationFrame(t0);
+      clearTimeout(t1);
+    };
   }, []);
 
   const level = age?.level ?? "··";
@@ -55,7 +67,7 @@ export default function Hero() {
   return (
     <section id="top" className="relative">
       <div className="mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28">
-        <p className="label">// operator profile</p>
+        <p className="label">{"// operator profile"}</p>
 
         <div className="mt-6 hud rounded-2xl p-6 sm:p-10">
           <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
@@ -70,7 +82,7 @@ export default function Hero() {
             </span>
             <span className="font-mono text-xs text-muted">
               CRED:{" "}
-              <span className="text-foreground">Series 65 · UT Austin Finance</span>
+              <span className="text-foreground">{credLine}</span>
             </span>
           </div>
 

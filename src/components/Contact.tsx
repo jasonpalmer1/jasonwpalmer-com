@@ -6,7 +6,7 @@ export default function Contact() {
     <section id="uplink" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-24">
         <div className="hud mx-auto max-w-2xl rounded-2xl p-8 sm:p-12">
-          <p className="label text-center">// establish uplink</p>
+          <p className="label text-center">{"// establish uplink"}</p>
           <h2 className="mt-3 text-center font-display text-3xl font-bold tracking-tight text-glow">
             CONTACT
           </h2>

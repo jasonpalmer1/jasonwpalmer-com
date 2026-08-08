@@ -36,7 +36,7 @@ export default function BlogIndex() {
       <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         {/* Header */}
         <div className="mb-12">
-          <p className="label">// dispatch log</p>
+          <p className="label">{"// dispatch log"}</p>
           <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-gradient">
             BUILD LOG
           </h1>
@@ -90,7 +90,7 @@ export default function BlogIndex() {
         </ol>
 
         {posts.length === 0 && (
-          <p className="font-mono text-sm text-muted">// no dispatches yet</p>
+          <p className="font-mono text-sm text-muted">{"// no dispatches yet"}</p>
         )}
 
         {/* Subscribe widget — below the posts so the writing comes first */}

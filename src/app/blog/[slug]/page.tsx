@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
@@ -80,16 +81,18 @@ export default async function BlogPost({
       <Nav />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleJsonLd) }}
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
+        }}
       />
       <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         {/* Back link */}
-        <a
+        <Link
           href="/blog/"
           className="mb-8 inline-block font-mono text-xs text-muted hover:text-accent transition-colors"
         >
           ← DISPATCH LOG
-        </a>
+        </Link>
 
         {/* Post header */}
         <header className="mb-10">

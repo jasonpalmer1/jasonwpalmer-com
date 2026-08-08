@@ -1,11 +1,7 @@
 "use client";
 
 import { useState } from "react";
-
-// Web3Forms public access key — designed to live in client-side HTML.
-// Submissions are relayed to the owner's inbox; the email address never
-// appears anywhere on the page.
-const ACCESS_KEY = "15d9048e-fd86-4578-8772-1d8a59525dce";
+import { WEB3FORMS_ACCESS_KEY } from "@/lib/web3forms";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
@@ -22,7 +18,7 @@ export default function ContactForm() {
     setError("");
     const form = e.currentTarget;
     const payload = {
-      access_key: ACCESS_KEY,
+      access_key: WEB3FORMS_ACCESS_KEY,
       subject: "New message from jasonwpalmer.com",
       ...Object.fromEntries(new FormData(form).entries()),
     };

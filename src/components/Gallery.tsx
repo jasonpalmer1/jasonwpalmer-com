@@ -7,12 +7,23 @@ export type GalleryImage = {
   alt: string;
 };
 
+// Most build screenshots are phone portraits (~780×1520). Default to that so
+// the first paint isn't a landscape letterbox; onLoad snaps to the real ratio.
+const DEFAULT_RATIO = "9 / 16";
+
 export default function Gallery({ images }: { images: GalleryImage[] }) {
   const [i, setI] = useState(0);
+  const [ratio, setRatio] = useState(DEFAULT_RATIO);
 
   const n = images.length;
-  const next = useCallback(() => setI((v) => (v + 1) % n), [n]);
-  const prev = useCallback(() => setI((v) => (v - 1 + n) % n), [n]);
+  const next = useCallback(() => {
+    if (n <= 1) return;
+    setI((v) => (v + 1) % n);
+  }, [n]);
+  const prev = useCallback(() => {
+    if (n <= 1) return;
+    setI((v) => (v - 1 + n) % n);
+  }, [n]);
 
   if (n === 0) return null;
 
@@ -29,18 +40,30 @@ export default function Gallery({ images }: { images: GalleryImage[] }) {
       }}
     >
       <div
-        className="w-full cursor-pointer overflow-hidden rounded-lg border border-border"
-        style={{ aspectRatio: "16 / 10", maxHeight: 260 }}
-        onClick={next}
+        className={`w-full overflow-hidden rounded-lg border border-border ${
+          n > 1 ? "cursor-pointer" : ""
+        }`}
+        style={{ aspectRatio: ratio, maxHeight: 420 }}
+        onClick={n > 1 ? next : undefined}
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          key={images[i].src}
           src={images[i].src}
           alt={images[i].alt}
-          loading="lazy"
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding="async"
+          onLoad={(e) => {
+            const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
+            if (w > 0 && h > 0) setRatio(`${w} / ${h}`);
+          }}
           className="h-full w-full object-contain transition-opacity active:opacity-80"
         />
       </div>
+
+      <p className="absolute h-px w-px overflow-hidden whitespace-nowrap" aria-live="polite">
+        Screenshot {i + 1} of {n}: {images[i].alt}
+      </p>
 
       {n > 1 && (
         <>

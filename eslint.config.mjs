@@ -12,6 +12,11 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Private draft consulting page + cross-repo audit bundles (not part of the site).
+    "src/app/_build/**",
+    "docs/bug-audits/**",
+    // One-off Node asset generators (CJS require).
+    "scripts/**",
   ]),
 ]);
 

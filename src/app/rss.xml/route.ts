@@ -6,6 +6,19 @@ import { profile } from "@/data/profile";
 
 export const dynamic = "force-static";
 
+function cdata(text: string): string {
+  // CDATA cannot contain ]]> — split if present.
+  return String(text || "").replace(/]]>/g, "]]]]><![CDATA[>");
+}
+
+function escXml(text: string): string {
+  return String(text || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
 export async function GET() {
   const posts = getAllPosts();
   const base = `https://${profile.domain}`;
@@ -13,14 +26,18 @@ export async function GET() {
   const items = posts
     .map((post) => {
       const url = `${base}/blog/${post.slug}/`;
+      const pub = new Date(post.meta.date);
+      const pubDate = Number.isNaN(pub.getTime())
+        ? new Date(0).toUTCString()
+        : pub.toUTCString();
       return `
     <item>
-      <title><![CDATA[${post.meta.title}]]></title>
+      <title><![CDATA[${cdata(post.meta.title)}]]></title>
       <link>${url}</link>
       <guid isPermaLink="true">${url}</guid>
-      <pubDate>${new Date(post.meta.date).toUTCString()}</pubDate>
-      <description><![CDATA[${post.meta.summary}]]></description>
-      ${post.meta.tags.map((t) => `<category>${t}</category>`).join("\n      ")}
+      <pubDate>${pubDate}</pubDate>
+      <description><![CDATA[${cdata(post.meta.summary)}]]></description>
+      ${post.meta.tags.map((t) => `<category>${escXml(t)}</category>`).join("\n      ")}
     </item>`;
     })
     .join("");
@@ -28,7 +45,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${profile.name} — Build Log</title>
+    <title>${escXml(profile.name)} — Build Log</title>
     <link>${base}/blog/</link>
     <description>Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.</description>
     <language>en-US</language>

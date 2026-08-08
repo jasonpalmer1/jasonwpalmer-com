@@ -50,7 +50,7 @@ export default function Platforms() {
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <p className="label">// distribution</p>
+            <p className="label">{"// distribution"}</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
               PLATFORMS
             </h2>

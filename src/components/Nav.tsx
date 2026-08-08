@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { game } from "@/data/profile";
 
 // Section links are absolute (/#…) so they work from any page, not just home.
@@ -16,7 +17,7 @@ export default function Nav() {
     <header className="sticky top-0 z-50 border-b border-border bg-background/70 backdrop-blur-md">
       <nav className="mx-auto flex max-w-6xl items-center gap-3 px-4 py-3 sm:px-6">
         {/* Brand → home */}
-        <a
+        <Link
           href="/"
           aria-label="Home"
           className="flex shrink-0 items-center gap-2 font-mono text-sm"
@@ -26,9 +27,9 @@ export default function Nav() {
             {game.callsign}
           </span>
           <span className="hidden text-[0.65rem] tracking-widest text-muted sm:inline">
-            // SYS.ONLINE
+            {"// SYS.ONLINE"}
           </span>
-        </a>
+        </Link>
 
         {/* Links — scroll horizontally on narrow screens instead of clipping off-edge */}
         <ul className="flex min-w-0 flex-1 items-center justify-start gap-0.5 overflow-x-auto font-mono text-[0.7rem] [scrollbar-width:none] sm:justify-end sm:gap-2 sm:text-xs [&::-webkit-scrollbar]:hidden">

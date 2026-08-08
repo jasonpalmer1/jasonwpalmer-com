@@ -60,7 +60,7 @@ const realBuilds = [
     problem:
       "No free, neutral map of the semiconductor & AI supply chain — just scattered analyst reports and paywalled databases.",
     built:
-      "Interactive decision tool covering 456+ companies across the full semiconductor value chain — materials to AI/data center. Each company profiled with financials, dependencies, and chokepoint exposure.",
+      "Interactive decision tool covering 615 companies and 3,400+ links across the full semiconductor value chain — materials to AI/data center. Each company profiled with financials, dependencies, and chokepoint exposure.",
     outcome: "Shipped and live.",
     outcomeLink: { href: "https://wafergraph.com", label: "→ wafergraph.com" },
     tags: ["Next.js", "Data pipeline", "Graph model", "Cloudflare"],

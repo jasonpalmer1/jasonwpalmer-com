@@ -42,7 +42,7 @@ npx wrangler pages deploy out --project-name=jasonwpalmer-com
 ## Notes
 
 - SEO: OpenGraph share card, JSON-LD `Person` schema, canonical URL, sitemap/robots.
-- Privacy: the contact email is assembled client-side (no plain `mailto:` in the HTML) to defeat scrapers.
+- Privacy: contact goes through Web3Forms (no plain `mailto:` in the HTML). Lock the form key to this domain in the Web3Forms dashboard.
 - Built and iterated with [Claude Code](https://claude.com/claude-code).
 
 ## License

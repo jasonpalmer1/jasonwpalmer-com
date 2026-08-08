@@ -1,6 +1,6 @@
 # Portfolio bug audit — handoff for Claude Code
 
-**Status:** Fixes implemented for jasonwpalmer-com in this PR; other-repo fixes ready to apply (push blocked from this agent)  
+**Status:** Fixes implemented for jasonwpalmer-com in this PR (security + UX/perf round 2); other-repo fixes ready to apply (push blocked from this agent)  
 **Auditor/fixer run:** Cursor cloud agent “Mistral AI code review”  
 **Agent URL:** https://cursor.com/agents/bc-019fe37e-4f87-7e91-8d87-7c53ad270f3d  
 **Date:** 2026-08-08  
@@ -48,9 +48,17 @@ Companion audit detail: [`docs/bug-audits/OTHER-PUBLIC-REPOS.md`](./docs/bug-aud
 | M3 Resend failures | `res.ok` checked (still non-fatal for row write) |
 | M6 List-Unsubscribe | Headers added in `send-dispatch.mjs` |
 | M7 Function HTML headers | CSP/nosniff/frame on confirm + unsubscribe pages |
-| L7 JSON-LD `<` breakout | Escaped `\u003c` in `layout.tsx` |
+| L7 JSON-LD `<` breakout | Escaped `\u003c` in `layout.tsx` + blog article JSON-LD |
+| Gallery portrait letterboxing | Aspect ratio follows natural image size (default 9:16) |
+| BootSequence a11y | Scroll lock, Esc skip, sessionStorage try/catch, dialog role |
+| FloatingActions focus | `tabIndex={-1}` when hidden |
+| Counter off-screen animate | Removed 2s fallback; `useInView` sync-checks already-visible |
+| posts.ts unchecked frontmatter | Defaults + slug allowlist |
+| RSS CDATA / categories | Hardened |
+| Content drift (wafergraph 456 vs 615) | Synced build-log-001 + `_build` draft |
+| Lint red / featured grid clutter | Labels braced; Nav/blog `Link`; only legendary spans 2 cols; eslint ignores draft/bundles |
 
-**Still open / optional on this site:** Turnstile (stronger than honeypot), MDX sanitize for untrusted authors, RSS CDATA hardening, `UNIQUE(token)` migration, Web3Forms domain-lock (dashboard action — documented in `.env.example`).
+**Still open / optional on this site:** Turnstile (stronger than honeypot), MDX sanitize for untrusted authors, `UNIQUE(token)` migration, Web3Forms domain-lock (dashboard action — documented in `.env.example`), extract Hero XP island from full client Hero.
 
 ---
 

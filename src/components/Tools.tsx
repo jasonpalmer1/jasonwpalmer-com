@@ -18,7 +18,9 @@ function ToolCard({ tool }: { tool: Tool }) {
     <article
       id={tool.id}
       className={`hud group flex flex-col rounded-xl p-6 transition-transform hover:-translate-y-1 ${rarityGlow[rarity]} ${
-        tool.featured ? "sm:col-span-2" : ""
+        // Only legendary cards span two columns — featuring everything
+        // collapsed the grid into a single tall stack.
+        tool.featured && rarity === "legendary" ? "sm:col-span-2" : ""
       }`}
     >
       {tool.images && tool.images.length > 0 && (
@@ -111,7 +113,7 @@ export default function Tools() {
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <p className="label">// inventory</p>
+            <p className="label">{"// inventory"}</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
               BUILDS
             </h2>

@@ -11,7 +11,7 @@ export default function Lore() {
               PERSONNEL FILE
             </span>
             <span className="hidden font-mono text-[0.65rem] tracking-widest text-muted sm:inline">
-              // LORE · CLASSIFIED
+              {"// LORE · CLASSIFIED"}
             </span>
             <span className="lore-cta ml-auto font-mono text-[0.65rem] tracking-widest text-accent">
               [&nbsp;
@@ -32,7 +32,7 @@ export default function Lore() {
               {lore.principle}
             </p>
             <p className="mt-2 font-mono text-[0.65rem] tracking-widest text-muted">
-              // everything below is evidence for that line
+              {"// everything below is evidence for that line"}
             </p>
 
             <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">

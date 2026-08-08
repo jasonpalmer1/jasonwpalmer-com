@@ -28,11 +28,13 @@ export default function FloatingActions() {
           : "pointer-events-none translate-y-3 opacity-0"
       }`}
       style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      aria-hidden={!visible}
     >
       <button
         type="button"
         onClick={toTop}
         aria-label="Back to top"
+        tabIndex={visible ? 0 : -1}
         className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-surface/80 text-muted backdrop-blur-md transition-colors hover:border-accent hover:text-accent"
       >
         <svg
