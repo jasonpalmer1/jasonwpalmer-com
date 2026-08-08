@@ -4,7 +4,7 @@ export default function Resume() {
   return (
     <section id="log" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-20">
-        <p className="label">// mission history</p>
+        <p className="label">{"// mission history"}</p>
         <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
           CAMPAIGN LOG
         </h2>
@@ -14,7 +14,10 @@ export default function Resume() {
             const active = /present/i.test(item.period);
             const id = String(experience.length - i).padStart(2, "0");
             return (
-              <li key={i} className="hud rounded-xl p-5 sm:p-6">
+              <li
+                key={`${item.org}-${item.role}-${item.period}`}
+                className="hud rounded-xl p-5 sm:p-6"
+              >
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1">
                   <span className="font-mono text-xs text-accent">
                     MSN-{id}
@@ -49,7 +52,10 @@ export default function Resume() {
 
         {/* Achievements */}
         <div className="mt-12">
-          <p className="label">// achievements unlocked</p>
+          <p className="label">{"// achievements unlocked"}</p>
+          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
+            ACHIEVEMENTS
+          </h2>
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {credentials.map((c, i) => (
               <div key={`c-${i}`} className="hud flex gap-3 rounded-xl p-5">

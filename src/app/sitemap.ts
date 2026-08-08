@@ -5,7 +5,7 @@
 export const dynamic = "force-static";
 
 import type { MetadataRoute } from "next";
-import { getAllPosts } from "@/lib/posts";
+import { getAllPosts, getAllTags, getPostsByTag } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -19,13 +19,24 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
+  const tagEntries: MetadataRoute.Sitemap = getAllTags().map((tag) => {
+    const tagged = getPostsByTag(tag);
+    const newest = tagged[0]?.meta.date;
+    return {
+      url: `${base}/blog/tag/${tag}/`,
+      lastModified: new Date(newest ?? "1970-01-01"),
+      changeFrequency: "weekly" as const,
+      priority: 0.5,
+    };
+  });
+
   // NOT `new Date()`. Build time means every deploy tells Google these two
   // pages changed, whether they did or not — and a sitemap caught claiming a
   // freshness it can't back is one Google learns to discount. The blog index
   // is exactly as fresh as its newest post; the homepage is the newer of that
   // post or the last real edit to the homepage's own copy (SITE_UPDATED below,
   // which is why it is a hand-bumped constant and not a timestamp).
-  const SITE_UPDATED = "2026-08-05"; // bump when the homepage copy changes
+  const SITE_UPDATED = "2026-08-09"; // bump when the homepage copy changes
   const newestPost = posts
     .map((p) => p.meta.date)
     .sort()
@@ -46,5 +57,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.9,
     },
     ...postEntries,
+    ...tagEntries,
   ];
 }

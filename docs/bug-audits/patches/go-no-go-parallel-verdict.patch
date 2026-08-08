@@ -1,0 +1,72 @@
+From 11f2c990bb08539ac5bb42cd7bd2b6a9cfd081fc Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Sat, 8 Aug 2026 22:35:32 +0000
+Subject: [PATCH] Fix parallel stress dropping null verifications incorrectly
+
+---
+ .gitignore  |  1 -
+ CLAUDE.md   | 18 ++++++++++++++++++
+ go-no-go.js |  8 +++++++-
+ 3 files changed, 25 insertions(+), 2 deletions(-)
+ create mode 100644 CLAUDE.md
+
+diff --git a/.gitignore b/.gitignore
+index b2e2079..e43b0f9 100644
+--- a/.gitignore
++++ b/.gitignore
+@@ -1,2 +1 @@
+-CLAUDE.md
+ .DS_Store
+diff --git a/CLAUDE.md b/CLAUDE.md
+new file mode 100644
+index 0000000..0176059
+--- /dev/null
++++ b/CLAUDE.md
+@@ -0,0 +1,18 @@
++# go-no-go
++
++Adversarial viability proofing for product ideas: forge a falsifiable plan, run skeptical research lenses, adversarially stress-test damaging findings, then synthesize a GO / CONDITIONAL-GO / NO-GO verdict.
++
++## How to run
++
++```bash
++# From a Claude Code session (or wherever this skill is installed):
++node go-no-go.js "<idea or path>"
++# Serial mode (one agent at a time under API load):
++node go-no-go.js --serial "<idea or path>"
++```
++
++See `README.md` and `PROTOCOL.md` for lenses, scoring, and veto rules.
++
++## Parallel-verdict fix
++
++In the parallel Stress path, a null agent result was wrapped as `{ finding, verdict: null }`, so `filter(Boolean)` kept empty verifications. Serial only pushed when the verdict was truthy. Parallel now filters with `x && x.verdict`. If any lens returns null, the run fails closed before Synthesize (`cleanLensData.length !== lenses.length`).
+diff --git a/go-no-go.js b/go-no-go.js
+index 6974e11..590a32a 100644
+--- a/go-no-go.js
++++ b/go-no-go.js
+@@ -308,7 +308,8 @@ async function proofOneLens(lens) {
+           .then(v => ({ finding: f, verdict: v }))
+       )
+     )
+-    verifications.push(...verifs.filter(Boolean))
++    // Match serial: drop entries where agent returned null (wrapper object is always truthy).
++    verifications.push(...verifs.filter(x => x && x.verdict))
+   }
+   return { lens: lens.key, title: lens.title, weight: lens.weight, result: res, verifications }
+ }
+@@ -325,6 +326,11 @@ if (serial) {
+ }
+ 
+ const cleanLensData = lensResults.filter(Boolean)
++if (cleanLensData.length !== lenses.length) {
++  throw new Error(
++    `Incomplete proof: ${cleanLensData.length}/${lenses.length} lenses returned results — refusing to synthesize`
++  )
++}
+ 
+ // ─── Stage 4: Synthesize ──────────────────────────────────────────────────────
+ 
+-- 
+2.43.0
+

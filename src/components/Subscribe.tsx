@@ -1,25 +1,78 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
+const TURNSTILE_SITE_KEY = process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || "";
+
 // Just the form mechanics (email input + button + states). Presentation —
 // heading, card, copy — lives in SubscribeBlock so there's a single header.
+// Turnstile: only mounts when NEXT_PUBLIC_TURNSTILE_SITE_KEY is set (see
+// docs/feature-scaffolds/turnstile-subscribe.md).
 export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  const [turnstileReady, setTurnstileReady] = useState(!TURNSTILE_SITE_KEY);
+  const inFlight = useRef(false);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const id = "cf-turnstile-api";
+    if (document.getElementById(id)) return;
+    const s = document.createElement("script");
+    s.id = id;
+    s.src = "https://challenges.cloudflare.com/turnstile/v0/api.js";
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
+
+  useEffect(() => {
+    if (!TURNSTILE_SITE_KEY) return;
+    const form = formRef.current;
+    if (!form) return;
+    const poll = window.setInterval(() => {
+      const token =
+        (form.querySelector(
+          '[name="cf-turnstile-response"]',
+        ) as HTMLInputElement | null)?.value || "";
+      if (token) {
+        setTurnstileReady(true);
+        window.clearInterval(poll);
+      }
+    }, 250);
+    return () => window.clearInterval(poll);
+  }, []);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current || status === "submitting") return;
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const honeypot = data.get("botcheck");
+    const turnstileToken =
+      (data.get("cf-turnstile-response") as string) ||
+      (data.get("turnstileToken") as string) ||
+      "";
+    if (TURNSTILE_SITE_KEY && !turnstileToken) {
+      setStatus("error");
+      setMessage("Complete the verification challenge, then try again.");
+      return;
+    }
+    inFlight.current = true;
     setStatus("submitting");
     setMessage("");
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({
+          email,
+          botcheck: honeypot || "",
+          turnstileToken,
+        }),
       });
       const json = await res.json();
       if (json.ok) {
@@ -33,6 +86,8 @@ export default function Subscribe() {
     } catch {
       setStatus("error");
       setMessage("Network error — please try again.");
+    } finally {
+      inFlight.current = false;
     }
   }
 
@@ -47,8 +102,24 @@ export default function Subscribe() {
     );
   }
 
+  const busy = status === "submitting";
+  const submitDisabled = busy || (Boolean(TURNSTILE_SITE_KEY) && !turnstileReady);
+
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-md">
+    <form
+      ref={formRef}
+      onSubmit={handleSubmit}
+      className="relative mx-auto max-w-md"
+    >
+      {/* Honeypot — leave empty. Server drops submissions when filled. */}
+      <input
+        type="text"
+        name="botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="email"
@@ -57,18 +128,26 @@ export default function Subscribe() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           aria-label="Email address"
+          autoComplete="email"
           required
-          disabled={status === "submitting"}
+          disabled={busy}
           className="w-full rounded-md border border-border bg-background/60 px-3 py-2 font-mono text-sm text-foreground outline-none transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent/40 sm:flex-1 disabled:opacity-50"
         />
         <button
           type="submit"
-          disabled={status === "submitting"}
+          disabled={submitDisabled}
           className="rounded-md border border-accent bg-accent/10 px-5 py-2 font-mono text-sm font-semibold tracking-wide text-accent transition-colors hover:bg-accent hover:text-background disabled:opacity-50"
         >
-          {status === "submitting" ? "SENDING…" : "SUBSCRIBE"}
+          {busy ? "SENDING…" : "SUBSCRIBE"}
         </button>
       </div>
+      {TURNSTILE_SITE_KEY ? (
+        <div
+          className="cf-turnstile mt-3"
+          data-sitekey={TURNSTILE_SITE_KEY}
+          data-theme="dark"
+        />
+      ) : null}
       {status === "error" && (
         <p className="mt-2 font-mono text-xs text-red-400" role="alert">
           {message}

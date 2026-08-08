@@ -80,7 +80,8 @@ body {
 .fx-scanlines {
   position: fixed;
   inset: 0;
-  z-index: 60;
+  /* Keep under sticky nav (z-50) so chrome stays crisp */
+  z-index: 40;
   pointer-events: none;
   background: repeating-linear-gradient(
     to bottom,
@@ -216,12 +217,6 @@ body {
 details[open] .lore-chevron {
   transform: rotate(90deg);
 }
-details[open] .lore-cta::after {
-  content: "COLLAPSE ]";
-}
-.lore-cta::after {
-  content: "DECRYPT ]";
-}
 details[open] .lore-body {
   animation: loreReveal 0.4s ease both;
 }
@@ -233,4 +228,37 @@ details[open] .lore-body {
 @media (prefers-reduced-motion: reduce) {
   .fx-grid, .pulse-dot, .blink { animation: none; }
   .bar-fill { transition: none; }
+  details[open] .lore-body { animation: none; }
+  html { scroll-behavior: auto; }
+  .hud { transition: none; }
+}
+
+/* Print: strip terminal chrome; keep dispatch prose readable */
+@media print {
+  .fx-grid,
+  .fx-glow,
+  .fx-scanlines,
+  header,
+  footer,
+  [aria-label="Back to top"],
+  [role="dialog"] {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+    color: #111 !important;
+  }
+  main {
+    max-width: none !important;
+    padding: 0 !important;
+  }
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.75em;
+    color: #444;
+  }
+  a[href^="#"]::after,
+  a[href^="/"]::after {
+    content: "";
+  }
 }

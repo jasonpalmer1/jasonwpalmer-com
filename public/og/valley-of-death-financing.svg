@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05060a"/>
+      <stop offset="100%" stop-color="#0a1628"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect x="40" y="40" width="1120" height="550" fill="none" stroke="#34f5c5" stroke-opacity="0.35" stroke-width="2"/>
+  <text x="80" y="120" fill="#34f5c5" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18" letter-spacing="4">// DISPATCH · JPALM</text>
+  <text x="80" y="280" fill="#e5e7eb" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="44" font-weight="700">The 'Valley of Death': Why So Much</text>
+  <text x="80" y="336" fill="#e5e7eb" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="44" font-weight="700">Government-Funded Technology Dies Before</text>
+  <text x="80" y="392" fill="#e5e7eb" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="44" font-weight="700">It Ships</text>
+  <text x="80" y="540" fill="#6b7280" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="20">valley-of-death-financing</text>
+  <text x="80" y="575" fill="#9ca3af" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="18">jasonwpalmer.com</text>
+</svg>

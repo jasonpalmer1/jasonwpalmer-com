@@ -11,6 +11,14 @@ export function useInView<T extends HTMLElement>(rootMargin = "0px") {
   useEffect(() => {
     const el = ref.current;
     if (!el || inView) return;
+
+    // Sync path for elements already on-screen at mount (IO can miss a frame).
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setInView(true);
+      return;
+    }
+
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {

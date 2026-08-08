@@ -29,7 +29,7 @@ export const platforms: Platform[] = [
     tagline: "A financial-education platform, grown from zero — entirely organic",
     description:
       "Founded and grew a financial-education platform to 750+ students around the world, " +
-      "with original curriculum spanning equities, options, futures, and " +
+      "with original curriculum spanning equities, options, futures, derivatives, and " +
       "risk management — taught as an hour of video six nights a week for 14 straight months. " +
       "Brand, platform, content, and community — all built from the ground up.",
     icon: "🎓",

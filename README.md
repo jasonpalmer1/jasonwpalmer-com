@@ -18,10 +18,11 @@ A finance operator & systems builder's portfolio, styled as a cyberpunk "operato
 
 ## Structure
 
-Content is data-driven — most edits happen in two files:
+Content is data-driven — most edits happen in:
 
 - `src/data/profile.ts` — bio, value pitch, stats, skills, experience, education, socials
 - `src/data/tools.ts` — the build/tool showcase cards
+- `src/data/platforms.ts` — audience/distribution platforms (e.g. The League)
 
 Components live in `src/components/`; the page composition is `src/app/page.tsx`.
 
@@ -39,10 +40,13 @@ npx next build                                              # -> ./out (static)
 npx wrangler pages deploy out --project-name=jasonwpalmer-com
 ```
 
+Prefer `/ship` from Claude Code on the local machine (preview first; `--prod` only with confirmation). **Deploys are local** — see `FOR-CLAUDE.md` if you're picking up cloud-agent work.
+
 ## Notes
 
 - SEO: OpenGraph share card, JSON-LD `Person` schema, canonical URL, sitemap/robots.
-- Privacy: the contact email is assembled client-side (no plain `mailto:` in the HTML) to defeat scrapers.
+- Privacy: contact goes through Web3Forms (no plain `mailto:` in the HTML). Lock the form key to this domain in the Web3Forms dashboard.
+- Agents: start at `FOR-CLAUDE.md` / `CLAUDE.md`.
 - Built and iterated with [Claude Code](https://claude.com/claude-code).
 
 ## License

@@ -12,9 +12,8 @@ type Props = {
 };
 
 // Counts up from 0 to `value` once it scrolls into view.
-// Fallback: if IntersectionObserver hasn't fired after 2 s (e.g. element
-// already in viewport on load or observer blocked), starts the animation
-// anyway so values never stay stuck at zero.
+// No timer fallback — that used to start every counter after 2s even when
+// still below the fold (wasted rAF + numbers already finished when scrolled to).
 export default function Counter({
   value,
   prefix = "",
@@ -24,23 +23,16 @@ export default function Counter({
 }: Props) {
   const { ref, inView } = useInView<HTMLSpanElement>();
   const [n, setN] = useState(0);
-  // `started` is true once we should animate — either because inView fired
-  // or because the 2-second fallback timer expired.
-  const [started, setStarted] = useState(false);
-
-  // Fallback timer: guarantee animation starts even if inView never fires.
-  useEffect(() => {
-    const t = setTimeout(() => setStarted(true), 2000);
-    return () => clearTimeout(t);
-  }, []);
-
-  // Start as soon as inView or the fallback fires (whichever comes first).
-  useEffect(() => {
-    if (inView) setStarted(true);
-  }, [inView]);
 
   useEffect(() => {
-    if (!started) return;
+    if (!inView) return;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      const t = requestAnimationFrame(() => setN(value));
+      return () => cancelAnimationFrame(t);
+    }
     let raf = 0;
     let start: number | null = null;
     const tick = (t: number) => {
@@ -53,18 +45,28 @@ export default function Counter({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [started, value, durationMs]);
+  }, [inView, value, durationMs]);
 
   // Integers stay clean; decimals show one place.
   const display = Number.isInteger(value)
     ? Math.round(n).toLocaleString()
     : n.toFixed(1);
+  const finalLabel = Number.isInteger(value)
+    ? value.toLocaleString()
+    : value.toFixed(1);
 
+  // Announce the final value only — ticking digits stay decorative.
   return (
-    <span ref={ref} className={className}>
-      {prefix}
-      {display}
-      {suffix}
+    <span
+      ref={ref}
+      className={className}
+      aria-label={`${prefix}${finalLabel}${suffix}`}
+    >
+      <span aria-hidden="true">
+        {prefix}
+        {display}
+        {suffix}
+      </span>
     </span>
   );
 }

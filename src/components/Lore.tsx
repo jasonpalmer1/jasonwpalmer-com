@@ -5,16 +5,19 @@ export default function Lore() {
     <section id="lore" className="scroll-mt-20 border-t border-border">
       <div className="mx-auto max-w-6xl px-6 py-12">
         <details className="hud group rounded-xl">
-          <summary className="lore-summary flex items-center gap-3 px-5 py-4 sm:px-6">
-            <span className="lore-chevron font-mono text-accent">▸</span>
+          <summary className="lore-summary flex cursor-pointer list-none items-center gap-3 px-5 py-4 sm:px-6 [&::-webkit-details-marker]:hidden">
+            <span className="lore-chevron font-mono text-accent" aria-hidden>
+              ▸
+            </span>
             <span className="font-display text-sm font-bold tracking-widest text-foreground">
               PERSONNEL FILE
             </span>
             <span className="hidden font-mono text-[0.65rem] tracking-widest text-muted sm:inline">
-              // LORE · CLASSIFIED
+              {"// LORE · CLASSIFIED"}
             </span>
             <span className="lore-cta ml-auto font-mono text-[0.65rem] tracking-widest text-accent">
-              [&nbsp;
+              <span className="group-open:hidden">[ DECRYPT ]</span>
+              <span className="hidden group-open:inline">[ COLLAPSE ]</span>
             </span>
           </summary>
 
@@ -32,7 +35,7 @@ export default function Lore() {
               {lore.principle}
             </p>
             <p className="mt-2 font-mono text-[0.65rem] tracking-widest text-muted">
-              // everything below is evidence for that line
+              {"// everything below is evidence for that line"}
             </p>
 
             <div className="mt-6 grid grid-cols-1 gap-3 sm:grid-cols-2">

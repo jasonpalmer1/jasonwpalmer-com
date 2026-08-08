@@ -5,11 +5,11 @@ Self-hosted newsletter for jasonwpalmer.com. Subscribers confirm via email (doub
 ## Architecture
 
 ```
-Browser → POST /api/subscribe (CF Pages Function)
+Browser → POST /api/subscribe (CF Pages Function; honeypot + IP/email cooldowns)
         → D1 "dispatch-subscribers" (stores email + token, status=pending)
         → Resend API (confirmation email with /api/confirm?token=...)
-        → Subscriber clicks confirm
-        → GET /api/confirm (CF Pages Function) → D1 status=confirmed
+        → Subscriber opens link → GET interstitial → POST confirms
+        → D1 status=confirmed + token rotated (new token is for unsubscribe)
 
 npm run send-dispatch -- <slug>
         → wrangler d1 (fetches confirmed subscribers)
@@ -18,10 +18,11 @@ npm run send-dispatch -- <slug>
 ```
 
 **Files:**
-- `functions/api/subscribe.js` — POST handler (validate, store, send confirmation)
-- `functions/api/confirm.js` — GET handler (confirm token → status=confirmed)
-- `functions/api/unsubscribe.js` — GET handler (token → status=unsubscribed, idempotent)
+- `functions/api/subscribe.js` — POST handler (validate, store, send confirmation; cooldown only after Resend succeeds)
+- `functions/api/confirm.js` — GET interstitial + POST confirm (pending only; rotates token)
+- `functions/api/unsubscribe.js` — GET interstitial + POST unsubscribe (idempotent)
 - `migrations/0001_subscribers.sql` — D1 schema
+- `migrations/0002_token_unique.sql` — unique index on `token` (run after 0001)
 - `scripts/send-dispatch.mjs` — manual send script
 - `src/components/Subscribe.tsx` — in-page subscribe form
 - `wrangler.toml` — Pages + D1 binding config
@@ -51,7 +52,7 @@ npx wrangler pages secret put RESEND_API_KEY --project-name jasonwpalmer-com
 
 This keeps the key out of `wrangler.toml` (which is committed). `SITE_URL` and `FROM_EMAIL` are set in `wrangler.toml` [vars] and are non-sensitive.
 
-> ⚠️ **A Pages secret only takes effect on the NEXT deployment.** After setting (or rotating) the secret, you MUST redeploy (`npx wrangler pages deploy`) or the live Functions keep using the old value. Symptom of a missing/stale key: the subscribe form returns "I'll send a confirmation shortly" instead of "check your inbox," and no email arrives.
+> ⚠️ **A Pages secret only takes effect on the NEXT deployment.** After setting (or rotating) the secret, you MUST redeploy (`npx wrangler pages deploy`) or the live Functions keep using the old value. Symptom of a missing/stale key: the form still returns the uniform success copy ("Almost there — check your inbox to confirm.") but **no email arrives**. Retry is allowed immediately when Resend did not succeed (confirm cooldown only starts after a delivered mail).
 
 ### Rotating the API key
 
@@ -68,6 +69,7 @@ The D1 database is already created. Apply the schema:
 
 ```bash
 npx wrangler d1 execute dispatch-subscribers --remote --file=migrations/0001_subscribers.sql
+npx wrangler d1 execute dispatch-subscribers --remote --file=migrations/0002_token_unique.sql
 ```
 
 Verify:

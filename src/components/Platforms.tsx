@@ -26,9 +26,19 @@ function PlatformCard({ platform }: { platform: Platform }) {
         {platform.description}
       </p>
 
-      <div className="mt-6 grid grid-cols-1 divide-y divide-border rounded-lg border border-border sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+      <div
+        className={`mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border ${
+          platform.stats.length <= 2
+            ? "sm:grid-cols-2"
+            : platform.stats.length === 3
+              ? "sm:grid-cols-3"
+              : platform.stats.length === 4
+                ? "sm:grid-cols-4"
+                : "sm:grid-cols-5"
+        }`}
+      >
         {platform.stats.map((s) => (
-          <div key={s.label} className="px-4 py-4 text-center">
+          <div key={s.label} className="bg-surface px-3 py-4 text-center sm:px-4">
             <div className="font-display text-xl font-bold text-accent text-glow sm:text-2xl">
               <Counter value={s.value} prefix={s.prefix} suffix={s.suffix} />
             </div>
@@ -50,7 +60,7 @@ export default function Platforms() {
       <div className="mx-auto max-w-6xl px-6 py-20">
         <div className="mb-10 flex items-end justify-between">
           <div>
-            <p className="label">// distribution</p>
+            <p className="label">{"// distribution"}</p>
             <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
               PLATFORMS
             </h2>

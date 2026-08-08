@@ -85,6 +85,12 @@ async function loadMatter(filePath) {
 // ---------------------------------------------------------------------------
 async function resolvePost() {
   if (slugArg) {
+    if (slugArg.startsWith("_")) {
+      console.error(
+        `[dispatch] ERROR: Refusing underscore slug "${slugArg}" (templates/drafts are not dispatchable).`,
+      );
+      process.exit(1);
+    }
     const filePath = join(POSTS_DIR, `${slugArg}.mdx`);
     if (!existsSync(filePath)) {
       console.error(`[dispatch] ERROR: Post not found: ${filePath}`);
@@ -95,7 +101,10 @@ async function resolvePost() {
   }
 
   // Find newest by frontmatter date
-  const files = readdirSync(POSTS_DIR).filter((f) => f.endsWith(".mdx"));
+  // Mirror src/lib/posts.ts — skip _TEMPLATE / draft scaffolds.
+  const files = readdirSync(POSTS_DIR).filter(
+    (f) => f.endsWith(".mdx") && !f.startsWith("_")
+  );
   if (files.length === 0) {
     console.error("[dispatch] ERROR: No .mdx files found in src/content/posts/");
     process.exit(1);
@@ -225,14 +234,28 @@ function escHtml(str) {
 // ---------------------------------------------------------------------------
 // Send via Resend
 // ---------------------------------------------------------------------------
-async function sendEmail({ to, subject, html }) {
+async function sendEmail({ to, subject, html, unsubUrl }) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: FROM_EMAIL, to: [to], subject, html }),
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [to],
+      subject,
+      html,
+      headers: {
+        "List-Id": `<dispatch.${new URL(SITE_URL).hostname}>`,
+        ...(unsubUrl
+          ? {
+              "List-Unsubscribe": `<${unsubUrl}>`,
+              "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            }
+          : {}),
+      },
+    }),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "(no body)");
@@ -252,13 +275,14 @@ function delay(ms) {
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  if (!RESEND_API_KEY) {
+  const post = await resolvePost();
+  console.log(`[dispatch] Post: "${post.title}" (slug: ${post.slug})`);
+
+  // Dry runs preview without Resend — key only required for real sends.
+  if (!isDry && !RESEND_API_KEY) {
     console.error("[dispatch] ERROR: RESEND_API_KEY is not set. Add it to .env or export it before running.");
     process.exit(1);
   }
-
-  const post = await resolvePost();
-  console.log(`[dispatch] Post: "${post.title}" (slug: ${post.slug})`);
 
   const subscribers = fetchSubscribers();
   console.log(`[dispatch] Confirmed subscribers: ${subscribers.length}`);
@@ -286,10 +310,11 @@ async function main() {
 
   for (let i = 0; i < subscribers.length; i++) {
     const { email, token } = subscribers[i];
+    const unsubUrl = `${SITE_URL}/api/unsubscribe?token=${token}`;
     const html = buildDispatchHtml({ title: post.title, summary: post.summary, slug: post.slug, token });
 
     try {
-      await sendEmail({ to: email, subject, html });
+      await sendEmail({ to: email, subject, html, unsubUrl });
       sent++;
       console.log(`[dispatch] [${sent}/${subscribers.length}] Sent → ${email}`);
     } catch (err) {
@@ -311,6 +336,7 @@ async function main() {
       console.log(`  ${e.email}: ${e.error}`);
     }
   }
+  if (failed > 0) process.exit(1);
 }
 
 main().catch((err) => {

@@ -1,11 +1,7 @@
 "use client";
 
-import { useState } from "react";
-
-// Web3Forms public access key — designed to live in client-side HTML.
-// Submissions are relayed to the owner's inbox; the email address never
-// appears anywhere on the page.
-const ACCESS_KEY = "15d9048e-fd86-4578-8772-1d8a59525dce";
+import { useRef, useState } from "react";
+import { WEB3FORMS_ACCESS_KEY } from "@/lib/web3forms";
 
 type Status = "idle" | "sending" | "ok" | "error";
 
@@ -15,16 +11,20 @@ const inputClass =
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const inFlight = useRef(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current || status === "sending") return;
+    inFlight.current = true;
     setStatus("sending");
     setError("");
     const form = e.currentTarget;
+    // Form fields first, then force access_key/subject so a crafted field can't overwrite them.
     const payload = {
-      access_key: ACCESS_KEY,
-      subject: "New message from jasonwpalmer.com",
       ...Object.fromEntries(new FormData(form).entries()),
+      access_key: WEB3FORMS_ACCESS_KEY,
+      subject: "New message from jasonwpalmer.com",
     };
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -46,12 +46,17 @@ export default function ContactForm() {
     } catch {
       setStatus("error");
       setError("Network error — please try again.");
+    } finally {
+      inFlight.current = false;
     }
   }
 
   if (status === "ok") {
     return (
-      <div className="mt-8 rounded-md border border-accent/40 bg-accent/10 p-6 text-center font-mono text-sm text-accent">
+      <div
+        role="status"
+        className="mt-8 rounded-md border border-accent/40 bg-accent/10 p-6 text-center font-mono text-sm text-accent"
+      >
         ✓ TRANSMISSION RECEIVED — I&apos;ll get back to you soon.
       </div>
     );
@@ -73,13 +78,25 @@ export default function ContactForm() {
           <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
             NAME
           </span>
-          <input name="name" type="text" required className={inputClass} />
+          <input
+            name="name"
+            type="text"
+            required
+            autoComplete="name"
+            className={inputClass}
+          />
         </label>
         <label className="block">
           <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
             YOUR EMAIL
           </span>
-          <input name="email" type="email" required className={inputClass} />
+          <input
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            className={inputClass}
+          />
         </label>
       </div>
       <label className="block">
@@ -97,7 +114,9 @@ export default function ContactForm() {
           {status === "sending" ? "SENDING…" : "[ SEND MESSAGE ]"}
         </button>
         {status === "error" && (
-          <span className="font-mono text-xs text-red-400">{error}</span>
+          <span className="font-mono text-xs text-red-400" role="alert">
+            {error}
+          </span>
         )}
       </div>
     </form>

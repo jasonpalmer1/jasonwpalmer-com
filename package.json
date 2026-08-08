@@ -5,8 +5,11 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "npx --yes serve out",
     "lint": "eslint",
+    "check:assets": "node scripts/check-build-assets.mjs",
+    "check": "npm run lint && npm run check:assets && npm run build",
+    "gen:og": "node scripts/gen-post-og.mjs",
     "send-dispatch": "node scripts/send-dispatch.mjs"
   },
   "dependencies": {

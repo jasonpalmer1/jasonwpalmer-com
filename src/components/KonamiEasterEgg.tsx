@@ -15,19 +15,43 @@ const SEQUENCE = [
   "a",
 ];
 
+function prefersReducedMotion(): boolean {
+  try {
+    return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  } catch {
+    return false;
+  }
+}
+
 export default function KonamiEasterEgg() {
   const [active, setActive] = useState(false);
   const progress = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocus = useRef<HTMLElement | null>(null);
 
-  // Listen for the Konami code.
+  // Listen for the Konami code — ignore typing inside form fields.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (active) return;
+      const t = e.target as HTMLElement | null;
+      if (
+        t &&
+        (t.tagName === "INPUT" ||
+          t.tagName === "TEXTAREA" ||
+          t.tagName === "SELECT" ||
+          t.isContentEditable)
+      ) {
+        return;
+      }
       const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
       if (key === SEQUENCE[progress.current]) {
         progress.current += 1;
         if (progress.current === SEQUENCE.length) {
           progress.current = 0;
+          const el = document.activeElement;
+          restoreFocus.current =
+            el instanceof HTMLElement ? el : null;
           setActive(true);
         }
       } else {
@@ -36,11 +60,41 @@ export default function KonamiEasterEgg() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [active]);
 
-  // Matrix rain while active.
+  // Modal chrome: scroll lock + Tab trap + Esc; restore focus on close.
+  useEffect(() => {
+    if (!active) {
+      const el = restoreFocus.current;
+      restoreFocus.current = null;
+      if (el && document.contains(el)) {
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        panelRef.current?.focus();
+        return;
+      }
+      if (e.key === "Escape") setActive(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [active]);
+
+  // Matrix rain while active (skipped when user prefers reduced motion).
   useEffect(() => {
     if (!active) return;
+    if (prefersReducedMotion()) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext("2d");
@@ -77,15 +131,9 @@ export default function KonamiEasterEgg() {
     };
     draw();
 
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(false);
-    };
-    window.addEventListener("keydown", onKey);
-
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("keydown", onKey);
     };
   }, [active]);
 
@@ -95,10 +143,17 @@ export default function KonamiEasterEgg() {
     <div
       className="fixed inset-0 z-[90] cursor-pointer"
       onClick={() => setActive(false)}
+      role="dialog"
+      aria-modal="true"
+      aria-label="Developer mode unlocked"
     >
-      <canvas ref={canvasRef} className="h-full w-full" />
+      <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="hud px-8 py-6 text-center">
+        <div
+          ref={panelRef}
+          tabIndex={-1}
+          className="hud px-8 py-6 text-center outline-none"
+        >
           <p className="label">cheat code accepted</p>
           <p className="mt-2 font-display text-2xl text-accent text-glow">
             DEVELOPER MODE UNLOCKED

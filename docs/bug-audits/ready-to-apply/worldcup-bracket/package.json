@@ -1,0 +1,16 @@
+{
+  "name": "worldcup-bracket",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "wrangler dev --local",
+    "deploy": "wrangler deploy",
+    "db:init:local": "wrangler d1 execute worldcup-bracket --local --file=migrations/001-init.sql",
+    "db:init:remote": "wrangler d1 execute worldcup-bracket --remote --file=migrations/001-init.sql",
+    "db:migrate:local": "wrangler d1 execute worldcup-bracket --local --file=migrations/002-edit-token.sql",
+    "db:migrate:remote": "wrangler d1 execute worldcup-bracket --remote --file=migrations/002-edit-token.sql"
+  },
+  "devDependencies": {
+    "wrangler": "^3.0.0"
+  }
+}
