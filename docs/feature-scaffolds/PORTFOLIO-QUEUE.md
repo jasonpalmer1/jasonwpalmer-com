@@ -62,3 +62,5 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] TagChip `aria-current` + tag-page ALL clear; Stats cols from length; progressbar roles
 - [x] Per-tag RSS (`/rss/tag/<tag>/`) + shared `lib/rss.ts`
 - [x] visit-log CSP snippet doc/script; optional front-matter `builds:` → homepage anchors
+- [x] Confirm GET validates pending token; success page shows unsub link
+- [x] `npm run check`; `start` serves `out/`; `error.tsx` + `manifest.ts`; SubscribeBlock RSS

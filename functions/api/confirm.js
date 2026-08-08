@@ -28,7 +28,7 @@ function esc(str) {
     .replace(/"/g, "&quot;");
 }
 
-function page({ title, heading, body, siteUrl, isSuccess, token }) {
+function page({ title, heading, body, siteUrl, isSuccess, token, unsubUrl }) {
   const accentColor = isSuccess ? "#34f5c5" : token ? "#34f5c5" : "#f87171";
   const icon = isSuccess ? "✓" : token ? "?" : "✗";
   const action = token
@@ -37,6 +37,9 @@ function page({ title, heading, body, siteUrl, isSuccess, token }) {
         <button type="submit" class="btn">CONFIRM SUBSCRIPTION →</button>
       </form>`
     : `<a href="${esc(siteUrl)}" class="btn">← BACK TO SITE</a>`;
+  const unsubLine = unsubUrl
+    ? `<p class="footer"><a href="${esc(unsubUrl)}">Unsubscribe anytime</a></p>`
+    : "";
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -91,8 +94,9 @@ function page({ title, heading, body, siteUrl, isSuccess, token }) {
     <div class="icon">${icon}</div>
     <p class="label">// dispatch log</p>
     <h1>${esc(heading)}</h1>
-    <p>${body}</p>
+    <p>${esc(body)}</p>
     ${action}
+    ${unsubLine}
     <p class="footer">
       <a href="${esc(siteUrl)}">jasonwpalmer.com</a>
     </p>
@@ -157,12 +161,14 @@ async function confirmToken(env, token, siteUrl) {
     });
   }
 
+  const unsubUrl = `${siteUrl}/api/unsubscribe?token=${encodeURIComponent(unsubToken)}`;
   return html(200, {
     title: "You're confirmed",
     heading: "You're subscribed.",
-    body: "Your email is confirmed. You'll get a dispatch each time something new ships. No spam — unsubscribe anytime.",
+    body: "Your email is confirmed. You'll get a dispatch each time something new ships. No spam.",
     siteUrl,
     isSuccess: true,
+    unsubUrl,
   });
 }
 
@@ -181,7 +187,44 @@ export async function onRequestGet({ request, env }) {
     });
   }
 
-  // Prefetch-safe interstitial — mutation only on POST.
+  const db = env.DB;
+  if (!db) {
+    return html(503, {
+      title: "Service unavailable",
+      heading: "Service unavailable",
+      body: "Something went wrong on our end. Please try again later.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  // Prefetch-safe: validate pending token before showing the confirm form.
+  let row;
+  try {
+    row = await db
+      .prepare("SELECT status FROM subscribers WHERE token = ?")
+      .bind(token)
+      .first();
+  } catch {
+    return html(500, {
+      title: "Error",
+      heading: "Something went wrong",
+      body: "We couldn't look up this confirmation link. Please try again later.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  if (!row || row.status !== "pending") {
+    return html(404, {
+      title: "Link invalid or expired",
+      heading: "Link invalid or expired",
+      body: "This confirmation link has already been used, is expired, or doesn't exist. If you'd like to subscribe, please enter your email again.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
   return html(200, {
     title: "Confirm subscription",
     heading: "Confirm your subscription",

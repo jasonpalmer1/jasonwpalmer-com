@@ -20,6 +20,12 @@ export default function SubscribeBlock() {
       <div className="mt-6">
         <Subscribe />
       </div>
+      <p className="mt-4 font-mono text-[0.65rem] tracking-widest text-muted/70">
+        or follow via{" "}
+        <a href="/rss.xml" className="text-accent/80 transition-colors hover:text-accent">
+          RSS
+        </a>
+      </p>
     </div>
   );
 }
