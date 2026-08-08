@@ -1,119 +1,5 @@
-import { tools, statusLabels, type Tool, type Rarity } from "@/data/tools";
-import Gallery from "./Gallery";
-
-const rarityClass: Record<Rarity, string> = {
-  legendary: "rarity-legendary",
-  epic: "rarity-epic",
-  rare: "rarity-rare",
-};
-const rarityGlow: Record<Rarity, string> = {
-  legendary: "glow-border-legendary",
-  epic: "glow-border-epic",
-  rare: "glow-border-rare",
-};
-
-function ToolCard({ tool }: { tool: Tool }) {
-  const rarity = tool.rarity ?? "rare";
-  return (
-    <article
-      id={tool.id}
-      className={`hud group flex flex-col rounded-xl p-6 transition-transform hover:-translate-y-1 ${rarityGlow[rarity]} ${
-        // Only legendary cards span two columns — featuring everything
-        // collapsed the grid into a single tall stack.
-        tool.featured && rarity === "legendary" ? "sm:col-span-2" : ""
-      }`}
-    >
-      {tool.images && tool.images.length > 0 && (
-        <figure className="mb-5">
-          <Gallery images={tool.images} />
-          {tool.imageCaption && (
-            <figcaption className="mt-2 font-mono text-xs leading-snug text-muted">
-              {tool.imageCaption}
-            </figcaption>
-          )}
-        </figure>
-      )}
-      <div className="flex items-start justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <span className="text-3xl" aria-hidden>
-            {tool.icon}
-          </span>
-          <div>
-            <div className="flex items-center gap-2">
-              <span
-                className={`rounded border px-1.5 py-0.5 font-mono text-[0.6rem] font-bold uppercase tracking-widest ${rarityClass[rarity]}`}
-              >
-                {rarity}
-              </span>
-              {tool.year && (
-                <span className="font-mono text-[0.6rem] text-muted">
-                  {tool.year}
-                </span>
-              )}
-            </div>
-            <h3 className="mt-1 font-display text-lg font-bold text-foreground">
-              {tool.name}
-            </h3>
-          </div>
-        </div>
-        <span
-          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[0.65rem] ${
-            tool.status === "live" || tool.status === "active"
-              ? "border-accent/30 bg-accent/10 text-accent"
-              : "border-border bg-surface text-muted"
-          }`}
-        >
-          {(tool.status === "live" || tool.status === "active") && (
-            <span className="pulse-dot" />
-          )}
-          {statusLabels[tool.status].toUpperCase()}
-        </span>
-      </div>
-
-      <p className="mt-2 font-mono text-xs text-accent-2">{tool.tagline}</p>
-
-      <p className="mt-4 flex-1 text-sm leading-relaxed text-foreground/80">
-        {tool.description}
-      </p>
-
-      <ul className="mt-5 flex flex-wrap gap-2">
-        {tool.stack.map((t) => (
-          <li
-            key={t}
-            className="rounded border border-border bg-surface px-2 py-1 font-mono text-[0.65rem] text-muted"
-          >
-            {t}
-          </li>
-        ))}
-      </ul>
-
-      {(tool.liveUrl || tool.sourceUrl) && (
-        <div className="mt-5 flex items-center gap-4 border-t border-border pt-4 font-mono text-sm">
-          {tool.liveUrl && (
-            <a
-              href={tool.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-accent transition-colors hover:text-glow"
-            >
-              [ LAUNCH → ]
-            </a>
-          )}
-          {tool.sourceUrl && (
-            <a
-              href={tool.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
-            >
-              [ SOURCE ]
-            </a>
-          )}
-        </div>
-      )}
-    </article>
-  );
-}
+import { tools } from "@/data/tools";
+import ToolsInventory from "./ToolsInventory";
 
 export default function Tools() {
   return (
@@ -130,11 +16,7 @@ export default function Tools() {
             {tools.length} UNLOCKED
           </span>
         </div>
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-          {tools.map((tool) => (
-            <ToolCard key={tool.id} tool={tool} />
-          ))}
-        </div>
+        <ToolsInventory items={tools} />
       </div>
     </section>
   );

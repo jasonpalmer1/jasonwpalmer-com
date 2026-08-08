@@ -65,3 +65,4 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] Confirm GET validates pending token; success page shows unsub link
 - [x] `npm run check`; `start` serves `out/`; `error.tsx` + `manifest.ts`; SubscribeBlock RSS
 - [x] `global-error.tsx`; Person JSON-LD image; MDX heading ids + TOC; FloatingActions focus/inert
+- [x] Builds rarity filter (`ToolsInventory`); blog index year grouping

@@ -4,7 +4,7 @@ import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import TagChip from "@/components/TagChip";
-import { getAllPosts, getAllTags } from "@/lib/posts";
+import { getAllPosts, getAllTags, type Post } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
@@ -88,37 +88,48 @@ export default function BlogIndex() {
           )}
         </div>
 
-        {/* Post list — tags sit outside the post Link (no nested anchors) */}
-        <ol className="space-y-6" aria-label="Blog posts">
-          {posts.map((post) => (
-            <li key={post.slug}>
-              <article className="hud rounded-xl p-5 transition-transform hover:-translate-y-0.5">
-                <div className="flex flex-wrap items-center gap-3">
-                  <time
-                    dateTime={post.meta.date}
-                    className="font-mono text-[0.65rem] text-muted"
-                  >
-                    {formatDate(post.meta.date)}
-                  </time>
-                  {post.meta.tags.map((tag) => (
-                    <TagChip key={tag} tag={tag} />
-                  ))}
-                </div>
-                <Link href={`/blog/${post.slug}/`} className="group mt-2 block">
-                  <h2 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-accent">
-                    {post.meta.title}
-                  </h2>
-                  <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
-                    {post.meta.summary}
-                  </p>
-                  <span className="mt-3 inline-block font-mono text-xs text-accent/70 transition-colors group-hover:text-accent">
-                    READ →
-                  </span>
-                </Link>
-              </article>
-            </li>
-          ))}
-        </ol>
+        {/* Post list — grouped by year; tags outside post Link (no nested anchors) */}
+        {groupPostsByYear(posts).map(([year, yearPosts]) => (
+          <section key={year} className="mb-12" aria-labelledby={`year-${year}`}>
+            <h2
+              id={`year-${year}`}
+              className="mb-5 font-mono text-xs tracking-widest text-muted"
+            >
+              {"// "}
+              {year}
+            </h2>
+            <ol className="space-y-6" aria-label={`Dispatches from ${year}`}>
+              {yearPosts.map((post) => (
+                <li key={post.slug}>
+                  <article className="hud rounded-xl p-5 transition-transform hover:-translate-y-0.5">
+                    <div className="flex flex-wrap items-center gap-3">
+                      <time
+                        dateTime={post.meta.date}
+                        className="font-mono text-[0.65rem] text-muted"
+                      >
+                        {formatDate(post.meta.date)}
+                      </time>
+                      {post.meta.tags.map((tag) => (
+                        <TagChip key={tag} tag={tag} />
+                      ))}
+                    </div>
+                    <Link href={`/blog/${post.slug}/`} className="group mt-2 block">
+                      <h3 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-accent">
+                        {post.meta.title}
+                      </h3>
+                      <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
+                        {post.meta.summary}
+                      </p>
+                      <span className="mt-3 inline-block font-mono text-xs text-accent/70 transition-colors group-hover:text-accent">
+                        READ →
+                      </span>
+                    </Link>
+                  </article>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
 
         {posts.length === 0 && (
           <p className="font-mono text-sm text-muted">{"// no dispatches yet"}</p>
@@ -141,4 +152,15 @@ function formatDate(iso: string): string {
     day: "2-digit",
     timeZone: "UTC",
   });
+}
+
+function groupPostsByYear(posts: Post[]): [string, Post[]][] {
+  const map = new Map<string, Post[]>();
+  for (const post of posts) {
+    const year = post.meta.date.slice(0, 4) || "undated";
+    const list = map.get(year) ?? [];
+    list.push(post);
+    map.set(year, list);
+  }
+  return [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 }
