@@ -10,8 +10,10 @@ From a machine with push access to each repo:
 # worldcup-bracket (HIGHEST PRIORITY — deploy after migrate)
 cd ~/projects/worldcup-bracket   # or clone
 git checkout -b cursor/bracket-put-auth-0f3d
-cp -R /path/to/jasonwpalmer-com/docs/bug-audits/ready-to-apply/worldcup-bracket/* .
-# ensure migrations/002-edit-token.sql is present
+BUNDLE=/path/to/jasonwpalmer-com/docs/bug-audits/ready-to-apply/worldcup-bracket
+cp "$BUNDLE/src/index.js" src/index.js
+cp "$BUNDLE/migrations/"*.sql migrations/
+cp "$BUNDLE/package.json" "$BUNDLE/README.md" "$BUNDLE/CLAUDE.md" .
 npm run db:migrate:remote
 git add -A && git commit -m "Require per-bracket edit tokens on PUT"
 git push -u origin HEAD
