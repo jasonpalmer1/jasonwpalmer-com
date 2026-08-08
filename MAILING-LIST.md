@@ -22,6 +22,7 @@ npm run send-dispatch -- <slug>
 - `functions/api/confirm.js` — GET handler (confirm token → status=confirmed)
 - `functions/api/unsubscribe.js` — GET handler (token → status=unsubscribed, idempotent)
 - `migrations/0001_subscribers.sql` — D1 schema
+- `migrations/0002_token_unique.sql` — unique index on `token` (run after 0001)
 - `scripts/send-dispatch.mjs` — manual send script
 - `src/components/Subscribe.tsx` — in-page subscribe form
 - `wrangler.toml` — Pages + D1 binding config
@@ -68,6 +69,7 @@ The D1 database is already created. Apply the schema:
 
 ```bash
 npx wrangler d1 execute dispatch-subscribers --remote --file=migrations/0001_subscribers.sql
+npx wrangler d1 execute dispatch-subscribers --remote --file=migrations/0002_token_unique.sql
 ```
 
 Verify:

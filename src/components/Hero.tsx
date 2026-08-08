@@ -1,7 +1,5 @@
-"use client";
-
-import { useEffect, useState } from "react";
 import { profile, game, socials, credentials, education } from "@/data/profile";
+import HeroXp from "./HeroXp";
 
 const credLine = [
   credentials[0]?.name?.replace(/^FINRA\s+/i, "") ?? "Series 65",
@@ -10,60 +8,7 @@ const credLine = [
   .filter(Boolean)
   .join(" · ");
 
-type AgeStats = {
-  level: number;
-  daysSince: number;
-  daysInYear: number;
-  xpPct: number;
-};
-
-// LEVEL = current age. XP = days elapsed in the current year of life.
-function computeAge(birthISO: string): AgeStats {
-  const [y, m, d] = birthISO.split("-").map(Number);
-  const now = new Date();
-  const dob = new Date(y, m - 1, d);
-  const hadBday =
-    now.getMonth() > dob.getMonth() ||
-    (now.getMonth() === dob.getMonth() && now.getDate() >= dob.getDate());
-  const level = now.getFullYear() - dob.getFullYear() - (hadBday ? 0 : 1);
-  const lastBday = new Date(
-    now.getFullYear() - (hadBday ? 0 : 1),
-    dob.getMonth(),
-    dob.getDate(),
-  );
-  const nextBday = new Date(
-    lastBday.getFullYear() + 1,
-    dob.getMonth(),
-    dob.getDate(),
-  );
-  const DAY = 86_400_000;
-  const daysSince = Math.floor((now.getTime() - lastBday.getTime()) / DAY);
-  const daysInYear = Math.round((nextBday.getTime() - lastBday.getTime()) / DAY);
-  return { level, daysSince, daysInYear, xpPct: (daysSince / daysInYear) * 100 };
-}
-
 export default function Hero() {
-  // Compute age stats on the client (avoids hydration mismatch) and
-  // animate the XP bar to the real value.
-  const [age, setAge] = useState<AgeStats | null>(null);
-  const [xp, setXp] = useState(0);
-  useEffect(() => {
-    const a = computeAge(game.birthDate);
-    // Client-only age (avoids SSR/hydration mismatch). Defer setState out of
-    // the effect body; animate XP shortly after.
-    const t0 = requestAnimationFrame(() => setAge(a));
-    const t1 = setTimeout(() => setXp(a.xpPct), 400);
-    return () => {
-      cancelAnimationFrame(t0);
-      clearTimeout(t1);
-    };
-  }, []);
-
-  const level = age?.level ?? "··";
-  const daysSince = age?.daysSince ?? 0;
-  const daysInYear = age?.daysInYear ?? 365;
-  const nextLevel = typeof level === "number" ? level + 1 : "··";
-
   return (
     <section id="top" className="relative">
       <div className="mx-auto max-w-6xl px-6 pb-16 pt-20 sm:pt-28">
@@ -90,7 +35,8 @@ export default function Hero() {
             <span className="text-glow">{profile.name}</span>
           </h1>
           <p className="mt-3 font-mono text-sm text-accent-2 text-glow-sky sm:text-base">
-            CLASS // {game.playerClass}
+            {"CLASS // "}
+            {game.playerClass}
           </p>
 
           <p className="mt-6 max-w-2xl text-xl font-semibold leading-snug text-foreground text-glow sm:text-2xl">
@@ -112,21 +58,7 @@ export default function Hero() {
             </p>
           </div>
 
-          {/* Rank + XP bar */}
-          <div className="mt-8 max-w-md">
-            <div className="flex items-end justify-between font-mono text-xs">
-              <span className="text-muted">
-                RANK <span className="text-gold">{game.rank}</span> · LVL{" "}
-                <span className="text-foreground">{level}</span>
-              </span>
-              <span className="text-muted">
-                {daysSince}/{daysInYear} DAYS → LVL {nextLevel}
-              </span>
-            </div>
-            <div className="bar-track mt-2">
-              <div className="bar-fill" style={{ width: `${xp}%` }} />
-            </div>
-          </div>
+          <HeroXp />
 
           <div className="mt-8 flex flex-wrap items-center gap-3">
             <a
