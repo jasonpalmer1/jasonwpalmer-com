@@ -233,4 +233,7 @@ details[open] .lore-body {
 @media (prefers-reduced-motion: reduce) {
   .fx-grid, .pulse-dot, .blink { animation: none; }
   .bar-fill { transition: none; }
+  details[open] .lore-body { animation: none; }
+  html { scroll-behavior: auto; }
+  .hud { transition: none; }
 }

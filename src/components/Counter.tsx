@@ -26,6 +26,13 @@ export default function Counter({
 
   useEffect(() => {
     if (!inView) return;
+    const reduce =
+      typeof window !== "undefined" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce) {
+      setN(value);
+      return;
+    }
     let raf = 0;
     let start: number | null = null;
     const tick = (t: number) => {

@@ -30,7 +30,7 @@ Content lives in plain TS data files; components render it; Next statically expo
 
 ## File map
 - `src/app/` — App Router. `page.tsx` (homepage composition), `layout.tsx` (root + SEO metadata/JSON-LD + visit-log beacon), `globals.css` (Tailwind + theme), `sitemap.ts`, `rss.xml/route.ts`, `blog/page.tsx` + `blog/[slug]/page.tsx`, `_build/page.tsx` (private consulting page — not routed; `/build` redirects home), app icons (`icon.png`, `favicon.ico`, `apple-icon.png`).
-- `src/components/` — UI: `Nav`, `Hero`, `Stats`, `Tools`, `Platforms`, `Skills`, `Resume`, `Lore`, `Contact`, `ContactForm` / `ConsultingForm` (Web3Forms), `Subscribe` / `SubscribeBlock` (native D1 list), `Gallery`, `FloatingActions`, `BootSequence`, `KonamiEasterEgg`, `Counter`.
+- `src/components/` — UI: `Nav`, `Hero`, `Stats`, `Tools`, `Platforms`, `Skills` + `SkillRow`, `Resume`, `Lore`, `Contact`, `ContactForm` / `ConsultingForm` (Web3Forms via `lib/web3forms.ts`), `Subscribe` / `SubscribeBlock` (native D1 list), `Gallery`, `FloatingActions`, `BootSequence`, `KonamiEasterEgg`, `Counter`.
 - `src/data/` — `profile.ts`, `tools.ts`, `platforms.ts`. **Edit content here.** (Beehiiv `newsletter.ts` is gone.)
 - `src/content/posts/` — blog `.mdx` files.
 - `src/lib/` — `posts.ts` (MDX loader), `useInView.ts` (scroll-reveal hook).

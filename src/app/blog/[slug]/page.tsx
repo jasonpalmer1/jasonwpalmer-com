@@ -155,16 +155,23 @@ const mdxComponents = {
   p: ({ children }: React.PropsWithChildren) => (
     <p className="my-4 text-base leading-7 text-foreground/85">{children}</p>
   ),
-  a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a
-      href={href}
-      target={href?.startsWith("http") ? "_blank" : undefined}
-      rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    // Reject javascript:/data: etc. Solo-authored MDX is trusted, but PRs aren't.
+    const safe =
+      typeof href === "string" && /^(https?:\/\/|\/|#|mailto:)/i.test(href)
+        ? href
+        : undefined;
+    return (
+      <a
+        href={safe}
+        target={safe?.startsWith("http") ? "_blank" : undefined}
+        rel={safe?.startsWith("http") ? "noopener noreferrer" : undefined}
+        className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
+      >
+        {children}
+      </a>
+    );
+  },
   ul: ({ children }: React.PropsWithChildren) => (
     <ul className="my-4 space-y-1.5 pl-5 text-base leading-7 text-foreground/85 list-disc">
       {children}
@@ -183,13 +190,23 @@ const mdxComponents = {
       {children}
     </blockquote>
   ),
-  code: ({ children }: React.PropsWithChildren) => (
-    <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-accent/90">
-      {children}
-    </code>
-  ),
+  code: ({
+    children,
+    className,
+  }: React.PropsWithChildren<{ className?: string }>) => {
+    // Fenced blocks render as <pre><code class="language-…"> — skip the
+    // inline chip styles so they aren't double-padded.
+    if (className) {
+      return <code className={`${className} font-mono text-sm`}>{children}</code>;
+    }
+    return (
+      <code className="rounded bg-surface px-1.5 py-0.5 font-mono text-sm text-accent/90">
+        {children}
+      </code>
+    );
+  },
   pre: ({ children }: React.PropsWithChildren) => (
-    <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-5 font-mono text-sm leading-6 text-foreground/90">
+    <pre className="my-6 overflow-x-auto rounded-xl border border-border bg-surface p-5 font-mono text-sm leading-6 text-foreground/90 [&_code]:rounded-none [&_code]:bg-transparent [&_code]:p-0">
       {children}
     </pre>
   ),

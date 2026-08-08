@@ -1,11 +1,9 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import type { GalleryImage } from "@/data/tools";
 
-export type GalleryImage = {
-  src: string;
-  alt: string;
-};
+export type { GalleryImage };
 
 // Most build screenshots are phone portraits (~780×1520). Default to that so
 // the first paint isn't a landscape letterbox; onLoad snaps to the real ratio.

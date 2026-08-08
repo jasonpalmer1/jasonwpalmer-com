@@ -38,6 +38,15 @@ export default function BootSequence({ name }: { name: string }) {
 
   useEffect(() => {
     if (storageGet("booted") === "1") return;
+    // Skip the theatrical boot when the user prefers reduced motion.
+    try {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        storageSet("booted", "1");
+        return;
+      }
+    } catch {
+      /* ignore */
+    }
     // Defer past the effect body — avoids cascading-render lint on an
     // intentional client-only mount gate (SSR must render inactive).
     const t = requestAnimationFrame(() => setActive(true));
