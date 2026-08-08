@@ -36,7 +36,7 @@ export default function SiteFooter() {
         </a>
       </p>
       <p className="pb-6 text-center font-mono text-[0.6rem] tracking-widest text-muted/40">
-        psst — try ↑ ↑ ↓ ↓ ← → ← → B A
+        psst — press ? for shortcuts · ↑ ↑ ↓ ↓ ← → ← → B A
       </p>
     </footer>
   );

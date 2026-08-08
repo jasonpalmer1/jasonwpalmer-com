@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   statusLabels,
   type Tool,
@@ -125,6 +125,22 @@ function ToolCard({ tool }: { tool: Tool }) {
 /** Client inventory grid with rarity filter (keeps Gallery interactive). */
 export default function ToolsInventory({ items }: { items: Tool[] }) {
   const [filter, setFilter] = useState<"all" | Rarity>("all");
+
+  // Deep links (/#tool-id) must not land on a filtered-out card.
+  useEffect(() => {
+    const revealHash = () => {
+      const id = window.location.hash.replace(/^#/, "");
+      if (!id || !items.some((t) => t.id === id)) return;
+      setFilter("all");
+      // Allow layout to paint unfiltered cards, then scroll into view.
+      requestAnimationFrame(() => {
+        document.getElementById(id)?.scrollIntoView({ block: "start" });
+      });
+    };
+    revealHash();
+    window.addEventListener("hashchange", revealHash);
+    return () => window.removeEventListener("hashchange", revealHash);
+  }, [items]);
 
   const visible = useMemo(() => {
     if (filter === "all") return items;

@@ -5,6 +5,7 @@ import "./globals.css";
 import { profile, socials, skills, experience, education } from "@/data/profile";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 import FloatingActions from "@/components/FloatingActions";
+import ShortcutsHelp from "@/components/ShortcutsHelp";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -121,6 +122,7 @@ export default function RootLayout({
         <div className="fx-scanlines" aria-hidden />
         {/* BootSequence lives on the homepage only — RSS/blog inbound skips the overlay */}
         <KonamiEasterEgg />
+        <ShortcutsHelp />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
