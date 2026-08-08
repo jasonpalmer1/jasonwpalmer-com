@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import Link from "next/link";
 import TagChip from "@/components/TagChip";
+import CopyButton from "@/components/CopyButton";
 
 export type BlogIndexItem = {
   slug: string;
@@ -118,6 +119,13 @@ export default function BlogIndexClient({
                       READ →
                     </span>
                   </Link>
+                  <div className="mt-3">
+                    <CopyButton
+                      value={`https://jasonwpalmer.com/blog/${post.slug}/`}
+                      label="COPY LINK"
+                      className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-muted transition-colors hover:border-accent/40 hover:text-accent"
+                    />
+                  </div>
                 </article>
               </li>
             ))}

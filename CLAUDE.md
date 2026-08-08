@@ -37,7 +37,7 @@ Content lives in plain TS data files; components render it; Next statically expo
 - `functions/api/` — `subscribe.js`, `confirm.js`, `unsubscribe.js`.
 - `public/` — `og.png`, `robots.txt`, `_headers`, `_redirects`, `builds/`.
 - `docs/bug-audits/`, `docs/feature-scaffolds/`, `FOR-CLAUDE.md`, `BUG-AUDIT.md`.
-- `scripts/` — `apply-audit-bundles.sh`, `check-build-assets.mjs`, `send-dispatch.mjs`, `gen-post-og.mjs` (stub), `print-visit-log-csp-snippet.mjs`, `gen-brand-assets.js`.
+- `scripts/` — `apply-audit-bundles.sh`, `check-build-assets.mjs` (galleries + covers), `send-dispatch.mjs`, `gen-post-og.mjs` (SVG OG writer), `print-visit-log-csp-snippet.mjs`, `gen-brand-assets.js`.
 - Config: `next.config.ts`, `eslint.config.mjs`, `postcss.config.mjs`, `tsconfig.json`, `wrangler.toml`, `.env.example`.
 
 ## Entry points — run / build / deploy

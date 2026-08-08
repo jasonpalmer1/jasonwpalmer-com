@@ -7,6 +7,7 @@ import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import TagChip from "@/components/TagChip";
 import CopyButton from "@/components/CopyButton";
+import ReadingProgress from "@/components/ReadingProgress";
 import {
   getAllPosts,
   getAllSlugs,
@@ -125,6 +126,7 @@ export default async function BlogPost({
 
   return (
     <>
+      <ReadingProgress />
       <Nav />
       <script
         type="application/ld+json"

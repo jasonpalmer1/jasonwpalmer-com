@@ -69,3 +69,5 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] Focus restore on ShortcutsHelp/Konami close; unsubscribe body escape
 - [x] OG `article:section`/`tags`; builds status filter; blog in-page search
 - [x] `gen-post-og.mjs` writes SVG cards (`npm run gen:og -- --write`)
+- [x] Posts wired to `/og/<slug>.svg` covers; `/og/*` cache; check:assets covers
+- [x] Reading progress bar on posts; copy-link on blog index; SubscribeBlock `#subscribe`

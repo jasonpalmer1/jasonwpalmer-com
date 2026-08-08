@@ -28,7 +28,7 @@ export default function Home() {
         <Resume />
         <Lore />
         <Contact />
-        <section id="subscribe" className="scroll-mt-20 border-t border-border">
+        <section className="border-t border-border">
           <div className="mx-auto max-w-6xl px-6 py-20">
             <SubscribeBlock />
           </div>

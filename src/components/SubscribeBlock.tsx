@@ -5,7 +5,10 @@ import Subscribe from "./Subscribe";
 // can always get notified of new dispatches without hunting for it.
 export default function SubscribeBlock() {
   return (
-    <div className="hud mx-auto max-w-xl rounded-2xl p-6 text-center sm:p-8">
+    <div
+      id="subscribe"
+      className="hud mx-auto max-w-xl scroll-mt-20 rounded-2xl p-6 text-center sm:p-8"
+    >
       <div className="flex items-center justify-center gap-2">
         <span className="pulse-dot" />
         <p className="label">{"// dispatch log"}</p>
