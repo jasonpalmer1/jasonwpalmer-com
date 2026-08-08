@@ -27,10 +27,12 @@ export default function KonamiEasterEgg() {
   const [active, setActive] = useState(false);
   const progress = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   // Listen for the Konami code — ignore typing inside form fields.
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
+      if (active) return;
       const t = e.target as HTMLElement | null;
       if (
         t &&
@@ -54,29 +56,38 @@ export default function KonamiEasterEgg() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [active]);
+
+  // Modal chrome: scroll lock + Tab trap + Esc (parity with BootSequence).
+  useEffect(() => {
+    if (!active) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    panelRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Tab") {
+        e.preventDefault();
+        panelRef.current?.focus();
+        return;
+      }
+      if (e.key === "Escape") setActive(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => {
+      document.body.style.overflow = prev;
+      window.removeEventListener("keydown", onKey);
+    };
+  }, [active]);
 
   // Matrix rain while active (skipped when user prefers reduced motion).
   useEffect(() => {
     if (!active) return;
-
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") setActive(false);
-    };
-    window.addEventListener("keydown", onKey);
-
-    if (prefersReducedMotion()) {
-      return () => window.removeEventListener("keydown", onKey);
-    }
+    if (prefersReducedMotion()) return;
 
     const canvas = canvasRef.current;
-    if (!canvas) {
-      return () => window.removeEventListener("keydown", onKey);
-    }
+    if (!canvas) return;
     const ctx = canvas.getContext("2d");
-    if (!ctx) {
-      return () => window.removeEventListener("keydown", onKey);
-    }
+    if (!ctx) return;
 
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     const resize = () => {
@@ -112,7 +123,6 @@ export default function KonamiEasterEgg() {
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("resize", resize);
-      window.removeEventListener("keydown", onKey);
     };
   }, [active]);
 
@@ -126,9 +136,13 @@ export default function KonamiEasterEgg() {
       aria-modal="true"
       aria-label="Developer mode unlocked"
     >
-      <canvas ref={canvasRef} className="h-full w-full" />
+      <canvas ref={canvasRef} className="h-full w-full" aria-hidden />
       <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-        <div className="hud px-8 py-6 text-center">
+        <div
+          ref={panelRef}
+          tabIndex={-1}
+          className="hud px-8 py-6 text-center outline-none"
+        >
           <p className="label">cheat code accepted</p>
           <p className="mt-2 font-display text-2xl text-accent text-glow">
             DEVELOPER MODE UNLOCKED

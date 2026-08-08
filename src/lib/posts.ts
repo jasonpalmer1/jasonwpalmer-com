@@ -4,6 +4,20 @@ import matter from "gray-matter";
 
 const POSTS_DIR = path.join(process.cwd(), "src/content/posts");
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+const TAG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** Normalize a front-matter tag into a URL slug. */
+export function slugifyTag(tag: string): string {
+  return tag
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+export function isValidTag(tag: string): boolean {
+  return TAG_RE.test(slugifyTag(tag));
+}
 
 export interface PostMeta {
   title: string;
@@ -77,4 +91,25 @@ export function getAllSlugs(): string[] {
   return listPostFiles()
     .map((f) => f.replace(/\.mdx$/, ""))
     .filter((slug) => SLUG_RE.test(slug));
+}
+
+/** Unique tag slugs across all posts (sorted). */
+export function getAllTags(): string[] {
+  const set = new Set<string>();
+  for (const post of getAllPosts()) {
+    for (const tag of post.meta.tags) {
+      const slug = slugifyTag(tag);
+      if (TAG_RE.test(slug)) set.add(slug);
+    }
+  }
+  return [...set].sort();
+}
+
+/** Posts that carry a given tag (newest first). */
+export function getPostsByTag(tag: string): Post[] {
+  const slug = slugifyTag(tag);
+  if (!TAG_RE.test(slug)) return [];
+  return getAllPosts().filter((post) =>
+    post.meta.tags.some((t) => slugifyTag(t) === slug),
+  );
 }

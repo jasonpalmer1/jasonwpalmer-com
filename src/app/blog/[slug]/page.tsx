@@ -5,7 +5,8 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
-import { getAllSlugs, getPostBySlug } from "@/lib/posts";
+import TagChip from "@/components/TagChip";
+import { getAllPosts, getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 // Prevent accessing slugs not defined in generateStaticParams.
@@ -75,6 +76,10 @@ export default async function BlogPost({
   if (!post) notFound();
 
   const url = `https://${profile.domain}/blog/${slug}/`;
+  const all = getAllPosts();
+  const idx = all.findIndex((p) => p.slug === slug);
+  const newer = idx > 0 ? all[idx - 1] : null;
+  const older = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
 
   // Article JSON-LD — mirrors the Person JSON-LD pattern in layout.tsx.
   const articleJsonLd = {
@@ -122,12 +127,7 @@ export default async function BlogPost({
               {formatDate(post.meta.date)}
             </time>
             {post.meta.tags.map((tag) => (
-              <span
-                key={tag}
-                className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-accent/70"
-              >
-                #{tag}
-              </span>
+              <TagChip key={tag} tag={tag} />
             ))}
           </div>
           <h1 className="mt-3 font-display text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl">
@@ -142,6 +142,32 @@ export default async function BlogPost({
         <article className="prose-blog">
           <MDXRemote source={post.content} components={mdxComponents} />
         </article>
+
+        {(newer || older) && (
+          <nav
+            className="mt-12 grid gap-4 border-t border-border pt-8 sm:grid-cols-2"
+            aria-label="Adjacent dispatches"
+          >
+            {older ? (
+              <Link
+                href={`/blog/${older.slug}/`}
+                className="font-mono text-xs text-muted transition-colors hover:text-accent"
+              >
+                ← {older.meta.title}
+              </Link>
+            ) : (
+              <span />
+            )}
+            {newer ? (
+              <Link
+                href={`/blog/${newer.slug}/`}
+                className="font-mono text-xs text-muted transition-colors hover:text-accent sm:text-right"
+              >
+                {newer.meta.title} →
+              </Link>
+            ) : null}
+          </nav>
+        )}
 
         {/* Subscribe widget at the end of every post */}
         <div className="mt-16 border-t border-border pt-12">

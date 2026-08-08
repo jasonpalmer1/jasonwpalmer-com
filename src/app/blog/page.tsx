@@ -3,7 +3,8 @@ import Link from "next/link";
 import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
-import { getAllPosts } from "@/lib/posts";
+import TagChip from "@/components/TagChip";
+import { getAllPosts, getAllTags } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
@@ -39,6 +40,7 @@ export const metadata: Metadata = {
 
 export default function BlogIndex() {
   const posts = getAllPosts();
+  const tags = getAllTags();
   const base = `https://${profile.domain}`;
 
   const itemListJsonLd = {
@@ -69,19 +71,28 @@ export default function BlogIndex() {
             BUILD LOG
           </h1>
           <p className="mt-3 font-mono text-sm text-muted">
-            Raw dispatches on what I&apos;m building, why, and what&apos;s breaking.
+            Raw dispatches on what I&apos;m building, why, and what&apos;s breaking.{" "}
+            <a
+              href="/rss.xml"
+              className="text-accent/80 transition-colors hover:text-accent"
+            >
+              RSS
+            </a>
           </p>
+          {tags.length > 0 && (
+            <div className="mt-4 flex flex-wrap gap-2" aria-label="Filter by tag">
+              {tags.map((tag) => (
+                <TagChip key={tag} tag={tag} />
+              ))}
+            </div>
+          )}
         </div>
 
-        {/* Post list */}
+        {/* Post list — tags sit outside the post Link (no nested anchors) */}
         <ol className="space-y-6" aria-label="Blog posts">
           {posts.map((post) => (
             <li key={post.slug}>
-              <Link
-                href={`/blog/${post.slug}/`}
-                className="group block hud rounded-xl p-5 transition-transform hover:-translate-y-0.5"
-              >
-                {/* Timestamp + tags row */}
+              <article className="hud rounded-xl p-5 transition-transform hover:-translate-y-0.5">
                 <div className="flex flex-wrap items-center gap-3">
                   <time
                     dateTime={post.meta.date}
@@ -90,29 +101,21 @@ export default function BlogIndex() {
                     {formatDate(post.meta.date)}
                   </time>
                   {post.meta.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-accent/70"
-                    >
-                      #{tag}
-                    </span>
+                    <TagChip key={tag} tag={tag} />
                   ))}
                 </div>
-
-                {/* Title */}
-                <h2 className="mt-2 font-display text-lg font-bold text-foreground group-hover:text-accent transition-colors">
-                  {post.meta.title}
-                </h2>
-
-                {/* Summary */}
-                <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
-                  {post.meta.summary}
-                </p>
-
-                <span className="mt-3 inline-block font-mono text-xs text-accent/70 group-hover:text-accent transition-colors">
-                  READ →
-                </span>
-              </Link>
+                <Link href={`/blog/${post.slug}/`} className="group mt-2 block">
+                  <h2 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-accent">
+                    {post.meta.title}
+                  </h2>
+                  <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
+                    {post.meta.summary}
+                  </p>
+                  <span className="mt-3 inline-block font-mono text-xs text-accent/70 transition-colors group-hover:text-accent">
+                    READ →
+                  </span>
+                </Link>
+              </article>
             </li>
           ))}
         </ol>

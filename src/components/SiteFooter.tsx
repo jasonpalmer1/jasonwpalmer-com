@@ -30,6 +30,11 @@ export default function SiteFooter() {
           )}
         </span>
       </div>
+      <p className="pb-4 text-center font-mono text-[0.65rem] tracking-widest text-muted/60">
+        <a href="/rss.xml" className="hover:text-accent">
+          RSS / DISPATCH FEED
+        </a>
+      </p>
       <p className="pb-6 text-center font-mono text-[0.6rem] tracking-widest text-muted/40">
         psst — try ↑ ↑ ↓ ↓ ← → ← → B A
       </p>

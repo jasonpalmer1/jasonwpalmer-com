@@ -45,6 +45,13 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 
 ## Ideas worth scaffolding later (not started)
 
-- Per-post OG images for blog
-- Dispatch archive index filtered by tag
 - Shared `visit-log` allowlist helper across sites’ `_headers`
+- Per-tag RSS feeds (`/rss/tag/<tag>.xml`)
+
+## Scaffolded this loop (cloud agent)
+
+- [x] Tag archive routes + TagChip (`docs/feature-scaffolds/tag-archive.md`) — live
+- [x] Per-post OG stub script + doc (`docs/feature-scaffolds/per-post-og.md`) — renderer TODO
+- [x] confirm/unsub `noindex` + `Disallow: /api/` in robots.txt
+- [x] ContactForm double-submit guard; Konami Tab trap + scroll lock
+- [x] Prev/next dispatch nav; footer + blog RSS link

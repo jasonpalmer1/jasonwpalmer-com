@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { WEB3FORMS_ACCESS_KEY } from "@/lib/web3forms";
 
 type Status = "idle" | "sending" | "ok" | "error";
@@ -11,9 +11,12 @@ const inputClass =
 export default function ContactForm() {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
+  const inFlight = useRef(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current || status === "sending") return;
+    inFlight.current = true;
     setStatus("sending");
     setError("");
     const form = e.currentTarget;
@@ -43,6 +46,8 @@ export default function ContactForm() {
     } catch {
       setStatus("error");
       setError("Network error — please try again.");
+    } finally {
+      inFlight.current = false;
     }
   }
 
