@@ -9,6 +9,12 @@ export type { GalleryImage };
 const DEFAULT_W = 780;
 const DEFAULT_H = 1520;
 
+function ratioFor(img: GalleryImage | undefined, measured: string | null): string {
+  if (measured) return measured;
+  if (img?.width && img?.height) return `${img.width} / ${img.height}`;
+  return `${DEFAULT_W} / ${DEFAULT_H}`;
+}
+
 export default function Gallery({
   images,
   priority = false,
@@ -18,7 +24,8 @@ export default function Gallery({
   priority?: boolean;
 }) {
   const [i, setI] = useState(0);
-  const [ratio, setRatio] = useState(`${DEFAULT_W} / ${DEFAULT_H}`);
+  // Natural size from onLoad — keyed by src so slide changes use data dims first.
+  const [measured, setMeasured] = useState<Record<string, string>>({});
 
   const n = images.length;
   const next = useCallback(() => {
@@ -33,6 +40,7 @@ export default function Gallery({
   if (n === 0) return null;
 
   const current = images[i];
+  const ratio = ratioFor(current, measured[current.src] ?? null);
 
   return (
     <div
@@ -64,7 +72,14 @@ export default function Gallery({
           decoding="async"
           onLoad={(e) => {
             const { naturalWidth: w, naturalHeight: h } = e.currentTarget;
-            if (w > 0 && h > 0) setRatio(`${w} / ${h}`);
+            if (w > 0 && h > 0) {
+              const nextRatio = `${w} / ${h}`;
+              setMeasured((prev) =>
+                prev[current.src] === nextRatio
+                  ? prev
+                  : { ...prev, [current.src]: nextRatio },
+              );
+            }
           }}
           className="h-full w-full object-contain transition-opacity active:opacity-80"
         />

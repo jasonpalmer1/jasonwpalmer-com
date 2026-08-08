@@ -49,6 +49,7 @@ npm install
 npm run dev        # next dev → http://localhost:3000
 npm run build      # next build → ./out (static)
 npm run lint       # eslint
+npm run check:assets # gallery paths under public/
 npx wrangler pages deploy        # wrangler.toml drives output dir + D1 binding (Functions)
 # (the old `wrangler pages deploy out --project-name=jasonwpalmer-com` / /ship form still works too —
 #  it also picks up the wrangler.toml D1 binding + Functions bundle. Either is fine.)
