@@ -33,10 +33,15 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - BootSequence `buildCount` (no tools[] in client), lazy galleries + intrinsic sizes
 - `npm run check:assets`, blog ItemList JSON-LD, meta/twitter alignment
 - Deleted `_build` / ConsultingForm; X in socials; Konami form-field guard
+- `LastShipped` homepage line from newest MDX date
+- BootSequence homepage-only (blog/RSS inbound skips overlay)
+- Skip link + shared `SiteFooter`; ContactForm access_key lock; Lore labels in HTML
+- Static asset long-cache + RSS `lastBuildDate` / Content-Type; gallery `aria-current`
+- Nav: client `Link` for dispatches + pinned SUBSCRIBE CTA; post OG/twitter parity
+- Dispatch `List-Id` header in `send-dispatch.mjs`
 
 ## Ideas worth scaffolding later (not started)
 
 - Per-post OG images for blog
 - Dispatch archive index filtered by tag
-- “Last shipped” auto line on homepage from newest MDX date
 - Shared `visit-log` allowlist helper across sites’ `_headers`

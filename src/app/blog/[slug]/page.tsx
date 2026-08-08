@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import Nav from "@/components/Nav";
+import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import { getAllSlugs, getPostBySlug } from "@/lib/posts";
 import { profile } from "@/data/profile";
@@ -36,11 +37,27 @@ export async function generateMetadata({
       publishedTime: post.meta.date,
       authors: [profile.name],
       images: post.meta.cover
-        ? [{ url: post.meta.cover, width: 1200, height: 630 }]
-        : [{ url: "/og.png", width: 1200, height: 630 }],
+        ? [
+            {
+              url: post.meta.cover,
+              width: 1200,
+              height: 630,
+              alt: post.meta.title,
+            },
+          ]
+        : [
+            {
+              url: "/og.png",
+              width: 1200,
+              height: 630,
+              alt: `${profile.name} — ${profile.title}`,
+            },
+          ],
     },
     twitter: {
       card: "summary_large_image",
+      site: "@gototownhq",
+      creator: "@gototownhq",
       title: post.meta.title,
       description: post.meta.summary,
       images: post.meta.cover ? [post.meta.cover] : ["/og.png"],
@@ -86,7 +103,7 @@ export default async function BlogPost({
           __html: JSON.stringify(articleJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <main id="main" className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         {/* Back link */}
         <Link
           href="/blog/"
@@ -131,6 +148,7 @@ export default async function BlogPost({
           <SubscribeBlock />
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }

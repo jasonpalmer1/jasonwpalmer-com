@@ -17,10 +17,11 @@ export default function ContactForm() {
     setStatus("sending");
     setError("");
     const form = e.currentTarget;
+    // Form fields first, then force access_key/subject so a crafted field can't overwrite them.
     const payload = {
+      ...Object.fromEntries(new FormData(form).entries()),
       access_key: WEB3FORMS_ACCESS_KEY,
       subject: "New message from jasonwpalmer.com",
-      ...Object.fromEntries(new FormData(form).entries()),
     };
     try {
       const res = await fetch("https://api.web3forms.com/submit", {
@@ -72,13 +73,25 @@ export default function ContactForm() {
           <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
             NAME
           </span>
-          <input name="name" type="text" required className={inputClass} />
+          <input
+            name="name"
+            type="text"
+            required
+            autoComplete="name"
+            className={inputClass}
+          />
         </label>
         <label className="block">
           <span className="mb-1 block font-mono text-xs tracking-wide text-muted">
             YOUR EMAIL
           </span>
-          <input name="email" type="email" required className={inputClass} />
+          <input
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+            className={inputClass}
+          />
         </label>
       </div>
       <label className="block">

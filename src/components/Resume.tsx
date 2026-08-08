@@ -53,6 +53,9 @@ export default function Resume() {
         {/* Achievements */}
         <div className="mt-12">
           <p className="label">{"// achievements unlocked"}</p>
+          <h2 className="mt-2 font-display text-3xl font-bold tracking-tight">
+            ACHIEVEMENTS
+          </h2>
           <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-2">
             {credentials.map((c, i) => (
               <div key={`c-${i}`} className="hud flex gap-3 rounded-xl p-5">

@@ -240,12 +240,15 @@ async function sendEmail({ to, subject, html, unsubUrl }) {
       to: [to],
       subject,
       html,
-      headers: unsubUrl
-        ? {
-            "List-Unsubscribe": `<${unsubUrl}>`,
-            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
-          }
-        : undefined,
+      headers: {
+        "List-Id": `<dispatch.${new URL(SITE_URL).hostname}>`,
+        ...(unsubUrl
+          ? {
+              "List-Unsubscribe": `<${unsubUrl}>`,
+              "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+            }
+          : {}),
+      },
     }),
   });
   if (!res.ok) {

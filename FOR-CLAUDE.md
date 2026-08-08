@@ -73,8 +73,9 @@ Never commit `CLAUDE.local.md`.
 ## Also removed / changed after the first audit pass
 
 - Deleted dead `_build` consulting page + `ConsultingForm` (restore from git if Jason wants it back)
-- BootSequence no longer imports `tools[]` (pass `buildCount` from layout) — keep it that way
-- Galleries default to `loading="lazy"`; send-dispatch skips `_` posts
+- BootSequence is **homepage-only** (`page.tsx`); pass `buildCount` only — never import `tools[]` into it
+- Shared `SiteFooter` on home + blog; skip link → `#main`
+- Galleries default to `loading="lazy"`; send-dispatch skips `_` posts + sends `List-Id`
 - X/`@gototownhq` is in `socials` + Twitter meta `site`/`creator`
 
 ## Quality gate before deploy (this site)

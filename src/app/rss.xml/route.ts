@@ -22,6 +22,12 @@ function escXml(text: string): string {
 export async function GET() {
   const posts = getAllPosts();
   const base = `https://${profile.domain}`;
+  const lastBuild = posts[0]
+    ? new Date(posts[0].meta.date)
+    : new Date();
+  const lastBuildDate = Number.isNaN(lastBuild.getTime())
+    ? new Date().toUTCString()
+    : lastBuild.toUTCString();
 
   const items = posts
     .map((post) => {
@@ -49,6 +55,8 @@ export async function GET() {
     <link>${base}/blog/</link>
     <description>Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.</description>
     <language>en-US</language>
+    <lastBuildDate>${lastBuildDate}</lastBuildDate>
+    <ttl>60</ttl>
     <atom:link href="${base}/rss.xml" rel="self" type="application/rss+xml"/>
     ${items}
   </channel>
@@ -56,7 +64,7 @@ export async function GET() {
 
   return new Response(xml, {
     headers: {
-      "Content-Type": "application/xml; charset=utf-8",
+      "Content-Type": "application/rss+xml; charset=utf-8",
     },
   });
 }

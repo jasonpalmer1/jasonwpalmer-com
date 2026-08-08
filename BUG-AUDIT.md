@@ -41,7 +41,7 @@ Companion: [`docs/bug-audits/OTHER-PUBLIC-REPOS.md`](./docs/bug-audits/OTHER-PUB
 
 Security: subscribe rate limit/cooldown/honeypot, optional Turnstile hooks (off until keys set), confirm/unsub interstitial + token rotate, CSP (visit-log, CF insights, Turnstile origins), List-Unsubscribe, JSON-LD escape, MDX `javascript:` reject.
 
-UX/perf/org: portrait galleries, boot a11y, in-view counters, posts/RSS hardening, Hero/Skills RSC islands, legendary-only featured span, content number sync, lint green.
+UX/perf/org: portrait galleries, boot a11y (homepage-only BootSequence), in-view counters, posts/RSS hardening (`lastBuildDate`, feed Content-Type), Hero/Skills RSC islands, `LastShipped`, shared `SiteFooter`, skip link, ContactForm access_key lock, Lore labels in DOM, static long-cache headers, nav Link + pinned SUBSCRIBE, legendary-only featured span, content number sync, lint green.
 
 Scaffolding for Claude: `FOR-CLAUDE.md`, `scripts/apply-audit-bundles.sh`, build-log `_TEMPLATE`, Turnstile feature doc, `PORTFOLIO-QUEUE.md`.
 

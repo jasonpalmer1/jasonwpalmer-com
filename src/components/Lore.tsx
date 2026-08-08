@@ -16,7 +16,8 @@ export default function Lore() {
               {"// LORE · CLASSIFIED"}
             </span>
             <span className="lore-cta ml-auto font-mono text-[0.65rem] tracking-widest text-accent">
-              [&nbsp;
+              <span className="group-open:hidden">[ DECRYPT ]</span>
+              <span className="hidden group-open:inline">[ COLLAPSE ]</span>
             </span>
           </summary>
 

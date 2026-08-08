@@ -3,8 +3,6 @@ import { Geist, Geist_Mono, Orbitron } from "next/font/google";
 import Script from "next/script";
 import "./globals.css";
 import { profile, socials, skills, experience, education } from "@/data/profile";
-import { tools } from "@/data/tools";
-import BootSequence from "@/components/BootSequence";
 import KonamiEasterEgg from "@/components/KonamiEasterEgg";
 import FloatingActions from "@/components/FloatingActions";
 
@@ -120,8 +118,7 @@ export default function RootLayout({
         <div className="fx-grid" aria-hidden />
         <div className="fx-glow" aria-hidden />
         <div className="fx-scanlines" aria-hidden />
-        {/* buildCount only — never import tools[] into the client BootSequence */}
-        <BootSequence name={profile.name} buildCount={tools.length} />
+        {/* BootSequence lives on the homepage only — RSS/blog inbound skips the overlay */}
         <KonamiEasterEgg />
         <script
           type="application/ld+json"

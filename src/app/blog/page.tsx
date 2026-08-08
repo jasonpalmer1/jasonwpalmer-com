@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import Nav from "@/components/Nav";
+import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import { getAllPosts } from "@/lib/posts";
 import { profile } from "@/data/profile";
@@ -16,7 +17,14 @@ export const metadata: Metadata = {
       "Build log dispatches on AI systems, finance tools, and whatever Jason is shipping.",
     url: `https://${profile.domain}/blog/`,
     type: "website",
-    images: [{ url: "/og.png", width: 1200, height: 630 }],
+    images: [
+      {
+        url: "/og.png",
+        width: 1200,
+        height: 630,
+        alt: `Dispatch Log — ${profile.name}`,
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
@@ -53,7 +61,7 @@ export default function BlogIndex() {
           __html: JSON.stringify(itemListJsonLd).replace(/</g, "\\u003c"),
         }}
       />
-      <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
+      <main id="main" className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         {/* Header */}
         <div className="mb-12">
           <p className="label">{"// dispatch log"}</p>
@@ -118,6 +126,7 @@ export default function BlogIndex() {
           <SubscribeBlock />
         </div>
       </main>
+      <SiteFooter />
     </>
   );
 }

@@ -28,6 +28,12 @@ export default function FloatingActions() {
       /* ignore */
     }
     window.scrollTo({ top: 0, behavior });
+    const main = document.getElementById("main");
+    if (main instanceof HTMLElement) {
+      // Prefer focusing main for keyboard users after jump-to-top.
+      if (!main.hasAttribute("tabindex")) main.tabIndex = -1;
+      main.focus({ preventScroll: true });
+    }
   };
 
   return (

@@ -122,7 +122,7 @@ export default function Gallery({
                 type="button"
                 onClick={() => setI(idx)}
                 aria-label={`Go to screenshot ${idx + 1} of ${n}`}
-                aria-current={idx === i}
+                aria-current={idx === i ? "true" : undefined}
                 className={`h-1.5 rounded-full transition-all ${
                   idx === i ? "w-4 bg-accent" : "w-1.5 bg-border"
                 }`}
