@@ -30,8 +30,8 @@ export default function Counter({
       typeof window !== "undefined" &&
       window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (reduce) {
-      setN(value);
-      return;
+      const t = requestAnimationFrame(() => setN(value));
+      return () => cancelAnimationFrame(t);
     }
     let raf = 0;
     let start: number | null = null;
