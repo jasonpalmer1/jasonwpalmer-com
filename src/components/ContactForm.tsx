@@ -96,7 +96,9 @@ export default function ContactForm() {
           {status === "sending" ? "SENDING…" : "[ SEND MESSAGE ]"}
         </button>
         {status === "error" && (
-          <span className="font-mono text-xs text-red-400">{error}</span>
+          <span className="font-mono text-xs text-red-400" role="alert">
+            {error}
+          </span>
         )}
       </div>
     </form>

@@ -31,10 +31,28 @@ export const metadata: Metadata = {
 
 export default function BlogIndex() {
   const posts = getAllPosts();
+  const base = `https://${profile.domain}`;
+
+  const itemListJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    itemListElement: posts.map((post, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      url: `${base}/blog/${post.slug}/`,
+      name: post.meta.title,
+    })),
+  };
 
   return (
     <>
       <Nav />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(itemListJsonLd).replace(/</g, "\\u003c"),
+        }}
+      />
       <main className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         {/* Header */}
         <div className="mb-12">

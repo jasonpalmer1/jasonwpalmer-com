@@ -77,9 +77,20 @@ Never commit `CLAUDE.local.md`.
 - Galleries default to `loading="lazy"`; send-dispatch skips `_` posts
 - X/`@gototownhq` is in `socials` + Twitter meta `site`/`creator`
 
+## Quality gate before deploy (this site)
+
+```bash
+cd ~/projects/jasonwpalmer-com
+npm run lint
+npm run check:assets   # gallery paths exist under public/
+npm run build
+# then /ship (preview) → /ship --prod with confirmation
+```
+
 ## Don’t
 
 - Don’t assume GitHub merge = live site  
 - Don’t deploy worldcup without `db:migrate:remote` (edit_token column)  
 - Don’t put trading infra / broker keys on this public site  
 - Don’t expand Sous work here (separate chat)
+- Don’t re-import `tools[]` into BootSequence — pass `buildCount` only
