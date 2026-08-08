@@ -1,0 +1,73 @@
+From 37dc54ec58215039ee3267efd051250060464c6c Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Sat, 8 Aug 2026 22:34:28 +0000
+Subject: [PATCH] Fix stale onNodePick click handler via ref
+
+---
+ ForceGraph.jsx | 21 +++++++++++++++------
+ 1 file changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/ForceGraph.jsx b/ForceGraph.jsx
+index 6e8368e..32345e9 100644
+--- a/ForceGraph.jsx
++++ b/ForceGraph.jsx
+@@ -113,6 +113,9 @@ export default function ForceGraph({
+   const hoverRef = useRef(-1)
+   const visibleRef = useRef(true)
+   const tRef = useRef(0)
++  // Keep latest callback without rebuilding the simulation on identity change
++  const onNodePickRef = useRef(onNodePick)
++  onNodePickRef.current = onNodePick
+   const [tip, setTip] = useState(null) // { x, y, label }
+ 
+   const reduce = prefersReducedMotion()
+@@ -385,7 +388,7 @@ export default function ForceGraph({
+       const i = pick(e.clientX, e.clientY)
+       if (i !== hoverRef.current) {
+         hoverRef.current = i
+-        canvas.style.cursor = i >= 0 && onNodePick ? 'pointer' : 'default'
++        canvas.style.cursor = i >= 0 && onNodePickRef.current ? 'pointer' : 'default'
+         if (i >= 0) {
+           const n = simRef.current.N[i]
+           setTip({ x: n.x, y: n.y, label: n.label })
+@@ -407,15 +410,16 @@ export default function ForceGraph({
+       }
+     }
+     const onClick = (e) => {
+-      if (!onNodePick) return
++      const pickFn = onNodePickRef.current
++      if (!pickFn) return
+       const i = pick(e.clientX, e.clientY)
+-      if (i >= 0) onNodePick(simRef.current.N[i].id)
++      if (i >= 0) pickFn(simRef.current.N[i].id)
+     }
+ 
+     if (interactive) {
+       canvas.addEventListener('pointermove', onMove)
+       canvas.addEventListener('pointerleave', onLeave)
+-      if (onNodePick) canvas.addEventListener('click', onClick)
++      canvas.addEventListener('click', onClick)
+     }
+ 
+     return () => {
+@@ -453,10 +457,15 @@ export default function ForceGraph({
+   )
+ }
+ 
+-// "#rrggbb" + alpha -> rgba() string. Accepts already-rgba/hsl by passing through.
++// "#rgb" / "#rrggbb" / "#rrggbbaa" + alpha -> rgba() string. Passes through rgba/hsl.
+ function hexA(color, a) {
+   if (color[0] === '#') {
+-    const n = parseInt(color.slice(1), 16)
++    let hex = color.slice(1)
++    if (hex.length === 3 || hex.length === 4) {
++      hex = [...hex].map((c) => c + c).join('')
++    }
++    if (hex.length >= 6) hex = hex.slice(0, 6)
++    const n = parseInt(hex, 16)
+     const r = (n >> 16) & 255
+     const g = (n >> 8) & 255
+     const b = n & 255
+-- 
+2.43.0
+

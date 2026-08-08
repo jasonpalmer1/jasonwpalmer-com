@@ -5,11 +5,11 @@ Self-hosted newsletter for jasonwpalmer.com. Subscribers confirm via email (doub
 ## Architecture
 
 ```
-Browser → POST /api/subscribe (CF Pages Function)
+Browser → POST /api/subscribe (CF Pages Function; honeypot + IP/email cooldowns)
         → D1 "dispatch-subscribers" (stores email + token, status=pending)
         → Resend API (confirmation email with /api/confirm?token=...)
-        → Subscriber clicks confirm
-        → GET /api/confirm (CF Pages Function) → D1 status=confirmed
+        → Subscriber opens link → GET interstitial → POST confirms
+        → D1 status=confirmed + token rotated (new token is for unsubscribe)
 
 npm run send-dispatch -- <slug>
         → wrangler d1 (fetches confirmed subscribers)

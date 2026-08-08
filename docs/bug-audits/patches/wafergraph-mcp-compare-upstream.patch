@@ -1,0 +1,494 @@
+From 882121e3b910ebef9f4b7ba2227342ca634a48d2 Mon Sep 17 00:00:00 2001
+From: Cursor Agent <cursoragent@cursor.com>
+Date: Sat, 8 Aug 2026 22:35:38 +0000
+Subject: [PATCH] Fix compare_companies unique sets and upstream errors
+
+---
+ CLAUDE.md           |   6 +-
+ README.md           |   2 +-
+ package-lock.json   |   4 +-
+ src/data.ts         |  52 +++++++--
+ src/mcp-agent.ts    | 255 ++++++++++++++++++++++++--------------------
+ src/tools/shared.ts |  28 +++++
+ 6 files changed, 219 insertions(+), 128 deletions(-)
+
+diff --git a/CLAUDE.md b/CLAUDE.md
+index 35a3805..172611c 100644
+--- a/CLAUDE.md
++++ b/CLAUDE.md
+@@ -12,15 +12,15 @@ Live: **https://mcp.wafergraph.com**
+ 
+ - `src/index.ts` — Worker entry point. Routes `GET /` → landing page, `/mcp*` → the MCP agent, else 404.
+ - `src/mcp-agent.ts` — `WafergraphMCP extends McpAgent`; registers the first 9 tools inline in `init()`, then delegates to the `src/tools/` modules for tools 10-30.
+-- `src/tools/shared.ts` — helpers every tool module shares: `jsonResult`/`errorResult`, compact company refs, `pricedCoverage()` (market cap is only ~72% filled, so every cap aggregate must ship its coverage), `hhi()`, `tallyBy()`, and the `ToolCtx`/`ToolRegistrar` contract.
++- `src/tools/shared.ts` — helpers every tool module shares: `jsonResult`/`errorResult`, `withUpstreamGuard` (maps `UpstreamFetchError` to structured tool errors), compact company refs, `pricedCoverage()` (market cap is only ~72% filled, so every cap aggregate must ship its coverage), `hhi()`, `tallyBy()`, and the `ToolCtx`/`ToolRegistrar` contract.
+ - `src/tools/screen.ts` — screening & discovery: `filter_companies`, `list_subsegments`, `get_subsegment`, `find_similar_companies`, `rank_by_market_cap`, `resolve_ticker`.
+ - `src/tools/geo.ts` — geography & structure: `list_countries`, `get_country_profile`, `compare_countries`, `get_segment_leaders`, `get_upstream_concentration`. Country is HQ, not fab location; every tool here says so.
+ - `src/tools/graphtools.ts` — graph analysis: `find_paths_between`, `simulate_disruption`, `find_single_source_dependencies`, `rank_by_connectivity`, `find_common_suppliers`.
+ - `src/tools/deals.ts` — deals & dataset: `get_deal`, `find_deals_by_company`, `get_ma_activity_summary`, `find_consolidation_hotspots`, `get_dataset_stats`.
+ - `scripts/smoke.mjs` — live JSON-RPC smoke test over Streamable HTTP; calls every tool `tools/list` reports and fails if any tool has no case, so a new tool cannot ship untested. `node scripts/smoke.mjs [baseUrl]`.
+-- `src/data.ts` — data layer: live-fetch + cache for companies/deals, vendored-snapshot read for taxonomy (hybrid mode — taxonomy.json isn't live-fetchable upstream; see `CLAUDE.local.md` for the full story).
++- `src/data.ts` — data layer: live-fetch + cache for companies/deals (`UpstreamFetchError` on failure), vendored-snapshot read for taxonomy (hybrid mode — taxonomy.json isn't live-fetchable upstream; see `CLAUDE.local.md` for the full story).
+ - `src/graph.ts` — supplier/customer edge graph + `walkChain` (tiered BFS up/down, capped depth 2). Reimplemented cleanly from the *algorithm* in wafergraph's `site/src/data.js` (`buildChain`/`suppliersOf`/`customersOf`) — not imported, per the read-only boundary on that repo.
+-- `src/types.ts` — raw upstream shapes (`Company`, `Taxonomy`, `Deal`) + `AllowedCompany`/`toAllowedCompany()`, the single whitelist point that drops `key_products` (see field-discipline note below).
++- `src/types.ts` — raw upstream shapes (`Company`, `Taxonomy`, `Deal`) + `AllowedCompany`/`toAllowedCompany()`, the single whitelist point for company fields shipped to clients (`key_products` included as of 2026-07-19; see README field-discipline note).
+ - `src/attribution.ts` — fixed `attribution`/`links` blocks attached to every tool response.
+ - `src/landing.ts` — the `/` HTML page (install snippets computed from the live request origin).
+ - `src/usage.ts` — `recordUsage(env, tool)`: per-tool-call usage counter (tool name + UTC date only, no PII) written to the `USAGE_KV` binding. Best-effort — never throws into a tool response.
+diff --git a/README.md b/README.md
+index 281a66b..8878e7e 100644
+--- a/README.md
++++ b/README.md
+@@ -31,7 +31,7 @@ Live: **https://mcp.wafergraph.com**
+ | `get_subsegment({segment, subsegment})` | All companies in one subsegment with position and country breakdowns. |
+ | `find_similar_companies({id})` | Nearest structural neighbours by Jaccard similarity over segment tags and shared supply-chain counterparties. |
+ | `rank_by_market_cap({segment?, country?, limit?})` | Largest companies by disclosed market cap, always with its coverage ratio. |
+-| `resolve_ticker({inputs})` | Batch-resolve up to 25 tickers, names, or ids to canonical companies, with suggestions on a miss. |
++| `resolve_ticker({queries})` | Batch-resolve up to 25 tickers, names, or ids to canonical companies, with suggestions on a miss. |
+ 
+ ### Geography & structure
+ 
+diff --git a/package-lock.json b/package-lock.json
+index de06ef9..543d338 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "wafergraph-mcp",
+-  "version": "1.0.0",
++  "version": "1.2.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "wafergraph-mcp",
+-      "version": "1.0.0",
++      "version": "1.2.1",
+       "dependencies": {
+         "@modelcontextprotocol/sdk": "^1.29.0",
+         "agents": "^0.17.4",
+diff --git a/src/data.ts b/src/data.ts
+index d98a48d..480defa 100644
+--- a/src/data.ts
++++ b/src/data.ts
+@@ -50,25 +50,65 @@ interface CacheEntry<T> {
+ let companiesCache: CacheEntry<Company[]> | null = null;
+ let dealsCache: CacheEntry<Deal[]> | null = null;
+ 
++/** Thrown when a live fetch of companies.json / deals.json fails. Tools catch this and return errorResult. */
++export class UpstreamFetchError extends Error {
++  readonly code = "upstream_fetch_failed" as const;
++  constructor(
++    message: string,
++    readonly filename: string,
++    readonly status?: number,
++    options?: { cause?: unknown },
++  ) {
++    super(message, options);
++    this.name = "UpstreamFetchError";
++  }
++}
++
+ function isFresh<T>(entry: CacheEntry<T> | null): entry is CacheEntry<T> {
+   return entry !== null && Date.now() - entry.fetchedAt < TTL_MS;
+ }
+ 
+ async function fetchJSON<T>(filename: string): Promise<T> {
+-  const res = await fetch(`${SOURCE_BASE}/${filename}`, {
+-    cf: { cacheTtl: EDGE_CACHE_TTL_SECONDS, cacheEverything: true },
+-  });
++  let res: Response;
++  try {
++    res = await fetch(`${SOURCE_BASE}/${filename}`, {
++      cf: { cacheTtl: EDGE_CACHE_TTL_SECONDS, cacheEverything: true },
++    });
++  } catch (cause) {
++    throw new UpstreamFetchError(
++      `wafergraph upstream fetch failed for ${filename}: network error`,
++      filename,
++      undefined,
++      { cause },
++    );
++  }
+   if (!res.ok) {
+-    throw new Error(`wafergraph upstream fetch failed for ${filename}: ${res.status} ${res.statusText}`);
++    throw new UpstreamFetchError(
++      `wafergraph upstream fetch failed for ${filename}: ${res.status} ${res.statusText}`,
++      filename,
++      res.status,
++    );
+   }
+   const contentType = res.headers.get("content-type") ?? "";
+   if (!contentType.includes("json")) {
+     // Guards against a repeat of the taxonomy.json discovery: if wafergraph
+     // ever stops serving one of these as real JSON (e.g. falls back to the
+     // SPA shell), fail loudly instead of returning HTML as "data".
+-    throw new Error(`wafergraph upstream returned non-JSON content-type "${contentType}" for ${filename}`);
++    throw new UpstreamFetchError(
++      `wafergraph upstream returned non-JSON content-type "${contentType}" for ${filename}`,
++      filename,
++    );
++  }
++  try {
++    return (await res.json()) as T;
++  } catch (cause) {
++    throw new UpstreamFetchError(
++      `wafergraph upstream returned unparseable JSON for ${filename}`,
++      filename,
++      undefined,
++      { cause },
++    );
+   }
+-  return res.json();
+ }
+ 
+ export async function getCompanies(): Promise<Company[]> {
+diff --git a/src/mcp-agent.ts b/src/mcp-agent.ts
+index 8d0d863..0641108 100644
+--- a/src/mcp-agent.ts
++++ b/src/mcp-agent.ts
+@@ -14,7 +14,7 @@ import { buildGraph, findCompany, suppliersOf, customersOf, walkChain, type Grap
+ import { toAllowedCompany } from "./types";
+ import { attributionForCompany, attributionGeneric, companyUrl, LINKS } from "./attribution";
+ import { recordUsage, recordSessionStart, isSelfTestClient } from "./usage";
+-import type { ToolCtx } from "./tools/shared";
++import { withUpstreamGuard, type ToolCtx } from "./tools/shared";
+ import { registerScreenTools } from "./tools/screen";
+ import { registerGeoTools } from "./tools/geo";
+ import { registerGraphTools } from "./tools/graphtools";
+@@ -49,7 +49,7 @@ function companyRef(g: Graph, id: string) {
+ }
+ 
+ export class WafergraphMCP extends McpAgent<Env, State, {}> {
+-  server = new McpServer({ name: "wafergraph-mcp", version: "1.2.0" });
++  server = new McpServer({ name: "wafergraph-mcp", version: "1.2.1" });
+   initialState: State = {};
+ 
+   // Set once per session from the initialize handshake, then applied to every
+@@ -85,36 +85,37 @@ export class WafergraphMCP extends McpAgent<Env, State, {}> {
+           country: z.string().optional().describe("Filter to companies headquartered in this country, e.g. 'Taiwan' (case-insensitive)."),
+         },
+       },
+-      async ({ query, segment, country }) => {
+-        await recordUsage(this.env, "search_companies", this.selfTest);
+-        const companies = await getCompanies();
+-        const q = query?.trim().toLowerCase();
+-        const seg = segment?.trim().toLowerCase();
+-        const ctry = country?.trim().toLowerCase();
+-
+-        const matches = companies.filter((c) => {
+-          if (q && !(c.name.toLowerCase().includes(q) || c.one_liner.toLowerCase().includes(q))) return false;
+-          if (seg && !c.segments.some((s) => s.segment.toLowerCase() === seg)) return false;
+-          if (ctry && c.country.toLowerCase() !== ctry) return false;
+-          return true;
+-        });
++      async ({ query, segment, country }) =>
++        withUpstreamGuard(async () => {
++          await recordUsage(this.env, "search_companies", this.selfTest);
++          const companies = await getCompanies();
++          const q = query?.trim().toLowerCase();
++          const seg = segment?.trim().toLowerCase();
++          const ctry = country?.trim().toLowerCase();
++
++          const matches = companies.filter((c) => {
++            if (q && !(c.name.toLowerCase().includes(q) || c.one_liner.toLowerCase().includes(q))) return false;
++            if (seg && !c.segments.some((s) => s.segment.toLowerCase() === seg)) return false;
++            if (ctry && c.country.toLowerCase() !== ctry) return false;
++            return true;
++          });
+ 
+-        const CAP = 25;
+-        const results = matches.slice(0, CAP).map((c) => ({
+-          id: c.id,
+-          name: c.name,
+-          ticker: c.ticker,
+-          segments: c.segments,
+-          one_liner: c.one_liner,
+-          company_url: companyUrl(c.id),
+-        }));
++          const CAP = 25;
++          const results = matches.slice(0, CAP).map((c) => ({
++            id: c.id,
++            name: c.name,
++            ticker: c.ticker,
++            segments: c.segments,
++            one_liner: c.one_liner,
++            company_url: companyUrl(c.id),
++          }));
+ 
+-        return jsonResult({
+-          data: { results, total: matches.length, returned: results.length },
+-          attribution: attributionGeneric(),
+-          links: LINKS,
+-        });
+-      },
++          return jsonResult({
++            data: { results, total: matches.length, returned: results.length },
++            attribution: attributionGeneric(),
++            links: LINKS,
++          });
++        }),
+     );
+ 
+     // ---- 2. get_company --------------------------------------------------
+@@ -130,43 +131,44 @@ export class WafergraphMCP extends McpAgent<Env, State, {}> {
+           id: z.string().describe("Company id, snake_case (e.g. 'tsmc', 'asml') or exact company name."),
+         },
+       },
+-      async ({ id }) => {
+-        await recordUsage(this.env, "get_company", this.selfTest);
+-        const companies = await getCompanies();
+-        const graph = buildGraph(companies);
+-        const company = findCompany(graph, id);
+-        if (!company) {
+-          return errorResult(`No company found for "${id}".`, {
+-            hint: "Use search_companies to find a valid id or name.",
+-          });
+-        }
+-
+-        // Hub companies carry very dense edge lists (memory makers list 175
+-        // suppliers), which made this response ~32KB — heavy for an LLM
+-        // context window. Cap each side generously and disclose the
+-        // truncation; most companies are far under the cap and unchanged.
+-        // Deeper walks belong to get_supply_chain.
+-        const EDGE_CAP = 80;
+-        const supplierIds = suppliersOf(graph, company.id);
+-        const customerIds = customersOf(graph, company.id);
+-        const suppliers = supplierIds.slice(0, EDGE_CAP).map((sid) => companyRef(graph, sid));
+-        const customers = customerIds.slice(0, EDGE_CAP).map((cid) => companyRef(graph, cid));
++      async ({ id }) =>
++        withUpstreamGuard(async () => {
++          await recordUsage(this.env, "get_company", this.selfTest);
++          const companies = await getCompanies();
++          const graph = buildGraph(companies);
++          const company = findCompany(graph, id);
++          if (!company) {
++            return errorResult(`No company found for "${id}".`, {
++              hint: "Use search_companies to find a valid id or name.",
++            });
++          }
+ 
+-        return jsonResult({
+-          data: {
+-            company: toAllowedCompany(company),
+-            suppliers,
+-            customers,
+-            supplier_count: supplierIds.length,
+-            customer_count: customerIds.length,
+-            ...(supplierIds.length > EDGE_CAP || customerIds.length > EDGE_CAP
+-              ? { note: `Edge lists capped at ${EDGE_CAP} per side; supplier_count/customer_count carry the true totals. Use get_supply_chain for the full graph.` }
+-              : {}),
+-          },
+-          attribution: attributionForCompany(company.id),
+-          links: LINKS,
+-        });
+-      },
++          // Hub companies carry very dense edge lists (memory makers list 175
++          // suppliers), which made this response ~32KB — heavy for an LLM
++          // context window. Cap each side generously and disclose the
++          // truncation; most companies are far under the cap and unchanged.
++          // Deeper walks belong to get_supply_chain.
++          const EDGE_CAP = 80;
++          const supplierIds = suppliersOf(graph, company.id);
++          const customerIds = customersOf(graph, company.id);
++          const suppliers = supplierIds.slice(0, EDGE_CAP).map((sid) => companyRef(graph, sid));
++          const customers = customerIds.slice(0, EDGE_CAP).map((cid) => companyRef(graph, cid));
++
++          return jsonResult({
++            data: {
++              company: toAllowedCompany(company),
++              suppliers,
++              customers,
++              supplier_count: supplierIds.length,
++              customer_count: customerIds.length,
++              ...(supplierIds.length > EDGE_CAP || customerIds.length > EDGE_CAP
++                ? { note: `Edge lists capped at ${EDGE_CAP} per side; supplier_count/customer_count carry the true totals. Use get_supply_chain for the full graph.` }
++                : {}),
++            },
++            attribution: attributionForCompany(company.id),
++            links: LINKS,
++          });
++        }),
+     );
+ 
+     // ---- 3. get_segments ---------------------------------------------
+@@ -337,59 +339,80 @@ export class WafergraphMCP extends McpAgent<Env, State, {}> {
+             .describe("Company ids (snake_case, e.g. ['tsmc','samsung_foundry']) or exact names. 2-6 of them."),
+         },
+       },
+-      async ({ ids }) => {
+-        await recordUsage(this.env, "compare_companies", this.selfTest);
+-        const companies = await getCompanies();
+-        const graph = buildGraph(companies);
+-
+-        // Resolve tickers too, matching analyze_portfolio_exposure — users who
+-        // just passed ["NVDA","TSM"] there WILL paste the same list here, and
+-        // did (found by user-journey testing 2026-07-25, J5).
+-        const byTicker = new Map<string, (typeof companies)[number]>();
+-        for (const c of companies) if (c.ticker) byTicker.set(c.ticker.toUpperCase(), c);
+-
+-        const resolved: { input: string; company: (typeof companies)[number] }[] = [];
+-        const unresolved: string[] = [];
+-        for (const raw of ids) {
+-          const c = findCompany(graph, raw) ?? byTicker.get(raw.trim().toUpperCase());
+-          if (c && !resolved.some((r) => r.company.id === c.id)) resolved.push({ input: raw, company: c });
+-          else if (!c) unresolved.push(raw);
+-        }
+-        if (resolved.length < 2) {
+-          return errorResult("Need at least 2 resolvable companies to compare.", {
+-            unresolved,
+-            hint: "Use search_companies to find valid ids.",
+-          });
+-        }
+-
+-        const rows = resolved.map(({ company: c }) => ({
+-          ...toAllowedCompany(c),
+-          supplier_count: suppliersOf(graph, c.id).length,
+-          customer_count: customersOf(graph, c.id).length,
+-          company_url: companyUrl(c.id),
+-        }));
++      async ({ ids }) =>
++        withUpstreamGuard(async () => {
++          await recordUsage(this.env, "compare_companies", this.selfTest);
++          const companies = await getCompanies();
++          const graph = buildGraph(companies);
++
++          // Resolve tickers too, matching analyze_portfolio_exposure — users who
++          // just passed ["NVDA","TSM"] there WILL paste the same list here, and
++          // did (found by user-journey testing 2026-07-25, J5).
++          const byTicker = new Map<string, (typeof companies)[number]>();
++          for (const c of companies) if (c.ticker) byTicker.set(c.ticker.toUpperCase(), c);
++
++          const resolved: { input: string; company: (typeof companies)[number] }[] = [];
++          const unresolved: string[] = [];
++          for (const raw of ids) {
++            const c = findCompany(graph, raw) ?? byTicker.get(raw.trim().toUpperCase());
++            if (c && !resolved.some((r) => r.company.id === c.id)) resolved.push({ input: raw, company: c });
++            else if (!c) unresolved.push(raw);
++          }
++          if (resolved.length < 2) {
++            return errorResult("Need at least 2 resolvable companies to compare.", {
++              unresolved,
++              hint: "Use search_companies to find valid ids.",
++            });
++          }
+ 
+-        // Shared counterparties are the comparative payload an agent actually
+-        // wants — "what do these two both depend on" is the common question.
+-        const supplierSets = resolved.map(({ company: c }) => new Set(suppliersOf(graph, c.id)));
+-        const customerSets = resolved.map(({ company: c }) => new Set(customersOf(graph, c.id)));
+-        const intersect = (sets: Set<string>[]) =>
+-          [...(sets[0] ?? [])].filter((id) => sets.every((s) => s.has(id))).map((id) => companyRef(graph, id));
++          const rows = resolved.map(({ company: c }) => ({
++            ...toAllowedCompany(c),
++            supplier_count: suppliersOf(graph, c.id).length,
++            customer_count: customersOf(graph, c.id).length,
++            company_url: companyUrl(c.id),
++          }));
+ 
+-        const priced = rows.filter((r) => r.market_cap_usd_b !== null).length;
++          // Shared = intersection of all compared sets. Unique-to-company =
++          // present for that company and for no other company in the compare set
++          // (same exclusivity rule as compare_countries' uniquely_present_segments).
++          const supplierSets = resolved.map(({ company: c }) => new Set(suppliersOf(graph, c.id)));
++          const customerSets = resolved.map(({ company: c }) => new Set(customersOf(graph, c.id)));
++          const intersect = (sets: Set<string>[]) =>
++            [...(sets[0] ?? [])].filter((id) => sets.every((s) => s.has(id))).map((id) => companyRef(graph, id));
++          const exclusiveTo = (sets: Set<string>[], index: number) =>
++            [...(sets[index] ?? [])]
++              .filter((id) => sets.every((s, j) => j === index || !s.has(id)))
++              .map((id) => companyRef(graph, id));
++
++          const unique_suppliers = resolved.map(({ company: c }, i) => ({
++            company_id: c.id,
++            counterparties: exclusiveTo(supplierSets, i),
++          }));
++          const unique_customers = resolved.map(({ company: c }, i) => ({
++            company_id: c.id,
++            counterparties: exclusiveTo(customerSets, i),
++          }));
+ 
+-        return jsonResult({
+-          data: {
+-            companies: rows,
+-            shared_suppliers: intersect(supplierSets),
+-            shared_customers: intersect(customerSets),
+-            ...(unresolved.length ? { unresolved } : {}),
+-            market_cap_coverage: `${priced}/${rows.length} compared companies have a market cap on file`,
+-          },
+-          attribution: attributionGeneric(),
+-          links: LINKS,
+-        });
+-      },
++          const priced = rows.filter((r) => r.market_cap_usd_b !== null).length;
++
++          return jsonResult({
++            data: {
++              companies: rows,
++              shared_suppliers: intersect(supplierSets),
++              shared_customers: intersect(customerSets),
++              unique_suppliers,
++              unique_customers,
++              methodology:
++                "shared_suppliers/shared_customers: counterparties present for every compared company. " +
++                "unique_suppliers/unique_customers: per company, counterparties that company has and no other " +
++                "compared company has (exclusive to that company within the compare set).",
++              ...(unresolved.length ? { unresolved } : {}),
++              market_cap_coverage: `${priced}/${rows.length} compared companies have a market cap on file`,
++            },
++            attribution: attributionGeneric(),
++            links: LINKS,
++          });
++        }),
+     );
+ 
+     // ---- 7. get_country_exposure -----------------------------------------
+diff --git a/src/tools/shared.ts b/src/tools/shared.ts
+index 1ad117b..520b783 100644
+--- a/src/tools/shared.ts
++++ b/src/tools/shared.ts
+@@ -6,6 +6,7 @@
+ // them without importing from the agent (which would be circular).
+ import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+ import { companyUrl } from "../attribution";
++import { UpstreamFetchError } from "../data";
+ import type { Company } from "../types";
+ import type { Graph } from "../graph";
+ 
+@@ -29,6 +30,33 @@ export function errorResult(message: string, extra?: Record<string, unknown>) {
+   };
+ }
+ 
++export type ToolHandlerResult = ReturnType<typeof jsonResult> | ReturnType<typeof errorResult>;
++
++/** Map UpstreamFetchError (and only that) to a structured tool errorResult. */
++export function upstreamErrorResult(err: UpstreamFetchError) {
++  return errorResult(err.message, {
++    code: err.code,
++    filename: err.filename,
++    ...(err.status !== undefined ? { status: err.status } : {}),
++    hint: "Live companies/deals fetch from wafergraph.com failed. Retry shortly; taxonomy tools that only need the vendored snapshot are unaffected.",
++  });
++}
++
++/**
++ * Run a tool body and turn upstream data-fetch failures into errorResult
++ * instead of an unhandled throw. Re-throws anything that is not UpstreamFetchError.
++ */
++export async function withUpstreamGuard(
++  fn: () => Promise<ToolHandlerResult>,
++): Promise<ToolHandlerResult> {
++  try {
++    return await fn();
++  } catch (err) {
++    if (err instanceof UpstreamFetchError) return upstreamErrorResult(err);
++    throw err;
++  }
++}
++
+ // Compact reference to a company for edge/result lists — enough for an agent
+ // to act on without a second call, small enough to return hundreds of them.
+ export function companyRef(g: Graph, id: string) {
+-- 
+2.43.0
+

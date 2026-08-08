@@ -225,14 +225,25 @@ function escHtml(str) {
 // ---------------------------------------------------------------------------
 // Send via Resend
 // ---------------------------------------------------------------------------
-async function sendEmail({ to, subject, html }) {
+async function sendEmail({ to, subject, html, unsubUrl }) {
   const res = await fetch("https://api.resend.com/emails", {
     method: "POST",
     headers: {
       "Authorization": `Bearer ${RESEND_API_KEY}`,
       "Content-Type": "application/json",
     },
-    body: JSON.stringify({ from: FROM_EMAIL, to: [to], subject, html }),
+    body: JSON.stringify({
+      from: FROM_EMAIL,
+      to: [to],
+      subject,
+      html,
+      headers: unsubUrl
+        ? {
+            "List-Unsubscribe": `<${unsubUrl}>`,
+            "List-Unsubscribe-Post": "List-Unsubscribe=One-Click",
+          }
+        : undefined,
+    }),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => "(no body)");
@@ -286,10 +297,11 @@ async function main() {
 
   for (let i = 0; i < subscribers.length; i++) {
     const { email, token } = subscribers[i];
+    const unsubUrl = `${SITE_URL}/api/unsubscribe?token=${token}`;
     const html = buildDispatchHtml({ title: post.title, summary: post.summary, slug: post.slug, token });
 
     try {
-      await sendEmail({ to: email, subject, html });
+      await sendEmail({ to: email, subject, html, unsubUrl });
       sent++;
       console.log(`[dispatch] [${sent}/${subscribers.length}] Sent → ${email}`);
     } catch (err) {

@@ -15,11 +15,13 @@ export default function Subscribe() {
     e.preventDefault();
     setStatus("submitting");
     setMessage("");
+    const form = e.currentTarget;
+    const honeypot = new FormData(form).get("botcheck");
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, botcheck: honeypot || "" }),
       });
       const json = await res.json();
       if (json.ok) {
@@ -48,7 +50,16 @@ export default function Subscribe() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-md">
+    <form onSubmit={handleSubmit} className="relative mx-auto max-w-md">
+      {/* Honeypot — leave empty. Server drops submissions when filled. */}
+      <input
+        type="text"
+        name="botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="email"

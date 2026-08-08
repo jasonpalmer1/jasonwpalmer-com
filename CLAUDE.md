@@ -8,11 +8,11 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
-- **Bug audit handoff (2026-08-08):** Cursor cloud agent “Mistral AI code review” documented findings — **no prior Mistral work existed; this pass wrote the docs only (no security fixes yet).** Start at **`BUG-AUDIT.md`**. Companion for other public repos: `docs/bug-audits/OTHER-PUBLIC-REPOS.md`. Highest priority across the portfolio is **worldcup-bracket** unauthenticated bracket PUT; on this site, subscribe rate-limiting + CSP sync. **Sous is out of scope** (separate chat). Private apps (Command Center, 4-Horn, wafergraph app, Who’s Starting, etc.) were not accessible here.
+- **Bug audit + fixes (2026-08-08):** Start at **`BUG-AUDIT.md`**. This site’s HIGH/MEDIUM mailing-list + CSP issues are **fixed in-branch** (deploy to ship). Other public repos have ready-to-apply bundles under `docs/bug-audits/` (this agent cannot push those remotes — see `docs/bug-audits/APPLY.md`). **worldcup-bracket** is still the #1 portfolio deploy. **Sous** = separate chat. Private apps not accessible here.
 - **Content upkeep** (the real ongoing job): keep `src/data/tools.ts` (build cards), `src/data/platforms.ts`, and `src/data/profile.ts` current as Jason ships things.
 - **Blog/build-log cadence**: posts live in `src/content/posts/` (currently `build-log-001`, `build-log-002`, `valley-of-death-financing`). Add build-log posts as projects ship; blog + RSS plumbing is already wired.
 - **Contact**: Web3Forms (`ContactForm.tsx` / `ConsultingForm.tsx`) — access key is hardcoded client-side by design; confirm domain lock in the Web3Forms dashboard. Form still posts to `https://api.web3forms.com/submit`.
-- **Mailing list (self-hosted, replaced Beehiiv)**: native form → `functions/api/subscribe.js` → **D1** `dispatch-subscribers` (double opt-in via `functions/api/confirm.js`; `unsubscribe.js`). Sending uses **Resend** (`scripts/send-dispatch.mjs`, run `npm run send-dispatch -- <slug>`; `--dry` to preview). One-time setup + ops in **`MAILING-LIST.md`**. Needs `RESEND_API_KEY` as a Pages secret + jasonwpalmer.com verified in Resend before confirmation/dispatch emails send. D1 binding lives in `wrangler.toml`. **Known gap:** no rate limit / confirm-email cooldown (see `BUG-AUDIT.md` H1).
+- **Mailing list (self-hosted, replaced Beehiiv)**: native form → `functions/api/subscribe.js` (honeypot + IP/email cooldowns) → **D1** `dispatch-subscribers` → confirm/unsubscribe via GET interstitial + POST. Sending uses **Resend** (`scripts/send-dispatch.mjs`, run `npm run send-dispatch -- <slug>`; `--dry` to preview). Ops: **`MAILING-LIST.md`**. Needs `RESEND_API_KEY` Pages secret + domain verified in Resend. D1 binding in `wrangler.toml`.
 
 ## Tech stack
 - **Next.js 16** (App Router, React 19) — static export (`output: "export"` → `out/`).
@@ -35,7 +35,8 @@ Content lives in plain TS data files; components render it; Next statically expo
 - `src/content/posts/` — blog `.mdx` files.
 - `src/lib/` — `posts.ts` (MDX loader), `useInView.ts` (scroll-reveal hook).
 - `functions/api/` — Pages Functions: `subscribe.js`, `confirm.js`, `unsubscribe.js`.
-- `public/` — `og.png`, `robots.txt`, `_headers` (Cloudflare headers — **CSP still lists Beehiiv; needs sync**, see `BUG-AUDIT.md` H2), `_redirects`, `builds/` screenshots.
+- `public/` — `og.png`, `robots.txt`, `_headers` (CSP allows visit-log + CF insights; Beehiiv removed), `_redirects`, `builds/` screenshots.
+- `docs/bug-audits/` — portfolio audit + APPLY bundles for other repos.
 - `scripts/` — `gen-brand-assets.js`, `send-dispatch.mjs`.
 - `BUG-AUDIT.md` — portfolio bug-audit handoff for Claude.
 - Config: `next.config.ts`, `eslint.config.mjs`, `postcss.config.mjs`, `tsconfig.json`, `wrangler.toml`, `.env.example`.
