@@ -49,7 +49,10 @@ export async function generateMetadata({
       url,
       type: "article",
       publishedTime: post.meta.date,
+      modifiedTime: post.meta.date,
       authors: [profile.name],
+      section: post.meta.tags[0] ?? "Dispatch",
+      tags: post.meta.tags,
       images: post.meta.cover
         ? [
             {

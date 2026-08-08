@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { slugifyTag } from "@/lib/posts";
+import { slugifyTag } from "@/lib/tags";
 
 /** Clickable dispatch tag → /blog/tag/<slug>/ */
 export default function TagChip({

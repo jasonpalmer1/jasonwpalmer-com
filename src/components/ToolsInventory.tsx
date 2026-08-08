@@ -5,6 +5,7 @@ import {
   statusLabels,
   type Tool,
   type Rarity,
+  type ToolStatus,
 } from "@/data/tools";
 import Gallery from "./Gallery";
 
@@ -19,7 +20,19 @@ const rarityGlow: Record<Rarity, string> = {
   rare: "glow-border-rare",
 };
 
-const FILTERS: Array<"all" | Rarity> = ["all", "legendary", "epic", "rare"];
+const RARITY_FILTERS: Array<"all" | Rarity> = [
+  "all",
+  "legendary",
+  "epic",
+  "rare",
+];
+const STATUS_FILTERS: Array<"all" | ToolStatus> = [
+  "all",
+  "live",
+  "active",
+  "prototype",
+  "archived",
+];
 
 function ToolCard({ tool }: { tool: Tool }) {
   const rarity = tool.rarity ?? "rare";
@@ -122,17 +135,18 @@ function ToolCard({ tool }: { tool: Tool }) {
   );
 }
 
-/** Client inventory grid with rarity filter (keeps Gallery interactive). */
+/** Client inventory grid with rarity + status filters (keeps Gallery interactive). */
 export default function ToolsInventory({ items }: { items: Tool[] }) {
-  const [filter, setFilter] = useState<"all" | Rarity>("all");
+  const [rarity, setRarity] = useState<"all" | Rarity>("all");
+  const [status, setStatus] = useState<"all" | ToolStatus>("all");
 
   // Deep links (/#tool-id) must not land on a filtered-out card.
   useEffect(() => {
     const revealHash = () => {
       const id = window.location.hash.replace(/^#/, "");
       if (!id || !items.some((t) => t.id === id)) return;
-      setFilter("all");
-      // Allow layout to paint unfiltered cards, then scroll into view.
+      setRarity("all");
+      setStatus("all");
       requestAnimationFrame(() => {
         document.getElementById(id)?.scrollIntoView({ block: "start" });
       });
@@ -143,32 +157,57 @@ export default function ToolsInventory({ items }: { items: Tool[] }) {
   }, [items]);
 
   const visible = useMemo(() => {
-    if (filter === "all") return items;
-    return items.filter((t) => (t.rarity ?? "rare") === filter);
-  }, [items, filter]);
+    return items.filter((t) => {
+      if (rarity !== "all" && (t.rarity ?? "rare") !== rarity) return false;
+      if (status !== "all" && t.status !== status) return false;
+      return true;
+    });
+  }, [items, rarity, status]);
+
+  const chip = (active: boolean) =>
+    `rounded border px-2 py-1 font-mono text-[0.65rem] tracking-widest uppercase transition-colors ${
+      active
+        ? "border-accent/50 bg-accent/15 text-accent"
+        : "border-border bg-surface text-muted hover:border-accent/40 hover:text-accent"
+    }`;
 
   return (
     <>
-      <div
-        className="mb-6 flex flex-wrap items-center gap-2"
-        role="group"
-        aria-label="Filter builds by rarity"
-      >
-        {FILTERS.map((f) => (
-          <button
-            key={f}
-            type="button"
-            onClick={() => setFilter(f)}
-            aria-pressed={filter === f}
-            className={`rounded border px-2 py-1 font-mono text-[0.65rem] tracking-widest uppercase transition-colors ${
-              filter === f
-                ? "border-accent/50 bg-accent/15 text-accent"
-                : "border-border bg-surface text-muted hover:border-accent/40 hover:text-accent"
-            }`}
-          >
-            {f}
-          </button>
-        ))}
+      <div className="mb-3 flex flex-wrap items-center gap-2">
+        <span className="font-mono text-[0.6rem] tracking-widest text-muted">
+          RARITY
+        </span>
+        <div role="group" aria-label="Filter builds by rarity" className="flex flex-wrap gap-2">
+          {RARITY_FILTERS.map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setRarity(f)}
+              aria-pressed={rarity === f}
+              className={chip(rarity === f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div className="mb-6 flex flex-wrap items-center gap-2">
+        <span className="font-mono text-[0.6rem] tracking-widest text-muted">
+          STATUS
+        </span>
+        <div role="group" aria-label="Filter builds by status" className="flex flex-wrap gap-2">
+          {STATUS_FILTERS.map((f) => (
+            <button
+              key={f}
+              type="button"
+              onClick={() => setStatus(f)}
+              aria-pressed={status === f}
+              className={chip(status === f)}
+            >
+              {f}
+            </button>
+          ))}
+        </div>
         <span className="ml-auto font-mono text-xs text-muted">
           {visible.length}/{items.length} SHOWN
         </span>
@@ -180,7 +219,7 @@ export default function ToolsInventory({ items }: { items: Tool[] }) {
       </div>
       {visible.length === 0 && (
         <p className="font-mono text-sm text-muted">
-          {"// no builds in this rarity tier"}
+          {"// no builds match these filters"}
         </p>
       )}
     </>

@@ -88,7 +88,7 @@ function page({ title, heading, body, siteUrl, token, done }) {
     <div class="icon">${done ? "○" : "?"}</div>
     <p class="label">// dispatch log</p>
     <h1>${esc(heading)}</h1>
-    <p>${body}</p>
+    <p>${esc(body)}</p>
     ${action}
     <p class="footer">
       Changed your mind? <a href="${esc(siteUrl)}">Re-subscribe at jasonwpalmer.com</a>

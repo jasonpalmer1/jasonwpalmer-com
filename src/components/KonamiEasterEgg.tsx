@@ -28,6 +28,7 @@ export default function KonamiEasterEgg() {
   const progress = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocus = useRef<HTMLElement | null>(null);
 
   // Listen for the Konami code — ignore typing inside form fields.
   useEffect(() => {
@@ -48,6 +49,9 @@ export default function KonamiEasterEgg() {
         progress.current += 1;
         if (progress.current === SEQUENCE.length) {
           progress.current = 0;
+          const el = document.activeElement;
+          restoreFocus.current =
+            el instanceof HTMLElement ? el : null;
           setActive(true);
         }
       } else {
@@ -58,9 +62,16 @@ export default function KonamiEasterEgg() {
     return () => window.removeEventListener("keydown", onKey);
   }, [active]);
 
-  // Modal chrome: scroll lock + Tab trap + Esc (parity with BootSequence).
+  // Modal chrome: scroll lock + Tab trap + Esc; restore focus on close.
   useEffect(() => {
-    if (!active) return;
+    if (!active) {
+      const el = restoreFocus.current;
+      restoreFocus.current = null;
+      if (el && document.contains(el)) {
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     panelRef.current?.focus();

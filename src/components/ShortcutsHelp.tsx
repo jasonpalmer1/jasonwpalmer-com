@@ -5,10 +5,16 @@ import { useEffect, useRef, useState } from "react";
 /**
  * Press `?` (Shift+/) outside form fields for operator terminal shortcuts.
  * Esc / click dismisses. Tab stays inside the dialog while open.
+ * Focus returns to the previously focused element on close.
  */
 export default function ShortcutsHelp() {
   const [open, setOpen] = useState(false);
   const panelRef = useRef<HTMLDivElement>(null);
+  const restoreFocus = useRef<HTMLElement | null>(null);
+
+  function close() {
+    setOpen(false);
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -24,7 +30,7 @@ export default function ShortcutsHelp() {
       }
       if (open && e.key === "Escape") {
         e.preventDefault();
-        setOpen(false);
+        close();
         return;
       }
       if (open && e.key === "Tab") {
@@ -34,6 +40,9 @@ export default function ShortcutsHelp() {
       }
       if (!open && e.key === "?" && !e.ctrlKey && !e.metaKey && !e.altKey) {
         e.preventDefault();
+        const active = document.activeElement;
+        restoreFocus.current =
+          active instanceof HTMLElement ? active : null;
         setOpen(true);
       }
     };
@@ -42,7 +51,14 @@ export default function ShortcutsHelp() {
   }, [open]);
 
   useEffect(() => {
-    if (!open) return;
+    if (!open) {
+      const el = restoreFocus.current;
+      restoreFocus.current = null;
+      if (el && document.contains(el)) {
+        el.focus({ preventScroll: true });
+      }
+      return;
+    }
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     panelRef.current?.focus();
@@ -59,7 +75,7 @@ export default function ShortcutsHelp() {
       role="dialog"
       aria-modal="true"
       aria-label="Keyboard shortcuts"
-      onClick={() => setOpen(false)}
+      onClick={close}
     >
       <div
         ref={panelRef}

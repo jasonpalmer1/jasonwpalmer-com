@@ -1,10 +1,9 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
-import TagChip from "@/components/TagChip";
-import { getAllPosts, getAllTags, type Post } from "@/lib/posts";
+import BlogIndexClient from "@/components/BlogIndexClient";
+import { getAllPosts, getAllTags } from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 export const metadata: Metadata = {
@@ -54,6 +53,14 @@ export default function BlogIndex() {
     })),
   };
 
+  const items = posts.map((p) => ({
+    slug: p.slug,
+    title: p.meta.title,
+    summary: p.meta.summary,
+    date: p.meta.date,
+    tags: p.meta.tags,
+  }));
+
   return (
     <>
       <Nav />
@@ -64,7 +71,6 @@ export default function BlogIndex() {
         }}
       />
       <main id="main" className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
-        {/* Header */}
         <div className="mb-12">
           <p className="label">{"// dispatch log"}</p>
           <h1 className="mt-2 font-display text-4xl font-bold tracking-tight text-gradient">
@@ -79,63 +85,10 @@ export default function BlogIndex() {
               RSS
             </a>
           </p>
-          {tags.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2" aria-label="Filter by tag">
-              {tags.map((tag) => (
-                <TagChip key={tag} tag={tag} />
-              ))}
-            </div>
-          )}
         </div>
 
-        {/* Post list — grouped by year; tags outside post Link (no nested anchors) */}
-        {groupPostsByYear(posts).map(([year, yearPosts]) => (
-          <section key={year} className="mb-12" aria-labelledby={`year-${year}`}>
-            <h2
-              id={`year-${year}`}
-              className="mb-5 font-mono text-xs tracking-widest text-muted"
-            >
-              {"// "}
-              {year}
-            </h2>
-            <ol className="space-y-6" aria-label={`Dispatches from ${year}`}>
-              {yearPosts.map((post) => (
-                <li key={post.slug}>
-                  <article className="hud rounded-xl p-5 transition-transform hover:-translate-y-0.5">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <time
-                        dateTime={post.meta.date}
-                        className="font-mono text-[0.65rem] text-muted"
-                      >
-                        {formatDate(post.meta.date)}
-                      </time>
-                      {post.meta.tags.map((tag) => (
-                        <TagChip key={tag} tag={tag} />
-                      ))}
-                    </div>
-                    <Link href={`/blog/${post.slug}/`} className="group mt-2 block">
-                      <h3 className="font-display text-lg font-bold text-foreground transition-colors group-hover:text-accent">
-                        {post.meta.title}
-                      </h3>
-                      <p className="mt-1.5 text-sm leading-relaxed text-foreground/70">
-                        {post.meta.summary}
-                      </p>
-                      <span className="mt-3 inline-block font-mono text-xs text-accent/70 transition-colors group-hover:text-accent">
-                        READ →
-                      </span>
-                    </Link>
-                  </article>
-                </li>
-              ))}
-            </ol>
-          </section>
-        ))}
+        <BlogIndexClient posts={items} tags={tags} />
 
-        {posts.length === 0 && (
-          <p className="font-mono text-sm text-muted">{"// no dispatches yet"}</p>
-        )}
-
-        {/* Subscribe widget — below the posts so the writing comes first */}
         <div className="mt-16 border-t border-border pt-12">
           <SubscribeBlock />
         </div>
@@ -143,24 +96,4 @@ export default function BlogIndex() {
       <SiteFooter />
     </>
   );
-}
-
-function formatDate(iso: string): string {
-  return new Date(iso).toLocaleDateString("en-US", {
-    year: "numeric",
-    month: "short",
-    day: "2-digit",
-    timeZone: "UTC",
-  });
-}
-
-function groupPostsByYear(posts: Post[]): [string, Post[]][] {
-  const map = new Map<string, Post[]>();
-  for (const post of posts) {
-    const year = post.meta.date.slice(0, 4) || "undated";
-    const list = map.get(year) ?? [];
-    list.push(post);
-    map.set(year, list);
-  }
-  return [...map.entries()].sort((a, b) => b[0].localeCompare(a[0]));
 }

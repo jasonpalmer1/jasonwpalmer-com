@@ -1,23 +1,12 @@
 import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
+import { isValidTag, slugifyTag } from "@/lib/tags";
+
+export { isValidTag, slugifyTag } from "@/lib/tags";
 
 const POSTS_DIR = path.join(process.cwd(), "src/content/posts");
 const SLUG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const TAG_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-
-/** Normalize a front-matter tag into a URL slug. */
-export function slugifyTag(tag: string): string {
-  return tag
-    .trim()
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
-}
-
-export function isValidTag(tag: string): boolean {
-  return TAG_RE.test(slugifyTag(tag));
-}
 
 export interface PostMeta {
   title: string;
@@ -104,7 +93,7 @@ export function getAllTags(): string[] {
   for (const post of getAllPosts()) {
     for (const tag of post.meta.tags) {
       const slug = slugifyTag(tag);
-      if (TAG_RE.test(slug)) set.add(slug);
+      if (isValidTag(slug)) set.add(slug);
     }
   }
   return [...set].sort();
@@ -113,7 +102,7 @@ export function getAllTags(): string[] {
 /** Posts that carry a given tag (newest first). */
 export function getPostsByTag(tag: string): Post[] {
   const slug = slugifyTag(tag);
-  if (!TAG_RE.test(slug)) return [];
+  if (!isValidTag(slug)) return [];
   return getAllPosts().filter((post) =>
     post.meta.tags.some((t) => slugifyTag(t) === slug),
   );

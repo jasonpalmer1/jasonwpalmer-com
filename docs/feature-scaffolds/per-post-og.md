@@ -1,18 +1,18 @@
-# Per-post OG images (scaffold)
+# Per-post OG images
 
-**Status:** Stub only — metadata already reads `cover` from front-matter; generator not run yet.
+**Status:** SVG generator live — `npm run gen:og -- --write` → `public/og/<slug>.svg`.
 
 ## Already wired
 
 - `PostMeta.cover` in `src/lib/posts.ts`
-- `src/app/blog/[slug]/page.tsx` uses `cover` for Open Graph / Twitter / JSON-LD when set
-- Falls back to `/og.png`
+- Blog post metadata/JSON-LD uses `cover` when set; else `/og.png`
 
-## To finish (Claude / local)
+## Activate on a post
 
-1. Run or extend `scripts/gen-post-og.mjs` (stub) to emit `public/og/<slug>.png`
-2. Add to each post front-matter: `cover: "/og/<slug>.png"`
-3. Document in `_TEMPLATE.build-log.mdx`
-4. Optionally add `npm run gen:og` to `package.json`
+```bash
+npm run gen:og -- --write
+# then in front-matter:
+# cover: "/og/build-log-001.svg"
+```
 
-No secrets required. Prefer the existing brand colors (`#05060a`, `#34f5c5`, Orbitron-ish monospace title).
+PNG via sharp/`@vercel/og` is optional later if a crawler rejects SVG.

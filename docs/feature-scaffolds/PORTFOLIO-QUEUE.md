@@ -45,8 +45,7 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 
 ## Ideas worth scaffolding later (not started)
 
-- Implement `gen-post-og.mjs` renderer (PNG output)
-- Client-side blog filter without navigation (optional UX)
+- PNG OG via sharp/`@vercel/og` if SVG cards underperform in crawlers
 
 ## Scaffolded this loop (cloud agent)
 
@@ -67,3 +66,6 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] `global-error.tsx`; Person JSON-LD image; MDX heading ids + TOC; FloatingActions focus/inert
 - [x] Builds rarity filter (`ToolsInventory`); blog index year grouping
 - [x] Hash deep-link clears rarity filter; `?` ShortcutsHelp overlay
+- [x] Focus restore on ShortcutsHelp/Konami close; unsubscribe body escape
+- [x] OG `article:section`/`tags`; builds status filter; blog in-page search
+- [x] `gen-post-og.mjs` writes SVG cards (`npm run gen:og -- --write`)
