@@ -28,6 +28,12 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [ ] Command Center / 4-Horn / wafergraph app / Who’s Starting / Our Place / visit-log / canaifeel
 - [ ] Mirror any shared patterns (CSP, rate limits, edit tokens) learned here
 
+## Done by cloud agent after initial audit (no action unless reverting)
+
+- BootSequence `buildCount` (no tools[] in client), lazy galleries + intrinsic sizes
+- `npm run check:assets`, blog ItemList JSON-LD, meta/twitter alignment
+- Deleted `_build` / ConsultingForm; X in socials; Konami form-field guard
+
 ## Ideas worth scaffolding later (not started)
 
 - Per-post OG images for blog
