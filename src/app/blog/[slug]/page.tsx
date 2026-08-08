@@ -6,7 +6,13 @@ import Nav from "@/components/Nav";
 import SiteFooter from "@/components/SiteFooter";
 import SubscribeBlock from "@/components/SubscribeBlock";
 import TagChip from "@/components/TagChip";
-import { getAllPosts, getAllSlugs, getPostBySlug } from "@/lib/posts";
+import {
+  getAllPosts,
+  getAllSlugs,
+  getPostBySlug,
+  getRelatedPosts,
+  readingMinutes,
+} from "@/lib/posts";
 import { profile } from "@/data/profile";
 
 // Prevent accessing slugs not defined in generateStaticParams.
@@ -80,6 +86,8 @@ export default async function BlogPost({
   const idx = all.findIndex((p) => p.slug === slug);
   const newer = idx > 0 ? all[idx - 1] : null;
   const older = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
+  const mins = readingMinutes(post.content);
+  const related = getRelatedPosts(slug, 2);
 
   // Article JSON-LD — mirrors the Person JSON-LD pattern in layout.tsx.
   const articleJsonLd = {
@@ -126,6 +134,9 @@ export default async function BlogPost({
             >
               {formatDate(post.meta.date)}
             </time>
+            <span className="font-mono text-[0.65rem] text-muted">
+              {mins} min read
+            </span>
             {post.meta.tags.map((tag) => (
               <TagChip key={tag} tag={tag} />
             ))}
@@ -142,6 +153,24 @@ export default async function BlogPost({
         <article className="prose-blog">
           <MDXRemote source={post.content} components={mdxComponents} />
         </article>
+
+        {related.length > 0 && (
+          <aside className="mt-12 border-t border-border pt-8">
+            <p className="label">{"// related dispatches"}</p>
+            <ul className="mt-4 space-y-3">
+              {related.map((r) => (
+                <li key={r.slug}>
+                  <Link
+                    href={`/blog/${r.slug}/`}
+                    className="font-mono text-sm text-accent/80 transition-colors hover:text-accent"
+                  >
+                    {r.meta.title} →
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </aside>
+        )}
 
         {(newer || older) && (
           <nav

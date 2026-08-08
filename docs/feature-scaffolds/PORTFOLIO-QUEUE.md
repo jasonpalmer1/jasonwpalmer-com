@@ -55,3 +55,6 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] confirm/unsub `noindex` + `Disallow: /api/` in robots.txt
 - [x] ContactForm double-submit guard; Konami Tab trap + scroll lock
 - [x] Prev/next dispatch nav; footer + blog RSS link
+- [x] Unsubscribe unknown-token 404; send-dispatch dry-run / exit / `_` slug guards
+- [x] Branded `not-found.tsx`; Tools status pulse only for live/active
+- [x] Platforms grid cols from `stats.length`; reading time + related posts

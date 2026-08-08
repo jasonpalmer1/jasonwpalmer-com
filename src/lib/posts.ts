@@ -113,3 +113,21 @@ export function getPostsByTag(tag: string): Post[] {
     post.meta.tags.some((t) => slugifyTag(t) === slug),
   );
 }
+
+/** Approximate reading time from MDX body (~200 wpm). */
+export function readingMinutes(content: string): number {
+  const words = content.trim().split(/\s+/).filter(Boolean).length;
+  return Math.max(1, Math.round(words / 200));
+}
+
+/** Other posts sharing at least one tag, newest first (excludes `slug`). */
+export function getRelatedPosts(slug: string, limit = 2): Post[] {
+  const current = getPostBySlug(slug);
+  if (!current) return [];
+  const tags = new Set(current.meta.tags.map(slugifyTag));
+  if (tags.size === 0) return [];
+  return getAllPosts()
+    .filter((p) => p.slug !== slug)
+    .filter((p) => p.meta.tags.some((t) => tags.has(slugifyTag(t))))
+    .slice(0, limit);
+}

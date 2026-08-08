@@ -56,8 +56,16 @@ function ToolCard({ tool }: { tool: Tool }) {
             </h3>
           </div>
         </div>
-        <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 font-mono text-[0.65rem] text-accent">
-          <span className="pulse-dot" />
+        <span
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 font-mono text-[0.65rem] ${
+            tool.status === "live" || tool.status === "active"
+              ? "border-accent/30 bg-accent/10 text-accent"
+              : "border-border bg-surface text-muted"
+          }`}
+        >
+          {(tool.status === "live" || tool.status === "active") && (
+            <span className="pulse-dot" />
+          )}
           {statusLabels[tool.status].toUpperCase()}
         </span>
       </div>

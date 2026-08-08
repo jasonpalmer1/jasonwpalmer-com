@@ -124,11 +124,56 @@ async function unsubscribeToken(env, token, siteUrl) {
     });
   }
 
+  let row;
   try {
-    await db
+    row = await db
+      .prepare("SELECT status FROM subscribers WHERE token = ?")
+      .bind(token)
+      .first();
+  } catch {
+    return html(500, {
+      title: "Error",
+      heading: "Something went wrong",
+      body: "We couldn't process your request. Please try again later.",
+      siteUrl,
+      done: true,
+    });
+  }
+
+  if (!row) {
+    return html(404, {
+      title: "Link not found",
+      heading: "Unsubscribe link not found",
+      body: "This link is invalid or already expired. If you're still getting emails, use the unsubscribe link in the latest dispatch.",
+      siteUrl,
+      done: true,
+    });
+  }
+
+  if (row.status === "unsubscribed") {
+    return html(200, {
+      title: "Already unsubscribed",
+      heading: "You're already unsubscribed.",
+      body: "You won't receive any more dispatches. Changed your mind? You can re-subscribe anytime on the site.",
+      siteUrl,
+      done: true,
+    });
+  }
+
+  try {
+    const result = await db
       .prepare("UPDATE subscribers SET status = 'unsubscribed' WHERE token = ?")
       .bind(token)
       .run();
+    if (!result.meta || result.meta.changes === 0) {
+      return html(404, {
+        title: "Link not found",
+        heading: "Unsubscribe link not found",
+        body: "This link is invalid or already expired. If you're still getting emails, use the unsubscribe link in the latest dispatch.",
+        siteUrl,
+        done: true,
+      });
+    }
   } catch {
     return html(500, {
       title: "Error",

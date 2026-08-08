@@ -26,7 +26,17 @@ function PlatformCard({ platform }: { platform: Platform }) {
         {platform.description}
       </p>
 
-      <div className="mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border sm:grid-cols-5">
+      <div
+        className={`mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-border bg-border ${
+          platform.stats.length <= 2
+            ? "sm:grid-cols-2"
+            : platform.stats.length === 3
+              ? "sm:grid-cols-3"
+              : platform.stats.length === 4
+                ? "sm:grid-cols-4"
+                : "sm:grid-cols-5"
+        }`}
+      >
         {platform.stats.map((s) => (
           <div key={s.label} className="bg-surface px-3 py-4 text-center sm:px-4">
             <div className="font-display text-xl font-bold text-accent text-glow sm:text-2xl">

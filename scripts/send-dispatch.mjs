@@ -85,6 +85,12 @@ async function loadMatter(filePath) {
 // ---------------------------------------------------------------------------
 async function resolvePost() {
   if (slugArg) {
+    if (slugArg.startsWith("_")) {
+      console.error(
+        `[dispatch] ERROR: Refusing underscore slug "${slugArg}" (templates/drafts are not dispatchable).`,
+      );
+      process.exit(1);
+    }
     const filePath = join(POSTS_DIR, `${slugArg}.mdx`);
     if (!existsSync(filePath)) {
       console.error(`[dispatch] ERROR: Post not found: ${filePath}`);
@@ -269,13 +275,14 @@ function delay(ms) {
 // Main
 // ---------------------------------------------------------------------------
 async function main() {
-  if (!RESEND_API_KEY) {
+  const post = await resolvePost();
+  console.log(`[dispatch] Post: "${post.title}" (slug: ${post.slug})`);
+
+  // Dry runs preview without Resend — key only required for real sends.
+  if (!isDry && !RESEND_API_KEY) {
     console.error("[dispatch] ERROR: RESEND_API_KEY is not set. Add it to .env or export it before running.");
     process.exit(1);
   }
-
-  const post = await resolvePost();
-  console.log(`[dispatch] Post: "${post.title}" (slug: ${post.slug})`);
 
   const subscribers = fetchSubscribers();
   console.log(`[dispatch] Confirmed subscribers: ${subscribers.length}`);
@@ -329,6 +336,7 @@ async function main() {
       console.log(`  ${e.email}: ${e.error}`);
     }
   }
+  if (failed > 0) process.exit(1);
 }
 
 main().catch((err) => {
