@@ -8,7 +8,9 @@ These are **intentional stubs / optional paths** laid down by the cloud audit ag
 | Build-log post template | — | `src/content/posts/_TEMPLATE.build-log.mdx` | Copy → rename → fill → `npm run send-dispatch` |
 | Last dispatch on homepage | — | `src/components/LastShipped.tsx` (in Hero) | Live — restyle/move as needed |
 | Tag archive | [tag-archive.md](./tag-archive.md) | `blog/tag/[tag]`, `TagChip`, `posts.ts` | Live |
+| Per-tag RSS | [tag-rss.md](./tag-rss.md) | `lib/rss.ts`, `rss/tag/[tag]/route.ts` | Live |
 | Per-post OG images | [per-post-og.md](./per-post-og.md) | `scripts/gen-post-og.mjs`, `cover` front-matter | Implement renderer + run script |
+| visit-log CSP allowlist | [visit-log-csp.md](./visit-log-csp.md) | `scripts/print-visit-log-csp-snippet.mjs` | Paste into sibling `_headers` |
 | Portfolio backlog | [PORTFOLIO-QUEUE.md](./PORTFOLIO-QUEUE.md) | n/a | Pick next item when idle |
 
 When you finish a scaffold, delete or rewrite its doc so the queue stays honest.

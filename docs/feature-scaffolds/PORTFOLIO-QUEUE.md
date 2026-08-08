@@ -45,8 +45,8 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 
 ## Ideas worth scaffolding later (not started)
 
-- Shared `visit-log` allowlist helper across sites’ `_headers`
-- Per-tag RSS feeds (`/rss/tag/<tag>.xml`)
+- Implement `gen-post-og.mjs` renderer (PNG output)
+- Client-side blog filter without navigation (optional UX)
 
 ## Scaffolded this loop (cloud agent)
 
@@ -58,3 +58,7 @@ Ordered for Jason’s local machine. Strike through when done; add dates.
 - [x] Unsubscribe unknown-token 404; send-dispatch dry-run / exit / `_` slug guards
 - [x] Branded `not-found.tsx`; Tools status pulse only for live/active
 - [x] Platforms grid cols from `stats.length`; reading time + related posts
+- [x] CopyButton (callsign + post URL); BlogPosting `timeRequired`; print CSS
+- [x] TagChip `aria-current` + tag-page ALL clear; Stats cols from length; progressbar roles
+- [x] Per-tag RSS (`/rss/tag/<tag>/`) + shared `lib/rss.ts`
+- [x] visit-log CSP snippet doc/script; optional front-matter `builds:` → homepage anchors

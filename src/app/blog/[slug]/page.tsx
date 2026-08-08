@@ -15,6 +15,7 @@ import {
   readingMinutes,
 } from "@/lib/posts";
 import { profile } from "@/data/profile";
+import { tools } from "@/data/tools";
 
 // Prevent accessing slugs not defined in generateStaticParams.
 export const dynamicParams = false;
@@ -89,6 +90,9 @@ export default async function BlogPost({
   const older = idx >= 0 && idx < all.length - 1 ? all[idx + 1] : null;
   const mins = readingMinutes(post.content);
   const related = getRelatedPosts(slug, 2);
+  const relatedBuilds = (post.meta.builds ?? [])
+    .map((id) => tools.find((t) => t.id === id))
+    .filter((t): t is (typeof tools)[number] => Boolean(t));
 
   // Article JSON-LD — mirrors the Person JSON-LD pattern in layout.tsx.
   const articleJsonLd = {
@@ -161,21 +165,42 @@ export default async function BlogPost({
           <MDXRemote source={post.content} components={mdxComponents} />
         </article>
 
-        {related.length > 0 && (
+        {(relatedBuilds.length > 0 || related.length > 0) && (
           <aside className="mt-12 border-t border-border pt-8">
-            <p className="label">{"// related dispatches"}</p>
-            <ul className="mt-4 space-y-3">
-              {related.map((r) => (
-                <li key={r.slug}>
-                  <Link
-                    href={`/blog/${r.slug}/`}
-                    className="font-mono text-sm text-accent/80 transition-colors hover:text-accent"
-                  >
-                    {r.meta.title} →
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            {relatedBuilds.length > 0 && (
+              <div className={related.length > 0 ? "mb-8" : undefined}>
+                <p className="label">{"// related builds"}</p>
+                <ul className="mt-4 space-y-3">
+                  {relatedBuilds.map((t) => (
+                    <li key={t.id}>
+                      <Link
+                        href={`/#${t.id}`}
+                        className="font-mono text-sm text-accent/80 transition-colors hover:text-accent"
+                      >
+                        {t.name} →
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            {related.length > 0 && (
+              <>
+                <p className="label">{"// related dispatches"}</p>
+                <ul className="mt-4 space-y-3">
+                  {related.map((r) => (
+                    <li key={r.slug}>
+                      <Link
+                        href={`/blog/${r.slug}/`}
+                        className="font-mono text-sm text-accent/80 transition-colors hover:text-accent"
+                      >
+                        {r.meta.title} →
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
           </aside>
         )}
 

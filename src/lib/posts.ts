@@ -25,6 +25,8 @@ export interface PostMeta {
   summary: string;
   tags: string[];
   cover?: string;
+  /** Optional tool ids from `src/data/tools.ts` — linked as related builds. */
+  builds?: string[];
 }
 
 export interface Post {
@@ -46,7 +48,10 @@ function normalizeMeta(data: Record<string, unknown>, slug: string): PostMeta {
     ? data.tags.filter((t): t is string => typeof t === "string")
     : [];
   const cover = typeof data.cover === "string" ? data.cover : undefined;
-  return { title, date, summary, tags, cover };
+  const builds = Array.isArray(data.builds)
+    ? data.builds.filter((b): b is string => typeof b === "string")
+    : undefined;
+  return { title, date, summary, tags, cover, builds };
 }
 
 function readPost(filename: string): Post {

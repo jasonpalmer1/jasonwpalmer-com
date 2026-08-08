@@ -93,6 +93,12 @@ export default async function TagArchive({
               ALL
             </Link>
             <TagChip tag={slug} active />
+            <a
+              href={`/rss/tag/${slug}/`}
+              className="rounded border border-border bg-surface px-1.5 py-0.5 font-mono text-[0.6rem] text-muted transition-colors hover:border-accent/40 hover:text-accent"
+            >
+              RSS
+            </a>
           </div>
         </div>
 
