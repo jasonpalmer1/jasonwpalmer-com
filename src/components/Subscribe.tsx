@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 type Status = "idle" | "submitting" | "success" | "error";
 
@@ -10,16 +10,22 @@ export default function Subscribe() {
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<Status>("idle");
   const [message, setMessage] = useState("");
+  const inFlight = useRef(false);
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (inFlight.current || status === "submitting") return;
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    const honeypot = data.get("botcheck");
+    inFlight.current = true;
     setStatus("submitting");
     setMessage("");
     try {
       const res = await fetch("/api/subscribe", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, botcheck: honeypot || "" }),
       });
       const json = await res.json();
       if (json.ok) {
@@ -33,6 +39,8 @@ export default function Subscribe() {
     } catch {
       setStatus("error");
       setMessage("Network error — please try again.");
+    } finally {
+      inFlight.current = false;
     }
   }
 
@@ -48,7 +56,16 @@ export default function Subscribe() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="mx-auto max-w-md">
+    <form onSubmit={handleSubmit} className="relative mx-auto max-w-md">
+      {/* Honeypot — leave empty. Server drops submissions when filled. */}
+      <input
+        type="text"
+        name="botcheck"
+        tabIndex={-1}
+        autoComplete="off"
+        aria-hidden="true"
+        className="absolute -left-[9999px] h-0 w-0 opacity-0"
+      />
       <div className="flex flex-col gap-3 sm:flex-row">
         <input
           type="email"
@@ -57,6 +74,7 @@ export default function Subscribe() {
           onChange={(e) => setEmail(e.target.value)}
           placeholder="you@example.com"
           aria-label="Email address"
+          autoComplete="email"
           required
           disabled={status === "submitting"}
           className="w-full rounded-md border border-border bg-background/60 px-3 py-2 font-mono text-sm text-foreground outline-none transition-colors placeholder:text-muted/50 focus:border-accent focus:ring-1 focus:ring-accent/40 sm:flex-1 disabled:opacity-50"

@@ -152,16 +152,23 @@ const mdxComponents = {
   p: ({ children }: React.PropsWithChildren) => (
     <p className="my-4 text-base leading-7 text-foreground/85">{children}</p>
   ),
-  a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a
-      href={href}
-      target={href?.startsWith("http") ? "_blank" : undefined}
-      rel={href?.startsWith("http") ? "noopener noreferrer" : undefined}
-      className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
-    >
-      {children}
-    </a>
-  ),
+  a: ({ href, children }: React.AnchorHTMLAttributes<HTMLAnchorElement>) => {
+    // Reject javascript:/data: etc. Solo-authored MDX is trusted, but PRs aren't.
+    const safe =
+      typeof href === "string" && /^(https?:\/\/|\/|#|mailto:)/i.test(href)
+        ? href
+        : undefined;
+    return (
+      <a
+        href={safe}
+        target={safe?.startsWith("http") ? "_blank" : undefined}
+        rel={safe?.startsWith("http") ? "noopener noreferrer" : undefined}
+        className="text-accent-2 underline underline-offset-2 hover:text-accent transition-colors"
+      >
+        {children}
+      </a>
+    );
+  },
   ul: ({ children }: React.PropsWithChildren) => (
     <ul className="my-4 space-y-1.5 pl-5 text-base leading-7 text-foreground/85 list-disc">
       {children}

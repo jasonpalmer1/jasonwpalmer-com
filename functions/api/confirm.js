@@ -1,24 +1,53 @@
 /**
- * GET /api/confirm?token=<uuid>
+ * GET  /api/confirm?token=<uuid>  — interstitial (avoids prefetch auto-confirm)
+ * POST /api/confirm               — body/query token actually confirms
  *
- * Confirms a subscriber's email address by setting status = 'confirmed'.
- * Returns a full dark-theme HTML page (no JS dependency).
+ * Confirms a subscriber's email by setting status = 'confirmed' and rotating
+ * the token (old confirm link dies; new token is for unsubscribe only).
  *
  * Security:
  *  - token looked up with parameterized binding — no string interpolation.
- *  - Refuses to confirm already-unsubscribed rows (WHERE status != 'unsubscribed').
- *  - result.meta.changes determines whether the token was valid.
+ *  - Only status = 'pending' rows can be confirmed.
+ *  - Prefetch-safe: GET alone does not mutate.
  */
 
-function page({ title, heading, body, siteUrl, isSuccess }) {
-  const accentColor = isSuccess ? "#34f5c5" : "#f87171";
-  const icon = isSuccess ? "✓" : "✗";
+const SECURITY_HEADERS = {
+  "Content-Type": "text/html; charset=utf-8",
+  "X-Content-Type-Options": "nosniff",
+  "X-Frame-Options": "DENY",
+  "Referrer-Policy": "strict-origin-when-cross-origin",
+  "Content-Security-Policy":
+    "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
+};
+
+function esc(str) {
+  return String(str || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function page({ title, heading, body, siteUrl, isSuccess, token, unsubUrl }) {
+  const accentColor = isSuccess ? "#34f5c5" : token ? "#34f5c5" : "#f87171";
+  const icon = isSuccess ? "✓" : token ? "?" : "✗";
+  const action = token
+    ? `<form method="POST" action="/api/confirm">
+        <input type="hidden" name="token" value="${esc(token)}" />
+        <button type="submit" class="btn">CONFIRM SUBSCRIPTION →</button>
+      </form>`
+    : `<a href="${esc(siteUrl)}" class="btn">← BACK TO SITE</a>`;
+  const unsubLine = unsubUrl
+    ? `<p class="footer"><a href="${esc(unsubUrl)}">Unsubscribe anytime</a></p>`
+    : "";
+
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>${title} — Jason Palmer</title>
+  <meta name="robots" content="noindex, nofollow" />
+  <title>${esc(title)} — Jason Palmer</title>
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     html, body {
@@ -39,49 +68,24 @@ function page({ title, heading, body, siteUrl, isSuccess }) {
       padding: 40px 32px;
       text-align: center;
     }
-    .icon {
-      font-size: 2.5rem;
-      color: ${accentColor};
-      margin-bottom: 16px;
-    }
+    .icon { font-size: 2.5rem; color: ${accentColor}; margin-bottom: 16px; }
     .label {
-      font-size: 11px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      color: #6b7280;
-      margin-bottom: 8px;
+      font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase;
+      color: #6b7280; margin-bottom: 8px;
     }
     h1 {
-      font-size: 22px;
-      font-weight: 700;
-      color: #ffffff;
-      margin-bottom: 16px;
-      letter-spacing: -0.02em;
+      font-size: 22px; font-weight: 700; color: #ffffff;
+      margin-bottom: 16px; letter-spacing: -0.02em;
     }
-    p {
-      font-size: 14px;
-      line-height: 1.6;
-      color: #9ca3af;
-      margin-bottom: 24px;
+    p { font-size: 14px; line-height: 1.6; color: #9ca3af; margin-bottom: 24px; }
+    a.btn, button.btn {
+      display: inline-block; padding: 12px 24px; background: ${accentColor};
+      color: #0a0e16; text-decoration: none; font-weight: 700; font-size: 12px;
+      letter-spacing: 0.1em; text-transform: uppercase; border-radius: 6px;
+      border: none; cursor: pointer; font-family: inherit;
     }
-    a.btn {
-      display: inline-block;
-      padding: 12px 24px;
-      background: ${accentColor};
-      color: #0a0e16;
-      text-decoration: none;
-      font-weight: 700;
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
-      border-radius: 6px;
-    }
-    a.btn:hover { opacity: 0.9; }
-    .footer {
-      margin-top: 24px;
-      font-size: 11px;
-      color: #374151;
-    }
+    a.btn:hover, button.btn:hover { opacity: 0.9; }
+    .footer { margin-top: 24px; font-size: 11px; color: #374151; }
     .footer a { color: #34f5c5; text-decoration: none; }
   </style>
 </head>
@@ -89,15 +93,83 @@ function page({ title, heading, body, siteUrl, isSuccess }) {
   <div class="card">
     <div class="icon">${icon}</div>
     <p class="label">// dispatch log</p>
-    <h1>${heading}</h1>
-    <p>${body}</p>
-    <a href="${siteUrl}" class="btn">← BACK TO SITE</a>
+    <h1>${esc(heading)}</h1>
+    <p>${esc(body)}</p>
+    ${action}
+    ${unsubLine}
     <p class="footer">
-      <a href="${siteUrl}">jasonwpalmer.com</a>
+      <a href="${esc(siteUrl)}">jasonwpalmer.com</a>
     </p>
   </div>
 </body>
 </html>`;
+}
+
+function html(status, opts) {
+  return new Response(page(opts), { status, headers: SECURITY_HEADERS });
+}
+
+async function confirmToken(env, token, siteUrl) {
+  if (!token) {
+    return html(400, {
+      title: "Invalid link",
+      heading: "Link invalid or expired",
+      body: "This confirmation link is missing a token. Please subscribe again.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  const db = env.DB;
+  if (!db) {
+    return html(503, {
+      title: "Service unavailable",
+      heading: "Service unavailable",
+      body: "Something went wrong on our end. Please try again later.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  // Rotate token on confirm so the email link cannot be replayed / used for unsub forever.
+  const unsubToken = crypto.randomUUID();
+  let result;
+  try {
+    result = await db
+      .prepare(
+        "UPDATE subscribers SET status = 'confirmed', confirmed_at = datetime('now'), token = ? WHERE token = ? AND status = 'pending'"
+      )
+      .bind(unsubToken, token)
+      .run();
+  } catch {
+    return html(500, {
+      title: "Error",
+      heading: "Something went wrong",
+      body: "We couldn't confirm your subscription. Please try again later.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  if (!result.meta || result.meta.changes === 0) {
+    return html(404, {
+      title: "Link invalid or expired",
+      heading: "Link invalid or expired",
+      body: "This confirmation link has already been used, is expired, or doesn't exist. If you'd like to subscribe, please enter your email again.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  const unsubUrl = `${siteUrl}/api/unsubscribe?token=${encodeURIComponent(unsubToken)}`;
+  return html(200, {
+    title: "You're confirmed",
+    heading: "You're subscribed.",
+    body: "Your email is confirmed. You'll get a dispatch each time something new ships. No spam.",
+    siteUrl,
+    isSuccess: true,
+    unsubUrl,
+  });
 }
 
 export async function onRequestGet({ request, env }) {
@@ -106,71 +178,79 @@ export async function onRequestGet({ request, env }) {
   const siteUrl = (env.SITE_URL || "https://jasonwpalmer.com").replace(/\/$/, "");
 
   if (!token) {
-    return new Response(
-      page({
-        title: "Invalid link",
-        heading: "Link invalid or expired",
-        body: "This confirmation link is missing a token. Please subscribe again.",
-        siteUrl,
-        isSuccess: false,
-      }),
-      { status: 400, headers: { "Content-Type": "text/html; charset=utf-8" } }
-    );
+    return html(400, {
+      title: "Invalid link",
+      heading: "Link invalid or expired",
+      body: "This confirmation link is missing a token. Please subscribe again.",
+      siteUrl,
+      isSuccess: false,
+    });
   }
 
   const db = env.DB;
   if (!db) {
-    return new Response(
-      page({
-        title: "Service unavailable",
-        heading: "Service unavailable",
-        body: "Something went wrong on our end. Please try again later.",
-        siteUrl,
-        isSuccess: false,
-      }),
-      { status: 503, headers: { "Content-Type": "text/html; charset=utf-8" } }
-    );
-  }
-
-  let result;
-  try {
-    result = await db.prepare(
-      "UPDATE subscribers SET status = 'confirmed', confirmed_at = datetime('now') WHERE token = ? AND status != 'unsubscribed'"
-    ).bind(token).run();
-  } catch {
-    return new Response(
-      page({
-        title: "Error",
-        heading: "Something went wrong",
-        body: "We couldn't confirm your subscription. Please try again later.",
-        siteUrl,
-        isSuccess: false,
-      }),
-      { status: 500, headers: { "Content-Type": "text/html; charset=utf-8" } }
-    );
-  }
-
-  if (!result.meta || result.meta.changes === 0) {
-    return new Response(
-      page({
-        title: "Link invalid or expired",
-        heading: "Link invalid or expired",
-        body: "This confirmation link has already been used, is expired, or doesn't exist. If you'd like to subscribe, please enter your email again.",
-        siteUrl,
-        isSuccess: false,
-      }),
-      { status: 404, headers: { "Content-Type": "text/html; charset=utf-8" } }
-    );
-  }
-
-  return new Response(
-    page({
-      title: "You're confirmed",
-      heading: "You're subscribed.",
-      body: "Your email is confirmed. You'll get a dispatch each time something new ships. No spam — unsubscribe anytime.",
+    return html(503, {
+      title: "Service unavailable",
+      heading: "Service unavailable",
+      body: "Something went wrong on our end. Please try again later.",
       siteUrl,
-      isSuccess: true,
-    }),
-    { status: 200, headers: { "Content-Type": "text/html; charset=utf-8" } }
-  );
+      isSuccess: false,
+    });
+  }
+
+  // Prefetch-safe: validate pending token before showing the confirm form.
+  let row;
+  try {
+    row = await db
+      .prepare("SELECT status FROM subscribers WHERE token = ?")
+      .bind(token)
+      .first();
+  } catch {
+    return html(500, {
+      title: "Error",
+      heading: "Something went wrong",
+      body: "We couldn't look up this confirmation link. Please try again later.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  if (!row || row.status !== "pending") {
+    return html(404, {
+      title: "Link invalid or expired",
+      heading: "Link invalid or expired",
+      body: "This confirmation link has already been used, is expired, or doesn't exist. If you'd like to subscribe, please enter your email again.",
+      siteUrl,
+      isSuccess: false,
+    });
+  }
+
+  return html(200, {
+    title: "Confirm subscription",
+    heading: "Confirm your subscription",
+    body: "Click below to confirm you want dispatch emails from jasonwpalmer.com.",
+    siteUrl,
+    isSuccess: false,
+    token,
+  });
+}
+
+export async function onRequestPost({ request, env }) {
+  const siteUrl = (env.SITE_URL || "https://jasonwpalmer.com").replace(/\/$/, "");
+  const contentType = request.headers.get("content-type") || "";
+  let token = "";
+
+  if (contentType.includes("application/json")) {
+    const body = await request.json().catch(() => ({}));
+    token = typeof body.token === "string" ? body.token : "";
+  } else {
+    const form = await request.formData().catch(() => null);
+    token = form && typeof form.get("token") === "string" ? form.get("token") : "";
+    if (!token) {
+      const url = new URL(request.url);
+      token = url.searchParams.get("token") || "";
+    }
+  }
+
+  return confirmToken(env, token, siteUrl);
 }

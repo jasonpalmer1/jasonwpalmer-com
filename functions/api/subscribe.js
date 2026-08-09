@@ -1,6 +1,6 @@
 /**
  * POST /api/subscribe
- * Body: { email: string }
+ * Body: { email: string, botcheck?: string }
  *
  * Stores the subscriber in D1 (status = "pending") and sends a
  * Resend confirmation email if RESEND_API_KEY is present.
@@ -10,10 +10,18 @@
  *  - Email validated server-side; max 254 chars; lowercased + trimmed.
  *  - Token generated with crypto.randomUUID().
  *  - RESEND_API_KEY never logged or returned.
+ *  - Honeypot field `botcheck` (filled = silent success, no write/send).
+ *  - Per-IP Cache API rate limit + per-email confirm cooldown.
+ *  - Uniform success copy (no email enumeration).
  *  - Missing RESEND_API_KEY → subscriber stored, ok returned (no 500).
  */
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+const CONFIRM_COOLDOWN_MS = 15 * 60 * 1000; // 15 minutes per email
+const IP_LIMIT = 10; // subscribes per IP per window
+const IP_WINDOW_SECONDS = 3600;
+
+const SUCCESS_MSG = "Almost there — check your inbox to confirm.";
 
 function buildConfirmationHtml(confirmUrl, siteUrl) {
   return `<!DOCTYPE html>
@@ -79,6 +87,42 @@ function buildConfirmationHtml(confirmUrl, siteUrl) {
 </html>`;
 }
 
+function ok() {
+  return Response.json({ ok: true, message: SUCCESS_MSG });
+}
+
+/** Cheap per-IP throttle via Cache API (best-effort on the edge). */
+async function isIpRateLimited(request) {
+  try {
+    const ip = request.headers.get("cf-connecting-ip") || "unknown";
+    const cache = caches.default;
+    const key = new Request(`https://subscribe-rate.invalid/${encodeURIComponent(ip)}`);
+    const hit = await cache.match(key);
+    let count = 0;
+    if (hit) {
+      count = parseInt(await hit.text(), 10) || 0;
+      if (count >= IP_LIMIT) return true;
+    }
+    await cache.put(
+      key,
+      new Response(String(count + 1), {
+        headers: { "Cache-Control": `max-age=${IP_WINDOW_SECONDS}` },
+      })
+    );
+    return false;
+  } catch {
+    return false; // fail open if Cache API unavailable
+  }
+}
+
+function parseSqliteUtc(ts) {
+  if (!ts || typeof ts !== "string") return null;
+  // D1/SQLite datetime('now') → "YYYY-MM-DD HH:MM:SS"
+  const iso = ts.includes("T") ? ts : ts.replace(" ", "T") + "Z";
+  const d = new Date(iso);
+  return Number.isNaN(d.getTime()) ? null : d.getTime();
+}
+
 export async function onRequestPost({ request, env }) {
   let body;
   try {
@@ -87,7 +131,12 @@ export async function onRequestPost({ request, env }) {
     return Response.json({ ok: false, error: "Invalid request body." }, { status: 400 });
   }
 
-  // --- Validate email ---
+  // Honeypot — bots fill hidden fields; humans leave them empty.
+  if (body.botcheck || body.website) {
+    return ok();
+  }
+
+  // --- Validate email before rate limit so junk doesn't burn budget ---
   const raw = typeof body.email === "string" ? body.email : "";
   const email = raw.trim().toLowerCase();
 
@@ -99,6 +148,13 @@ export async function onRequestPost({ request, env }) {
   }
   if (!EMAIL_RE.test(email)) {
     return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+  }
+
+  if (await isIpRateLimited(request)) {
+    return Response.json(
+      { ok: false, error: "Too many requests — try again later." },
+      { status: 429 }
+    );
   }
 
   const db = env.DB;
@@ -113,14 +169,23 @@ export async function onRequestPost({ request, env }) {
   let existing;
   try {
     existing = await db.prepare(
-      "SELECT id, status FROM subscribers WHERE email = ?"
+      "SELECT id, status, token, created_at FROM subscribers WHERE email = ?"
     ).bind(email).first();
   } catch {
     return Response.json({ ok: false, error: "Database error." }, { status: 500 });
   }
 
+  // Already confirmed — same success copy (no enumeration), no email.
   if (existing && existing.status === "confirmed") {
-    return Response.json({ ok: true, message: "You're already subscribed." });
+    return ok();
+  }
+
+  // Pending + still in cooldown — don't rotate token / re-send.
+  if (existing && existing.status === "pending") {
+    const created = parseSqliteUtc(existing.created_at);
+    if (created && Date.now() - created < CONFIRM_COOLDOWN_MS) {
+      return ok();
+    }
   }
 
   // --- Generate a fresh token ---
@@ -137,21 +202,24 @@ export async function onRequestPost({ request, env }) {
       return Response.json({ ok: false, error: "Database error." }, { status: 500 });
     }
   } else {
-    // New subscriber
     try {
       await db.prepare(
         "INSERT INTO subscribers (email, status, token, created_at) VALUES (?, 'pending', ?, ?)"
       ).bind(email, token, now).run();
-    } catch {
+    } catch (err) {
+      // Concurrent first-insert race on UNIQUE(email) — treat as success.
+      const msg = String(err && err.message ? err.message : err);
+      if (/unique|constraint/i.test(msg)) return ok();
       return Response.json({ ok: false, error: "Database error." }, { status: 500 });
     }
   }
 
   // --- Send confirmation email (best-effort) ---
+  let confirmSent = false;
   if (env.RESEND_API_KEY) {
-    const confirmUrl = `${siteUrl}/api/confirm?token=${token}`;
+    const confirmUrl = `${siteUrl}/api/confirm?token=${encodeURIComponent(token)}`;
     try {
-      await fetch("https://api.resend.com/emails", {
+      const res = await fetch("https://api.resend.com/emails", {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${env.RESEND_API_KEY}`,
@@ -164,16 +232,29 @@ export async function onRequestPost({ request, env }) {
           html: buildConfirmationHtml(confirmUrl, siteUrl),
         }),
       });
+      if (res.ok) {
+        confirmSent = true;
+      } else {
+        // Non-fatal for the subscriber row; do not leak status details or the key.
+        await res.text().catch(() => "");
+      }
     } catch {
       // Intentional: send failure is non-fatal — subscriber is already stored.
-      // Do not log the API key or rethrow.
     }
   }
 
-  return Response.json({
-    ok: true,
-    message: env.RESEND_API_KEY
-      ? "Almost there — check your inbox to confirm."
-      : "You're on the list — I'll send a confirmation shortly.",
-  });
+  // No mail delivered → don't start the 15m confirm cooldown (allow immediate retry).
+  // Uniform success copy still applies (no enumeration / key-status leak).
+  if (!confirmSent) {
+    try {
+      await db
+        .prepare("UPDATE subscribers SET created_at = ? WHERE email = ?")
+        .bind("1970-01-01 00:00:00", email)
+        .run();
+    } catch {
+      /* ignore */
+    }
+  }
+
+  return ok();
 }
