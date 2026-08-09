@@ -17,6 +17,9 @@
 /.next/
 /out/
 
+# wrangler local dev state (D1/KV emulation — never commit local data)
+/.wrangler/
+
 # production
 /build
 
