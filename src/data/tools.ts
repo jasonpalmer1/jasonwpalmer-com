@@ -190,7 +190,7 @@ export const tools: Tool[] = [
     name: "Our Place",
     tagline: "A private world for two, built as a birthday gift",
     description:
-      "A private app I built for my girlfriend as a birthday gift, for staying close across a " +
+      "A private app I built as a birthday gift, for staying close across a " +
       "long distance. Real-time chat and voice notes, a synced Listening Room, a photo keepsake " +
       "wall, a milestone timeline, open-when letters, and a trip tracker with its own " +
       "constellation map. Nothing here is public — this one's just ours.",
