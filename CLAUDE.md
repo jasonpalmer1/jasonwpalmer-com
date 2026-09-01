@@ -8,6 +8,17 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
+- **GA4 pending prod promotion (2026-08-31):** `src/app/layout.tsx` gained a manual `<head>`
+  (first one in this layout — coexists fine with the `metadata` export, same pattern
+  whosstarting already uses) carrying a plain gtag.js snippet, Measurement ID `G-Z05EBSHWWC`
+  under the "Jason Palmer Sites" GA4 account. Committed to `main` (`725e72f`) and live-verified
+  on a preview deploy (`https://ga4-gtag-preview.jasonwpalmer-com.pages.dev`) — the
+  `gtag/js?id=G-Z05EBSHWWC` request fires. **NOT yet promoted to production** — this repo has no
+  standing auto-deploy grant like whosstarting's, and `/ship`'s own safety contract gates `--prod`
+  on the public site behind Jason's explicit sign-off in the conversation. Next: Jason says go →
+  `npx wrangler pages deploy out --project-name=jasonwpalmer-com --branch=main` (source
+  `~/.cloudflare.env` first). Comment in the snippet flags it for replacement by a Cloudflare
+  Zaraz edge tag later; never run both.
 - **Content upkeep** (the real ongoing job): keep `src/data/tools.ts` (build cards) and `src/data/profile.ts` (stats/experience) current as Jason ships things. Recent commits added a Who's Starting card and iterated its blurb.
 - **Blog/build-log cadence**: only one post exists (`build-log-001.mdx`). Add build-log posts as projects ship; the blog + RSS plumbing is already wired.
 - **Contact**: recently migrated email → Web3Forms contact form. Confirm the form key is set (see `.env.example`) and the form still posts.
