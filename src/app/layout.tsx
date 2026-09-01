@@ -99,6 +99,21 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} ${orbitron.variable} h-full antialiased`}
     >
+      <head>
+        {/* GA4 (gtag.js) — Analytics & Advertiser-Pitch Plan Phase 1. May
+            later be replaced by a Cloudflare Zaraz edge tag using the same
+            Measurement ID — if that happens, remove this block; never run
+            both at once. */}
+        <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z05EBSHWWC" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-Z05EBSHWWC');`,
+          }}
+        />
+      </head>
       <body className="min-h-full flex flex-col">
         <div className="fx-grid" aria-hidden />
         <div className="fx-glow" aria-hidden />
