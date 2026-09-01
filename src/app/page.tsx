@@ -37,12 +37,12 @@ export default function Home() {
           <span className="tracking-widest">
             {game.callsign} // {profile.domain} // BUILT WITH NEXT.JS × CLOUDFLARE //{" "}
             <a
-              href="https://x.com/gototownhq"
+              href="https://x.com/ironstrikeai"
               target="_blank"
               rel="noopener noreferrer"
               className="hover:text-foreground"
             >
-              @GOTOTOWNHQ
+              @IRONSTRIKEAI
             </a>
           </span>
         </div>
