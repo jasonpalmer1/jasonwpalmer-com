@@ -8,6 +8,23 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
+- **2026-09-04 — HQ `collecting=false` is not a missing tag.** Live CDP on the
+  apex (and `/blog/`, `/privacy/`): `gtag.js` 200, `POST …/g/collect?tid=G-Z05EBSHWWC&en=page_view`
+  **204**, `_ga` / `_ga_Z05EBSHWWC` cookies set, no consent mode, same payload
+  shape as working whosstarting `G-XGX0C3ZEKG`. No SPA-only first-load gap on
+  those URLs (full HTML + `gtag('config')`). HQ ga4-snapshot uses the Data API
+  (`runReport`, property **552206522** ↔ `G-Z05EBSHWWC`, account 406447216) —
+  that API is not Realtime and lags 24–48h. Collection only actually started
+  after the 09-03 CSP `script-src` fix, so a 09-04 snapshot of last-7d can
+  still be nulls. **Do not fake `collecting=true` in code.** Remaining code
+  hole (this change): `img-src` / `connect-src` were narrower than wafergraph's
+  working GA4 allowlist (Safari pixel + non-region1 collect). **Still needs
+  Jason: wrangler deploy** (push does not ship). Then in GA4 Admin, Realtime
+  on property 552206522 while loading the apex in a normal browser; if
+  Realtime is empty, check Data Filters (internal IP) and that the web stream
+  ID is exactly `G-Z05EBSHWWC`. If Realtime works but HQ stays false after
+  48h: Google signals thresholding on a low-traffic property, or the snapshot
+  job — not this repo.
 - **2026-09-03 — GA4 HAD NEVER RUN, AND THE FIX IS NOW LIVE (`a7d6fb8`, deployment `abd4b236`).**
   This file's 08-31 note above said GA4 was "live-verified on the real apex". It verified the tag
   was PRESENT in the HTML. It was. `public/_headers` never listed `googletagmanager.com` in
