@@ -8,6 +8,34 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
+- **2026-09-03 — GA4 HAD NEVER RUN, AND THE FIX IS NOW LIVE (`a7d6fb8`, deployment `abd4b236`).**
+  This file's 08-31 note above said GA4 was "live-verified on the real apex". It verified the tag
+  was PRESENT in the HTML. It was. `public/_headers` never listed `googletagmanager.com` in
+  `script-src` (`git log -S googletagmanager` over that file returns nothing), so the browser
+  refused to execute it and the GA4 property collected nothing for three days. Cloudflare Insights
+  was blocked the same way. **Present in the markup is not running** — the only check that catches
+  this is loading the page in a real browser and reading the console. Proven fixed the same way:
+  a headless load of the live apex now fires a real `google-analytics.com/g/collect?…&en=page_view`
+  to `G-Z05EBSHWWC`, not just a script tag.
+- ⚠ **PUSHING `main` STILL DEPLOYS NOTHING HERE. Confirmed a third time 2026-09-03.** `a7d6fb8`'s
+  own commit message claimed the opposite — that this repo had "turned out to be git-integrated"
+  because an earlier push "deployed itself". It had not. The push produced zero new deployments and
+  the live CSP was unchanged; only the explicit wrangler deploy moved it. The trap: `wrangler pages
+  deployment list` shows a **Source** commit for a MANUAL deploy too, so that column can never tell
+  a git build from a hand deploy. Don't re-derive this — it was already corrected on 2026-07-05.
+- **Deploy with bare `npx wrangler pages deploy`** (source `~/.cloudflare.env` first). `wrangler.toml`
+  carries `pages_build_output_dir = "out"`, the `DB` D1 binding and the `SITE_URL`/`FROM_EMAIL` vars;
+  the older `pages deploy out --project-name=…` form bypasses that config and risks shipping without
+  the Functions bundle the newsletter endpoints (`/api/subscribe`, `/api/confirm`, `/api/unsubscribe`)
+  depend on. Watch for `✨ Uploading Functions bundle` in the output.
+- **Privacy policy written, awaiting Jason's OK** — branch `privacy-policy` (`8e3e08f`), preview at
+  `https://privacy-policy.jasonwpalmer-com.pages.dev/privacy/`. `src/app/privacy/page.tsx`, linked
+  from the homepage footer and `sitemap.ts`. Not a copy of ironstrikeai.com's policy: that site is
+  first-party-analytics-only and says "no third-party trackers", which would be FALSE here because
+  of GA4. Every claim was read out of the code (visit-log `src/beacon.js` privacy contract and its
+  `form_abandon` path, the DNT/GPC gate, `migrations/0001_subscribers.sql`, `functions/api/subscribe.js`,
+  the two web3forms components). If a tracker is ever added or removed, change that page in the
+  same commit and bump its `EFFECTIVE` constant and the sitemap `lastModified`.
 - **GA4 LIVE IN PRODUCTION (promoted 2026-08-31 on Jason's explicit go):** `src/app/layout.tsx`
   carries a manual `<head>` (first one in this layout — coexists fine with the `metadata` export,
   same pattern whosstarting already uses) with a plain gtag.js snippet, Measurement ID
