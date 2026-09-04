@@ -1,3 +1,12 @@
+# ⚠ 2026-09-03, found live with a headless browser on the real apex: GA4 and
+# Cloudflare Insights were being BLOCKED by this CSP and had been since GA4
+# shipped on 2026-08-31. `googletagmanager.com` was never in `script-src` — a
+# `git log -S` over this file returns nothing. The tag was in the HTML, which is
+# what "live-verified" checked, but the browser refused to execute it, so the
+# GA4 property has been recording nothing. Present in the markup is not the same
+# as running. Hosts added below; verify by loading the page in a real browser
+# and reading the console, not by grepping the HTML for the tag.
+#
 # 2026-09-03: visit-log migrated to the neutral host visit.ironstrikeai.com
 # (visit-log.jwpalm99.workers.dev leaked Jason's personal handle in a public
 # URL, a standing red line). Both hosts are allow-listed together on purpose:
@@ -12,4 +21,4 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.google-analytics.com https://region1.google-analytics.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
