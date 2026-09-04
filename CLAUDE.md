@@ -28,8 +28,7 @@ _Keep this current — it's the fastest way to pick up work._
   the older `pages deploy out --project-name=…` form bypasses that config and risks shipping without
   the Functions bundle the newsletter endpoints (`/api/subscribe`, `/api/confirm`, `/api/unsubscribe`)
   depend on. Watch for `✨ Uploading Functions bundle` in the output.
-- **Privacy policy written, awaiting Jason's OK** — branch `privacy-policy` (`8e3e08f`), preview at
-  `https://privacy-policy.jasonwpalmer-com.pages.dev/privacy/`. `src/app/privacy/page.tsx`, linked
+- **Privacy policy LIVE 2026-09-03 22:20** — Jason approved in the hub; merged `3bb09f4`, deployed by hand (`fcfd8b00`), verified `https://jasonwpalmer.com/privacy/` by title. `src/app/privacy/page.tsx`, linked
   from the homepage footer and `sitemap.ts`. Not a copy of ironstrikeai.com's policy: that site is
   first-party-analytics-only and says "no third-party trackers", which would be FALSE here because
   of GA4. Every claim was read out of the code (visit-log `src/beacon.js` privacy contract and its
