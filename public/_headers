@@ -1,7 +1,15 @@
+# 2026-09-03: visit-log migrated to the neutral host visit.ironstrikeai.com
+# (visit-log.jwpalm99.workers.dev leaked Jason's personal handle in a public
+# URL, a standing red line). Both hosts are allow-listed together on purpose:
+# the beacon is edge/browser-cached up to an hour and a service worker may
+# hold the old script, so a tab that loaded the old beacon before this
+# deploy keeps POSTing to the old host — dropping it from connect-src would
+# make those events die silently with a green build. Remove the old host
+# once the transition window has passed.
 /*
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'

@@ -135,8 +135,12 @@ gtag('config', 'G-Z05EBSHWWC');`,
             the collector (~/projects/visit-log/src/beacon.js), so tracking
             changes ship by deploying that Worker, not by editing three sites.
             Plain <script defer>, not next/script, to keep the same early-firing
-            behavior the inline snippet had. */}
-        <script defer src="https://visit-log.jwpalm99.workers.dev/v.js" />
+            behavior the inline snippet had. Points at the neutral host
+            visit.ironstrikeai.com as of 2026-09-03 (the old
+            visit-log.jwpalm99.workers.dev host leaked Jason's personal handle
+            in a public URL); public/_headers keeps both hosts allow-listed
+            during the transition window, see the comment there. */}
+        <script defer src="https://visit.ironstrikeai.com/v.js" />
         {children}
         <FloatingActions />
         {/* Cloudflare Web Analytics — inert when token is unset */}
