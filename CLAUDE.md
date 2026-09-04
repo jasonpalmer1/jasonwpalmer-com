@@ -21,8 +21,26 @@ _Keep this current — it's the fastest way to pick up work._
   This repo still has no standing auto-deploy grant (unlike whosstarting): any future prod deploy
   needs Jason's sign-off in the conversation.
 - **Content upkeep** (the real ongoing job): keep `src/data/tools.ts` (build cards) and `src/data/profile.ts` (stats/experience) current as Jason ships things. Recent commits added a Who's Starting card and iterated its blurb.
-- **Blog/build-log cadence**: four posts now (`build-log-001`, `build-log-002`, `valley-of-death-financing`, `built-on-fieldy`). Blog + RSS + sitemap plumbing is wired; a new `.mdx` in `src/content/posts/` lands in all three automatically (verified 2026-09-03).
-- **🔴 AWAITING JASON (2026-09-03): `built-on-fieldy` is on a PREVIEW only.** Branch `post/built-on-fieldy` (`2353072`, pushed), preview at https://post-built-on-fieldy.jasonwpalmer-com.pages.dev/blog/built-on-fieldy/ — prod still 404s that route, confirmed by content. It is a hiring artifact aimed at Fieldy; Jason sends the email himself. To promote: `source ~/.cloudflare.env && npx wrangler pages deploy out --project-name=jasonwpalmer-com --branch=main`, merge the branch to main, **and submit to search in the SAME session** (new prod pages get submitted immediately, never deferred to a daily). The link he hands out must be the apex URL, never the `.pages.dev` one.
+- **Blog/build-log cadence**: four posts now (`build-log-001`, `build-log-002`, `valley-of-death-financing`, `built-on-fieldy`), all live in prod. Blog + RSS + sitemap plumbing is wired; a new `.mdx` in `src/content/posts/` lands in all three automatically (verified 2026-09-03).
+- **✅ `built-on-fieldy` IS LIVE IN PRODUCTION (2026-09-04, on Jason's explicit go).** Merged
+  `post/built-on-fieldy` → `main` fast-forward (`849d01c`, pushed), built, deployed
+  `npx wrangler pages deploy out --project-name=jasonwpalmer-com --branch=main` → deployment
+  `44c1591f`. Live-verified on the APEX at https://jasonwpalmer.com/blog/built-on-fieldy/ —
+  200, `<title>Built on Fieldy — Jason Palmer</title>`, self-canonical, no noindex, GA4 present,
+  and the probe's negative branch was proven first against a known-bad URL (this site's 404 titles
+  "404: Route Not Found", so "Built on Fieldy" cannot appear on it). Submitted to search the same
+  session: IndexNow 200 + Search Console sitemap submit; Google already reports the URL
+  "Discovered - currently not indexed". The link Jason hands to Fieldy is the apex URL.
+  **Still owed: Jason sends the email himself (pitch Step 5).**
+- **The IndexNow key file is finally LIVE** (`/51a6a251c35f43cfb472347d3dc7429a.txt`, 200) — it had
+  been committed since 2026-08-05 but never deployed, so this repo had never once pinged IndexNow.
+  This deploy fixed that; the 2026-09-04 autopilot run submitted 3 changed URLs, its first ever here.
+- ⚠ **`sitemap-autopilot.mjs` prints "all clear — nothing to do" on a run that DID submit.** That
+  line means "no breakage to notify", not "no work done" — read `autopilot.log`, not stdout, to
+  confirm an IndexNow/GSC submit actually happened.
+- ⚠ **Google has never crawled `/blog/` or the two build-log posts** (verified 2026-09-04 via
+  `gsc-inspect.mjs`: 4 of 6 URLs "Discovered - currently not indexed", never crawled). Only the
+  homepage and `valley-of-death-financing` are indexed. Worth a look before the next post.
 - ⚠ **Baseline lint here is 35 errors / 2 warnings repo-wide, all pre-existing** (`react/jsx-no-comment-textnodes` in `Tools.tsx` and friends). A bare `npm run lint` exit code is therefore a meaningless quality gate — lint changed files only.
 - **Contact**: recently migrated email → Web3Forms contact form. Confirm the form key is set (see `.env.example`) and the form still posts.
 - **Mailing list (self-hosted, replaced Beehiiv)**: native form → `functions/api/subscribe.js` → **D1** `dispatch-subscribers` (double opt-in via `functions/api/confirm.js`; `unsubscribe.js`). Sending uses **Resend** (`scripts/send-dispatch.mjs`, run `npm run send-dispatch -- <slug>`; `--dry` to preview). One-time setup + ops in **`MAILING-LIST.md`**. Needs `RESEND_API_KEY` as a Pages secret + jasonwpalmer.com verified in Resend before confirmation/dispatch emails send. D1 binding lives in `wrangler.toml`.
