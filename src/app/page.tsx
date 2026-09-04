@@ -43,6 +43,10 @@ export default function Home() {
               className="hover:text-foreground"
             >
               @IRONSTRIKEAI
+            </a>{" "}
+            //{" "}
+            <a href="/privacy/" className="hover:text-foreground">
+              PRIVACY
             </a>
           </span>
         </div>

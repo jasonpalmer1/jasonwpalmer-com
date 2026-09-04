@@ -45,6 +45,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: "weekly",
       priority: 0.9,
     },
+    // Privacy is a static legal page: real, indexable, but low priority and
+    // rarely edited. lastModified is the hand-set date on the page itself, not
+    // build time, for the same reason as the homepage above.
+    {
+      url: `${base}/privacy/`,
+      lastModified: new Date("2026-09-03"),
+      changeFrequency: "yearly",
+      priority: 0.3,
+    },
     ...postEntries,
   ];
 }
