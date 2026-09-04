@@ -8,23 +8,29 @@ Conventions: follows `~/projects/CONVENTIONS.md` (stack, deploy, autonomy, quali
 
 ## Current focus / next steps
 _Keep this current — it's the fastest way to pick up work._
-- **2026-09-04 — HQ `collecting=false` is not a missing tag.** Live CDP on the
-  apex (and `/blog/`, `/privacy/`): `gtag.js` 200, `POST …/g/collect?tid=G-Z05EBSHWWC&en=page_view`
-  **204**, `_ga` / `_ga_Z05EBSHWWC` cookies set, no consent mode, same payload
-  shape as working whosstarting `G-XGX0C3ZEKG`. No SPA-only first-load gap on
-  those URLs (full HTML + `gtag('config')`). HQ ga4-snapshot uses the Data API
-  (`runReport`, property **552206522** ↔ `G-Z05EBSHWWC`, account 406447216) —
-  that API is not Realtime and lags 24–48h. Collection only actually started
-  after the 09-03 CSP `script-src` fix, so a 09-04 snapshot of last-7d can
-  still be nulls. **Do not fake `collecting=true` in code.** Remaining code
-  hole (this change): `img-src` / `connect-src` were narrower than wafergraph's
-  working GA4 allowlist (Safari pixel + non-region1 collect). **Still needs
-  Jason: wrangler deploy** (push does not ship). Then in GA4 Admin, Realtime
-  on property 552206522 while loading the apex in a normal browser; if
-  Realtime is empty, check Data Filters (internal IP) and that the web stream
-  ID is exactly `G-Z05EBSHWWC`. If Realtime works but HQ stays false after
-  48h: Google signals thresholding on a low-traffic property, or the snapshot
-  job — not this repo.
+- **2026-09-04 (later) — HQ `collecting=false` is honest; site tag/CSP are not the blocker.**
+  Re-verified live: apex CSP includes `www.googletagmanager.com` + `*.google-analytics.com` /
+  `*.analytics.google.com` / `*.googletagmanager.com` (img+connect); HTML has
+  `gtag('config','G-Z05EBSHWWC')`; Chrome netlog shows `g/collect?tid=G-Z05EBSHWWC&en=page_view`
+  → **HTTP 204**. IndexNow keyfile `/51a6a251c35f43cfb472347d3dc7429a.txt` 200.
+  Widened CSP from PR #2 is **already in production** (`6423ef1`, Pages deploy
+  `101f0b82`) — push still does not deploy, but this deploy already happened.
+  HQ `scripts/ga4-snapshot.mjs` reads Data API property **552206522** (measurement
+  `G-Z05EBSHWWC`, account 406447216) with SA `hq-ga4-reader@mission-hq-analytics`;
+  auth/metadata OK; `runReport` / `runRealtimeReport` return **no rows** (same
+  credential returns real numbers for canaifeel/whosstarting/wafergraph). Snapshot
+  correctly sets `collecting=false` / null windows — **do not fake `collecting=true`**.
+  First-party visit-log also marks most jasonwpalmer sessions as `rig`, so Google
+  bot filtering likely drops agent hits even when collect returns 204.
+  **Jason-only (no more site code):** (1) GA4 Admin → property for jasonwpalmer.com
+  → Realtime, load `https://jasonwpalmer.com/` in a normal non-headless browser;
+  (2) if Realtime empty despite Network 204: Admin → Data Settings → Data Filters
+  (internal/developer) and Data Streams → confirm Measurement ID is exactly
+  `G-Z05EBSHWWC` under property **552206522** (if the stream moved, update HQ
+  `SITES` propertyId); (3) optional: enable Analytics **Admin** API on GCP project
+  `mission-hq-analytics` (561198087760) so agents can read stream/filter config;
+  (4) after real human traffic lands, wait for next `ga4-snapshot` — collecting
+  becomes true only when `window_28d` has a nonzero metric.
 - **2026-09-03 — GA4 HAD NEVER RUN, AND THE FIX IS NOW LIVE (`a7d6fb8`, deployment `abd4b236`).**
   This file's 08-31 note above said GA4 was "live-verified on the real apex". It verified the tag
   was PRESENT in the HTML. It was. `public/_headers` never listed `googletagmanager.com` in
