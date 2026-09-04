@@ -7,6 +7,15 @@
 # as running. Hosts added below; verify by loading the page in a real browser
 # and reading the console, not by grepping the HTML for the tag.
 #
+# 2026-09-04: the 09-03 script-src fix is live — a real browser load of /,
+# /blog/, and /privacy/ each fires gtag page_view to G-Z05EBSHWWC and Google
+# answers 204. HQ Data API collecting=false is that report lag / admin, not a
+# missing tag. Remaining CSP hole vs the working wafergraph allowlist: img-src
+# had no GA hosts (Safari's pixel fallback) and connect-src only listed www +
+# region1 (other regions + analytics.google.com + gtag config XHR). Wildcards
+# below match wafergraph; do not treat a 204 from one Chrome region as "CSP is
+# done".
+#
 # 2026-09-03: visit-log migrated to the neutral host visit.ironstrikeai.com
 # (visit-log.jwpalm99.workers.dev leaked Jason's personal handle in a public
 # URL, a standing red line). Both hosts are allow-listed together on purpose:
@@ -21,4 +30,4 @@
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.google-analytics.com https://region1.google-analytics.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
