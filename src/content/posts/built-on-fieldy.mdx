@@ -1,0 +1,33 @@
+---
+title: "Built on Fieldy"
+date: "2026-09-03"
+summary: "I built a game on top of Fieldy's API that scores your day from the conversations you actually have. Here's what the API made easy, what was hard, and the one thing I designed and deliberately didn't ship."
+tags: ["building", "ai", "api", "fieldy"]
+---
+
+I built a small game on top of Fieldy's API. It scores your day from the conversations you actually have while wearing the device, and every point traces back to the exact quote that earned it. It's live at [extract.ironstrikeai.com](https://extract.ironstrikeai.com), and it works with your own Fieldy account. No sign-up beyond your own API key.
+
+## What the API made easy
+
+Auth is a single bearer key. Pulling conversations by time range is straightforward, and Fieldy already does the hard part of turning audio into a title, a summary, and a few quotes, so I never had to touch a transcript myself. The API is also callable directly from a browser, no backend in the middle, which is the whole reason this demo can exist without me ever holding anyone's key.
+
+## What was hard, and how I handled it
+
+- The list endpoint's default page size mostly returned conversations that were still processing. I had missed the `pageSize` parameter, and once I set it explicitly and paged through with a cursor, real data showed up.
+- Real recordings are messy. I've seen a single two-to-three-hour recording get split into 31 detected speakers. That broke a scoring approach built for a handful of distinct people, so I moved to scoring per quote instead of per conversation.
+- The evidence per conversation caps at a summary plus three quotes, no matter how long the recording ran. That's the ceiling I had to design the whole scoring system around.
+- Conversations sometimes show up with a lag after they actually happen, so a same-day check can miss something that lands a few hours later.
+- A Fieldy API key can read, write, and delete, with no scopes. I confirmed this myself: created a throwaway record, edited it, then deleted it, all with one key. That shaped a hard rule for this build. The key never leaves the user's own browser, and the page says so, in plain words, before it ever asks for one.
+- Separately, on my own side: I'd been running achievement scoring on a Workers AI model that had quietly been deprecated, so every AI-scored call had been failing closed from the start without me noticing. An eval harness caught it, and it was the only thing that could have. Every scoring response now reports honestly whether the AI actually ran, not just whether an award showed up.
+
+## What I built on paper, and stopped
+
+I sketched a real-time version: Fieldy's webhooks fire the moment a conversation ends, and a notification lands on your phone with what it was worth before you've even opened the app. I didn't build it. Doing that for a stranger's account means holding a credential, indefinitely, on a server, that can read, edit, and delete their entire recorded life. That's not a trade worth making for a demo. If Fieldy had a token that was read-only, revocable, and scoped to just the fields this game needs, I'd build the real-time version today.
+
+## What I'd add to the API next
+
+A conversation-ended webhook with the payload already attached, so a client isn't stuck polling. Quotes tied to individual segments instead of one three-quote cap per whole conversation. A confidence score per detected speaker, so long multi-person recordings can be trusted more when they've earned it. And a scoped, read-only token type, for exactly the reason above.
+
+I built this solo, directing Claude Code, in ten days. The scoring itself runs on Cloudflare's Workers AI at request time, reading what a conversation actually contained.
+
+Most of what's above came from playing my own daily recordings back to myself and noticing where the game got it wrong.
