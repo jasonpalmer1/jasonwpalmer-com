@@ -110,7 +110,7 @@ export default function RootLayout({
             __html: `window.dataLayer = window.dataLayer || [];
 function gtag(){dataLayer.push(arguments);}
 gtag('js', new Date());
-gtag('config', 'G-Z05EBSHWWC');`,
+gtag('config', 'G-Z05EBSHWWC', { cookie_flags: 'Secure;SameSite=Lax' });`,
           }}
         />
       </head>
@@ -138,8 +138,7 @@ gtag('config', 'G-Z05EBSHWWC');`,
             behavior the inline snippet had. Points at the neutral host
             visit.ironstrikeai.com as of 2026-09-03 (the old
             visit-log.jwpalm99.workers.dev host leaked Jason's personal handle
-            in a public URL); public/_headers keeps both hosts allow-listed
-            during the transition window, see the comment there. */}
+            in a public URL and is no longer in CSP). */}
         <script defer src="https://visit.ironstrikeai.com/v.js" />
         {children}
         <FloatingActions />

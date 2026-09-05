@@ -9,13 +9,13 @@
  *  - token looked up with parameterized binding — no string interpolation.
  *  - Only status = 'pending' rows can be confirmed.
  *  - Prefetch-safe: GET alone does not mutate.
+ *  - Token must be a UUID; pages.dev host is refused by /api/_middleware.js.
  */
 
-const SECURITY_HEADERS = {
+import { applySecurityHeaders, isUuid, readJsonLimited } from "../_lib/security.js";
+
+const HTML_EXTRAS = {
   "Content-Type": "text/html; charset=utf-8",
-  "X-Content-Type-Options": "nosniff",
-  "X-Frame-Options": "DENY",
-  "Referrer-Policy": "strict-origin-when-cross-origin",
   "Content-Security-Policy":
     "default-src 'none'; style-src 'unsafe-inline'; form-action 'self'; base-uri 'none'; frame-ancestors 'none'",
 };
@@ -106,11 +106,13 @@ function page({ title, heading, body, siteUrl, isSuccess, token, unsubUrl }) {
 }
 
 function html(status, opts) {
-  return new Response(page(opts), { status, headers: SECURITY_HEADERS });
+  const headers = new Headers();
+  applySecurityHeaders(headers, HTML_EXTRAS);
+  return new Response(page(opts), { status, headers });
 }
 
 async function confirmToken(env, token, siteUrl) {
-  if (!token) {
+  if (!token || !isUuid(token)) {
     return html(400, {
       title: "Invalid link",
       heading: "Link invalid or expired",
@@ -177,7 +179,7 @@ export async function onRequestGet({ request, env }) {
   const token = url.searchParams.get("token") || "";
   const siteUrl = (env.SITE_URL || "https://jasonwpalmer.com").replace(/\/$/, "");
 
-  if (!token) {
+  if (!token || !isUuid(token)) {
     return html(400, {
       title: "Invalid link",
       heading: "Link invalid or expired",
@@ -241,8 +243,8 @@ export async function onRequestPost({ request, env }) {
   let token = "";
 
   if (contentType.includes("application/json")) {
-    const body = await request.json().catch(() => ({}));
-    token = typeof body.token === "string" ? body.token : "";
+    const parsed = await readJsonLimited(request, 4096);
+    token = parsed.ok && typeof parsed.data.token === "string" ? parsed.data.token : "";
   } else {
     const form = await request.formData().catch(() => null);
     token = form && typeof form.get("token") === "string" ? form.get("token") : "";
