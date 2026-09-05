@@ -14,12 +14,19 @@
  *  - Per-IP Cache API rate limit + per-email confirm cooldown.
  *  - Uniform success copy (no email enumeration).
  *  - Missing RESEND_API_KEY → subscriber stored, ok returned (no 500).
+ *  - Host allowlist (see /api/_middleware.js) — pages.dev cannot write.
+ *  - Origin/Referer allowlist — browser POSTs must come from this site.
+ *  - JSON body capped; Content-Type must be application/json.
+ *  - No CORS headers.
  */
+
+import { isAllowedOrigin, json, readJsonLimited } from "../_lib/security.js";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const CONFIRM_COOLDOWN_MS = 15 * 60 * 1000; // 15 minutes per email
 const IP_LIMIT = 10; // subscribes per IP per window
 const IP_WINDOW_SECONDS = 3600;
+const MAX_BODY_BYTES = 4096;
 
 const SUCCESS_MSG = "Almost there — check your inbox to confirm.";
 
@@ -88,7 +95,7 @@ function buildConfirmationHtml(confirmUrl, siteUrl) {
 }
 
 function ok() {
-  return Response.json({ ok: true, message: SUCCESS_MSG });
+  return json({ ok: true, message: SUCCESS_MSG });
 }
 
 /** Cheap per-IP throttle via Cache API (best-effort on the edge). */
@@ -124,12 +131,15 @@ function parseSqliteUtc(ts) {
 }
 
 export async function onRequestPost({ request, env }) {
-  let body;
-  try {
-    body = await request.json();
-  } catch {
-    return Response.json({ ok: false, error: "Invalid request body." }, { status: 400 });
+  if (!isAllowedOrigin(request)) {
+    return json({ ok: false, error: "Invalid request." }, 403);
   }
+
+  const parsed = await readJsonLimited(request, MAX_BODY_BYTES);
+  if (!parsed.ok) {
+    return json({ ok: false, error: parsed.error }, parsed.status);
+  }
+  const body = parsed.data;
 
   // Honeypot — bots fill hidden fields; humans leave them empty.
   if (body.botcheck || body.website) {
@@ -141,25 +151,22 @@ export async function onRequestPost({ request, env }) {
   const email = raw.trim().toLowerCase();
 
   if (!email) {
-    return Response.json({ ok: false, error: "Email address is required." }, { status: 400 });
+    return json({ ok: false, error: "Email address is required." }, 400);
   }
   if (email.length > 254) {
-    return Response.json({ ok: false, error: "Email address is too long." }, { status: 400 });
+    return json({ ok: false, error: "Email address is too long." }, 400);
   }
   if (!EMAIL_RE.test(email)) {
-    return Response.json({ ok: false, error: "Please enter a valid email address." }, { status: 400 });
+    return json({ ok: false, error: "Please enter a valid email address." }, 400);
   }
 
   if (await isIpRateLimited(request)) {
-    return Response.json(
-      { ok: false, error: "Too many requests — try again later." },
-      { status: 429 }
-    );
+    return json({ ok: false, error: "Too many requests — try again later." }, 429);
   }
 
   const db = env.DB;
   if (!db) {
-    return Response.json({ ok: false, error: "Service unavailable." }, { status: 503 });
+    return json({ ok: false, error: "Service unavailable." }, 503);
   }
 
   const siteUrl = (env.SITE_URL || "https://jasonwpalmer.com").replace(/\/$/, "");
@@ -172,7 +179,7 @@ export async function onRequestPost({ request, env }) {
       "SELECT id, status, token, created_at FROM subscribers WHERE email = ?"
     ).bind(email).first();
   } catch {
-    return Response.json({ ok: false, error: "Database error." }, { status: 500 });
+    return json({ ok: false, error: "Database error." }, 500);
   }
 
   // Already confirmed — same success copy (no enumeration), no email.
@@ -199,7 +206,7 @@ export async function onRequestPost({ request, env }) {
         "UPDATE subscribers SET status = 'pending', token = ?, created_at = ? WHERE email = ?"
       ).bind(token, now, email).run();
     } catch {
-      return Response.json({ ok: false, error: "Database error." }, { status: 500 });
+      return json({ ok: false, error: "Database error." }, 500);
     }
   } else {
     try {
@@ -210,7 +217,7 @@ export async function onRequestPost({ request, env }) {
       // Concurrent first-insert race on UNIQUE(email) — treat as success.
       const msg = String(err && err.message ? err.message : err);
       if (/unique|constraint/i.test(msg)) return ok();
-      return Response.json({ ok: false, error: "Database error." }, { status: 500 });
+      return json({ ok: false, error: "Database error." }, 500);
     }
   }
 

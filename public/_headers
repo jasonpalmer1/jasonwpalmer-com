@@ -1,4 +1,11 @@
-# ⚠ 2026-09-03, found live with a headless browser on the real apex: GA4 and
+# Security headers for static assets. Pages Functions do NOT inherit these —
+# see functions/_lib/security.js and functions/api/_middleware.js.
+#
+# 2026-09-05: live apex + jasonwpalmer-com.pages.dev were sending
+# Access-Control-Allow-Origin: * on static responses (not from this file —
+# likely a Pages/dashboard layer). Detach it here. Do not re-add wildcard CORS.
+#
+# 2026-09-03, found live with a headless browser on the real apex: GA4 and
 # Cloudflare Insights were being BLOCKED by this CSP and had been since GA4
 # shipped on 2026-08-31. `googletagmanager.com` was never in `script-src` — a
 # `git log -S` over this file returns nothing. The tag was in the HTML, which is
@@ -16,18 +23,27 @@
 # below match wafergraph; do not treat a 204 from one Chrome region as "CSP is
 # done".
 #
-# 2026-09-03: visit-log migrated to the neutral host visit.ironstrikeai.com
-# (visit-log.jwpalm99.workers.dev leaked Jason's personal handle in a public
-# URL, a standing red line). Both hosts are allow-listed together on purpose:
-# the beacon is edge/browser-cached up to an hour and a service worker may
-# hold the old script, so a tab that loaded the old beacon before this
-# deploy keeps POSTing to the old host — dropping it from connect-src would
-# make those events die silently with a green build. Remove the old host
-# once the transition window has passed.
+# 2026-09-05: unused third-party hosts removed from CSP (beehiiv — mailing list
+# is self-hosted; visit-log.jwpalm99.workers.dev — transition window closed,
+# that host leaked a personal handle in every response). Beacon is
+# visit.ironstrikeai.com only.
 /*
+  ! Access-Control-Allow-Origin
   X-Frame-Options: DENY
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: camera=(), microphone=(), geolocation=()
   Strict-Transport-Security: max-age=31536000; includeSubDomains
-  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://subscribe-forms.beehiiv.com https://visit-log.jwpalm99.workers.dev https://visit.ironstrikeai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'
+  Cross-Origin-Opener-Policy: same-origin
+  Cross-Origin-Resource-Policy: same-origin
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline' https://visit.ironstrikeai.com https://www.googletagmanager.com https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: https://jasonwpalmer.com https://*.google-analytics.com https://*.googletagmanager.com; connect-src 'self' https://api.web3forms.com https://visit.ironstrikeai.com https://*.google-analytics.com https://*.analytics.google.com https://*.googletagmanager.com https://cloudflareinsights.com; frame-src 'none'; frame-ancestors 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests
+
+# Production + preview pages.dev aliases — do not index. Write APIs are also
+# refused on these hosts by functions/api/_middleware.js.
+https://:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+  ! Access-Control-Allow-Origin
+
+https://:version.:project.pages.dev/*
+  X-Robots-Tag: noindex, nofollow
+  ! Access-Control-Allow-Origin
