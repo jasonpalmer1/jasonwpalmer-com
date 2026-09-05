@@ -77,27 +77,56 @@ function ToolCard({ tool }: { tool: Tool }) {
         ))}
       </ul>
 
-      {(tool.liveUrl || tool.sourceUrl) && (
-        <div className="mt-5 flex items-center gap-4 border-t border-border pt-4 font-mono text-sm">
-          {tool.liveUrl && (
-            <a
-              href={tool.liveUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="font-semibold text-accent transition-colors hover:text-glow"
-            >
-              [ LAUNCH → ]
-            </a>
+      {(tool.liveUrl || tool.sourceUrl || (tool.related && tool.related.length > 0)) && (
+        <div className="mt-5 border-t border-border pt-4">
+          {(tool.liveUrl || tool.sourceUrl) && (
+            <div className="flex items-center gap-4 font-mono text-sm">
+              {tool.liveUrl && (
+                <a
+                  href={tool.liveUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-semibold text-accent transition-colors hover:text-glow"
+                >
+                  [ LAUNCH → ]
+                </a>
+              )}
+              {tool.sourceUrl && (
+                <a
+                  href={tool.sourceUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-foreground/80 transition-colors hover:text-foreground"
+                >
+                  [ SOURCE ]
+                </a>
+              )}
+            </div>
           )}
-          {tool.sourceUrl && (
-            <a
-              href={tool.sourceUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="text-foreground/80 transition-colors hover:text-foreground"
+          {tool.related && tool.related.length > 0 && (
+            <nav
+              aria-label={`${tool.name} reading`}
+              className={tool.liveUrl || tool.sourceUrl ? "mt-4" : undefined}
             >
-              [ SOURCE ]
-            </a>
+              <p className="label">{tool.relatedLabel ?? "// related · read"}</p>
+              <ul className="mt-2 flex flex-col gap-1.5">
+                {tool.related.map((item) => (
+                  <li key={item.href}>
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex min-h-11 items-center rounded-lg border border-border bg-surface/60 px-3 py-2 font-mono text-xs leading-snug text-accent-2 transition-colors hover:border-accent/40 hover:text-accent"
+                    >
+                      <span className="mr-2 shrink-0 text-muted" aria-hidden>
+                        ›
+                      </span>
+                      {item.label}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </nav>
           )}
         </div>
       )}

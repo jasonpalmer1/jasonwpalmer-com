@@ -34,6 +34,9 @@ export type Tool = {
   // Optional links.
   liveUrl?: string;
   sourceUrl?: string;
+  // Optional related-reading cluster rendered next to the launch link.
+  related?: { label: string; href: string }[];
+  relatedLabel?: string;
   // Optional year/date for sorting and display.
   year?: string;
   // Mark the standout projects to feature them larger.
@@ -267,12 +270,36 @@ export const tools: Tool[] = [
     name: "canaifeel.com",
     tagline: "Can AI feel?",
     description:
-      "The questions people actually Google about AI — why does ChatGPT lie? will AI take my " +
-      "job? — answered in plain English with games instead of lectures. Free, no signup.",
+      "The questions people actually Google about AI — why does ChatGPT always agree? can AI " +
+      "feel? will AI take my job? — answered in plain English with games instead of lectures. " +
+      "Free, no signup. Start with any of the five below.",
     icon: "🤖",
     status: "live",
     stack: ["AI education", "Interactive games"],
-    liveUrl: "https://canaifeel.com",
+    liveUrl: "https://canaifeel.com/",
+    relatedLabel: "// canaifeel · read",
+    related: [
+      {
+        label: "Why does ChatGPT always agree with me?",
+        href: "https://canaifeel.com/why-does-chatgpt-always-agree-with-me/",
+      },
+      {
+        label: "How is AI different from a regular program?",
+        href: "https://canaifeel.com/how-is-ai-different-from-a-regular-program/",
+      },
+      {
+        label: "What is a prompt?",
+        href: "https://canaifeel.com/what-is-a-prompt/",
+      },
+      {
+        label: "Can AI feel?",
+        href: "https://canaifeel.com/can-ai-feel/",
+      },
+      {
+        label: "Will AI take my job?",
+        href: "https://canaifeel.com/will-ai-take-my-job/",
+      },
+    ],
   },
   {
     id: "sous",
